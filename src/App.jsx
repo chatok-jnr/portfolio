@@ -9,6 +9,7 @@ export default function App() {
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [selectedProject, setSelectedProject] = useState(null);
   const [selectedAchievement, setSelectedAchievement] = useState(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const cppCode = `#include<bits/stdc++.h>
 using namespace std;
@@ -265,10 +266,26 @@ int32_t main() {
       </button>
 
       <nav className="fixed top-0 w-full bg-gray-900/80 backdrop-blur-md z-50 border-b border-emerald-500/20">
-        <div className="max-w-7xl mx-auto px-6 py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex justify-between items-center">
-            <div className="text-2xl font-bold text-emerald-400">{'<Chatok Junior/>'}</div>
-            <div className="flex gap-8">
+            <div className="text-xl sm:text-2xl font-bold text-emerald-400">{'<Chatok Junior/>'}</div>
+            {/* Mobile menu button */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden p-2 rounded-md text-gray-300 hover:text-emerald-400 focus:outline-none"
+            >
+              {isMobileMenuOpen ? (
+                <X size={24} />
+              ) : (
+                <div className="space-y-2">
+                  <div className="w-6 h-0.5 bg-current"></div>
+                  <div className="w-6 h-0.5 bg-current"></div>
+                  <div className="w-6 h-0.5 bg-current"></div>
+                </div>
+              )}
+            </button>
+            {/* Desktop menu */}
+            <div className="hidden md:flex gap-8">
               {['home', 'about', 'projects', 'achievements', 'contact'].map(item => (
                 <button
                   key={item}
@@ -282,12 +299,33 @@ int32_t main() {
               ))}
             </div>
           </div>
+          {/* Mobile menu panel */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden pt-4">
+              <div className="flex flex-col space-y-4 pb-3">
+                {['home', 'about', 'projects', 'achievements', 'contact'].map(item => (
+                  <button
+                    key={item}
+                    onClick={() => {
+                      scrollToSection(item);
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className={`capitalize hover:text-emerald-400 transition-colors ${
+                      activeSection === item ? 'text-emerald-400' : 'text-gray-300'
+                    }`}
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </nav>
 
-      <section id="home" className="min-h-screen flex items-center justify-center px-6 pt-20">
-        <div className="max-w-3xl w-full">
-          <div className="grid grid-cols-1 gap-6 max-w-3xl mx-auto bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-emerald-500/30 shadow-2xl shadow-emerald-500/10 overflow-hidden">
+      <section id="home" className="min-h-screen flex items-center justify-center px-4 sm:px-6 pt-20">
+        <div className="w-full max-w-3xl">
+          <div className="grid grid-cols-1 gap-4 sm:gap-6 mx-auto bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-emerald-500/30 shadow-2xl shadow-emerald-500/10 overflow-hidden">
             <div className="p-6 bg-gray-900/80">
               <div className="flex items-center gap-2 mb-4">
                 <div className="flex gap-2">
@@ -349,28 +387,28 @@ int32_t main() {
             </button>
           </div>
 
-          <div className="mt-8 flex justify-center gap-6">
-            <a href="https://github.com/chatok-jnr" target="_blank" rel="noopener noreferrer" onClick={playClickSound} className="text-gray-400 hover:text-emerald-400 transition-colors hover:scale-110 transform">
-              <Github size={28} />
+          <div className="flex justify-center gap-4 sm:gap-6 mt-8">
+            <a href="https://github.com/chatok-jnr" target="_blank" rel="noopener noreferrer" onClick={playClickSound} className="text-gray-400 hover:text-emerald-400 transition-colors hover:scale-110 transform p-2">
+              <Github size={24} className="sm:w-7 sm:h-7" />
             </a>
-            <a href="https://www.linkedin.com/in/chatok-junior/" target="_blank" rel="noopener noreferrer" onClick={playClickSound} className="text-gray-400 hover:text-emerald-400 transition-colors hover:scale-110 transform">
-              <Linkedin size={28} />
+            <a href="https://www.linkedin.com/in/chatok-junior/" target="_blank" rel="noopener noreferrer" onClick={playClickSound} className="text-gray-400 hover:text-emerald-400 transition-colors hover:scale-110 transform p-2">
+              <Linkedin size={24} className="sm:w-7 sm:h-7" />
             </a>
-            <a href="mailto:md.sakib.hos3n@gmail.com" onClick={playClickSound} className="text-gray-400 hover:text-emerald-400 transition-colors hover:scale-110 transform">
-              <Mail size={28} />
+            <a href="mailto:md.sakib.hos3n@gmail.com" onClick={playClickSound} className="text-gray-400 hover:text-emerald-400 transition-colors hover:scale-110 transform p-2">
+              <Mail size={24} className="sm:w-7 sm:h-7" />
             </a>
           </div>
         </div>
       </section>
 
-      <section id="about" className="min-h-screen flex items-center justify-center px-6 py-20">
+      <section id="about" className="min-h-screen flex items-center justify-center px-4 sm:px-6 py-16 sm:py-20">
         <div className="max-w-6xl w-full">
-          <h2 className="text-5xl font-bold text-emerald-400 mb-12 text-center">
-            <GraduationCap className="inline mr-3" size={48} />
+          <h2 className="text-3xl sm:text-5xl font-bold text-emerald-400 mb-8 sm:mb-12 text-center">
+            <GraduationCap className="inline mr-2 sm:mr-3 w-8 h-8 sm:w-12 sm:h-12" />
             About Me
           </h2>
           
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
             <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 border border-emerald-500/30 hover:border-emerald-500/50 transition-all hover:shadow-lg hover:shadow-emerald-500/20">
               <h3 className="text-2xl font-bold text-emerald-400 mb-4">Education</h3>
               <p className="text-xl font-semibold mb-2">University of Information Technology & Sciences</p>
@@ -401,14 +439,14 @@ int32_t main() {
         </div>
       </section>
 
-      <section id="projects" className="min-h-screen flex items-center justify-center px-6 py-20 bg-gray-900/50">
+      <section id="projects" className="min-h-screen flex items-center justify-center px-4 sm:px-6 py-16 sm:py-20 bg-gray-900/50">
         <div className="max-w-6xl w-full">
-          <h2 className="text-5xl font-bold text-emerald-400 mb-12 text-center">
-            <Briefcase className="inline mr-3" size={48} />
+          <h2 className="text-3xl sm:text-5xl font-bold text-emerald-400 mb-8 sm:mb-12 text-center">
+            <Briefcase className="inline mr-2 sm:mr-3 w-8 h-8 sm:w-12 sm:h-12" />
             Projects
           </h2>
           
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
             {projects.map((project, idx) => (
               <div
                 key={idx}
@@ -441,14 +479,14 @@ int32_t main() {
         </div>
       </section>
 
-      <section id="achievements" className="min-h-screen flex items-center justify-center px-6 py-20">
+      <section id="achievements" className="min-h-screen flex items-center justify-center px-4 sm:px-6 py-16 sm:py-20">
         <div className="max-w-6xl w-full">
-          <h2 className="text-5xl font-bold text-emerald-400 mb-12 text-center">
-            <Award className="inline mr-3" size={48} />
+          <h2 className="text-3xl sm:text-5xl font-bold text-emerald-400 mb-8 sm:mb-12 text-center">
+            <Award className="inline mr-2 sm:mr-3 w-8 h-8 sm:w-12 sm:h-12" />
             Achievements
           </h2>
           
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
             {achievements.map((achievement, idx) => (
               <div
                 key={idx}
@@ -494,13 +532,13 @@ int32_t main() {
         </div>
       </section>
 
-      <section id="contact" className="min-h-screen flex items-center justify-center px-6 py-20 bg-gray-900/50">
+      <section id="contact" className="min-h-screen flex items-center justify-center px-4 sm:px-6 py-16 sm:py-20 bg-gray-900/50">
         <div className="max-w-4xl w-full text-center">
-          <h2 className="text-5xl font-bold text-emerald-400 mb-12">
+          <h2 className="text-3xl sm:text-5xl font-bold text-emerald-400 mb-8 sm:mb-12">
             Get In Touch
           </h2>
           
-          <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-12 border border-emerald-500/30">
+          <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 sm:p-12 border border-emerald-500/30">
             <p className="text-xl text-gray-300 mb-8">
               I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.
             </p>
@@ -518,13 +556,13 @@ int32_t main() {
                 <span className="text-gray-300">+880 1971 311958</span>
               </div> */}
               
-              <div className="flex justify-center gap-6 mt-8">
+              <div className="flex flex-wrap justify-center gap-4 mt-8">
                 <a
                   href="https://github.com/chatok-jnr"
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={playClickSound}
-                  className="px-8 py-4 bg-emerald-500 text-gray-900 rounded-lg font-semibold hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/50 hover:shadow-emerald-500/70 hover:scale-110 transform"
+                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-emerald-500 text-gray-900 rounded-lg font-semibold hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/50 hover:shadow-emerald-500/70 hover:scale-105 transform"
                 >
                   <Github className="inline mr-2" size={20} />
                   GitHub
@@ -534,7 +572,7 @@ int32_t main() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={playClickSound}
-                  className="px-8 py-4 bg-emerald-500 text-gray-900 rounded-lg font-semibold hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/50 hover:shadow-emerald-500/70 hover:scale-110 transform"
+                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-emerald-500 text-gray-900 rounded-lg font-semibold hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/50 hover:shadow-emerald-500/70 hover:scale-105 transform"
                 >
                   <Linkedin className="inline mr-2" size={20} />
                   LinkedIn
@@ -545,32 +583,32 @@ int32_t main() {
                   rel="noopener noreferrer"
                   onClick={playClickSound}
                   aria-label="Facebook"
-                  className="px-8 py-4 bg-emerald-500 text-gray-900 rounded-lg font-semibold hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/50 hover:shadow-emerald-500/70 hover:scale-110 transform"
+                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-emerald-500 text-gray-900 rounded-lg font-semibold hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/50 hover:shadow-emerald-500/70 hover:scale-105 transform"
                 >
                   <Facebook className="inline mr-2" size={20} />
                   Facebook
                 </a>
-                  <a
-                    href="https://www.instagram.com/chatok.jr/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={playClickSound}
-                    aria-label="Instagram"
-                    className="px-8 py-4 bg-emerald-500 text-gray-900 rounded-lg font-semibold hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/50 hover:shadow-emerald-500/70 hover:scale-110 transform"
-                  >
-                    <Instagram className="inline mr-2" size={20} />
-                    Instagram
-                  </a>
+                <a
+                  href="https://www.instagram.com/chatok.jr/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={playClickSound}
+                  aria-label="Instagram"
+                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-emerald-500 text-gray-900 rounded-lg font-semibold hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/50 hover:shadow-emerald-500/70 hover:scale-105 transform"
+                >
+                  <Instagram className="inline mr-2" size={20} />
+                  Instagram
+                </a>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <footer className="bg-gray-900 border-t border-emerald-500/20 py-8">
-        <div className="max-w-7xl mx-auto px-6 text-center text-gray-400">
-          <p>© 2025 Md. Sakib Hosen. Built with React & Tailwind CSS</p>
-          <p className="mt-2 text-emerald-400">Competitive Programmer | Backend Developer</p>
+      <footer className="bg-gray-900 border-t border-emerald-500/20 py-6 sm:py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center text-gray-400">
+          <p className="text-sm sm:text-base">© 2025 Md. Sakib Hosen. Built with React & Tailwind CSS</p>
+          <p className="mt-2 text-emerald-400 text-sm sm:text-base">Competitive Programmer | Backend Developer</p>
         </div>
       </footer>
 
