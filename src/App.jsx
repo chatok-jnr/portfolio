@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Github, Linkedin, Mail, Phone, ExternalLink, Code2, Award, Briefcase, GraduationCap, MessageSquare, Volume2, VolumeX } from 'lucide-react';
+import { Github, Linkedin, Facebook, Instagram, Mail, Phone, ExternalLink, Code2, Award, Briefcase, GraduationCap, MessageSquare, Volume2, VolumeX, X } from 'lucide-react';
 
 export default function App() {
   const [typedCode, setTypedCode] = useState('');
@@ -7,6 +7,8 @@ export default function App() {
   const [activeSection, setActiveSection] = useState('home');
   const [showOutput, setShowOutput] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [selectedAchievement, setSelectedAchievement] = useState(null);
 
   const cppCode = `#include<bits/stdc++.h>
 using namespace std;
@@ -118,26 +120,101 @@ int32_t main() {
     {
       title: 'Taza Bazar',
       tech: 'Node.js, Express, MongoDB',
-      description: 'Architected secure RESTful APIs for user authentication, product management, and admin operations. Implemented JWT authentication with bcrypt and CORS policies.',
+      short: `The backend is a Node.js + Express API that provides authentication, 
+      user/consumer/farmer management, alerts, bids, and admin functionality backed 
+      by MongoDB (via Mongoose). It implements REST routes organized by feature, uses 
+      JWT + bcrypt for auth, and is set up for local development with nodemon and production start via node server.js`,
+
+      details: `The backend is a Node.js + Express (v5) REST API using MongoDB (accessed through Mongoose and the native mongodb package) 
+      with configuration via dotenv; its primary entry point is server.js (scripts in package.json expose start and dev), and the codebase 
+      follows a modular MVC-like layout with feature-separated folders — controllers for request handlers, models for Mongoose schemas, routes 
+      for endpoint wiring, middleware for auth and request guards. 
+      Authentication is JWT-based (jsonwebtoken) with password hashing via bcrypt/bcryptjs and route protection implemented in authMiddleware.js; 
+      cors and morgan are used for cross-origin handling and request logging, secrets live in config.env (see config.env.example), 
+      and common request flows include register → bcrypt-hash → login → JWT issuance → protected-route validation.`,
+
       link: 'https://taza-bazar-app-4l7i.onrender.com/',
       highlights: ['JWT Authentication', 'RESTful API', 'Secure Backend']
     },
     {
       title: 'Sudoku Solver',
       tech: 'JavaScript, HTML, CSS',
-      description: 'Developed a responsive browser-based Sudoku solver using recursive backtracking algorithm with constraint checking.',
+      short: `sudokuSolver is a lightweight web-based Sudoku solver 
+      and visualizer that lets you enter a Sudoku puzzle in the browser 
+      and automatically solves it using the project's solving logic.`,
+
+      details: `sudokuSolver is a small, self-contained web project that demonstrates a Sudoku solving 
+      tool implemented in plain HTML, CSS, and JavaScript. It provides an interactive grid UI where users 
+      can enter known numbers, then run the solver to compute and display a solution. The repository is 
+      ideal for learning about puzzle solving algorithms, DOM manipulation, and small front-end app structure.`,
+
       link: 'https://chatok-jnr.github.io/sudokuSolver/',
       highlights: ['Backtracking Algorithm', 'Client-side Processing', 'Responsive Design']
     }
   ];
 
   const achievements = [
-    { icon: '🏆', title: 'Champion – UITS Hackify Fest 2025', desc: 'Team UITS_ACES - 1st place among top university programmers' },
-    { icon: '🥇', title: 'Champion – UITS Winter Fest 2024', desc: '1st place in solo contest' },
-    { icon: '💻', title: 'Codeforces Pupil', desc: 'Max Rating: 1344 | 600+ problems solved' },
-    { icon: '⭐', title: 'CodeChef 3-Star', desc: 'Max Rating: 1724' },
-    { icon: '🎯', title: '1000+ Problems', desc: 'Solved across multiple online judges' },
-    { icon: '🌐', title: 'ICPC Dhaka Regional 2024', desc: 'Team UITS_ACES participant' }
+    { 
+      icon: '🏆', 
+      title: 'Champion – UITS Hackify Fest 2025', 
+      short: 'Team UITS_ACES - 1st place among top university programmers', 
+      details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.',
+      link: `https://www.linkedin.com/posts/chatok-junior_hackify2025-programmingchampions-uitsabraces-activity-7328465793086566400-H8Wv?utm_source=social_share_send&utm_medium=member_desktop_web&rcm=ACoAADWQgRYBTcu-Rldj4Z0YC59wEOuxG-zfjNA`,
+      highlights: ['Team Win', 'Top University Teams']
+    },
+
+     { 
+      icon: '🏆', 
+      title: 'Champion – UITS Intra University Programming Contest 2025', 
+      short: 'Team UITS_ACES - 1st place among top university programmers', 
+      details: 'What an incredible journey! Team UITS_ACES emerged as the champion in the UITS Intra University Programming Contest 2025 held on February 18, 2025.',
+      link: `https://www.linkedin.com/posts/chatok-junior_uitsabraces-champion-uits-activity-7303339882007932928--UgU?utm_source=social_share_send&utm_medium=member_desktop_web&rcm=ACoAADWQgRYBTcu-Rldj4Z0YC59wEOuxG-zfjNA`,
+      highlights: ['Team Win', 'Top University Teams']
+    },
+
+    { 
+      icon: '🥇', 
+      title: 'Champion – UITS Winter Fest 2024', 
+      short: '1st place in solo contest', 
+      details: 'I became the first at the UITS winter fest programming contest. Which was held on 18 February 2024.',
+      link: `https://www.linkedin.com/posts/chatok-junior_i-am-happy-to-share-that-i-became-the-first-activity-7182949932599840769-iTSU?utm_source=social_share_send&utm_medium=member_desktop_web&rcm=ACoAADWQgRYBTcu-Rldj4Z0YC59wEOuxG-zfjNA`,
+      highlights: ['Solo Victory', 'Problem Solving']
+    },
+    
+    { 
+      icon: '🟢', 
+      title: 'Codeforces Pupil', 
+      short: 'Max Rating: 1344 | 600+ problems solved', 
+      details: ``,
+      link: `https://codeforces.com/profile/chatok.jr`,
+      highlights: ['600+ Problems', 'Active Contestant']
+    },
+
+    { 
+      icon: '⭐', 
+      title: 'CodeChef 3-Star', 
+      short: 'Max Rating: 1724', 
+      details: ``,
+      link: 'https://www.codechef.com/users/chatok_junior',
+      highlights: ['3-Star', 'Contest Performance']
+    },
+
+    { 
+      icon: '🎯', 
+      title: '1000+ Problems', 
+      short: 'Solved across multiple online judges', 
+      details: '',
+      highlights: ['1000+ Problems', 'Wide Platform Coverage']
+    },
+
+    { 
+      icon: '🌐', 
+      title: 'ICPC Dhaka Regional 2024', 
+      short: 'Team UITS_ACES participant', 
+      details: `A huge shoutout to my incredible teammates for their dedication, passion, and perseverance. 💪 It was a privilege to be part of this journey together!`, 
+      link: '#',
+      highlights: ['ICPC Regional Participant', 'Team Competition']
+    }
   ];
 
   const scrollToSection = (id) => {
@@ -148,6 +225,32 @@ int32_t main() {
       element.scrollIntoView({ behavior: 'smooth' });
     }
   };
+
+  const openProjectDetails = (project) => {
+    playClickSound();
+    setSelectedProject(project);
+  };
+
+  const openAchievementDetails = (achievement) => {
+    playClickSound();
+    setSelectedAchievement(achievement);
+  };
+
+  const closeDetails = () => {
+    playClickSound();
+    setSelectedProject(null);
+    setSelectedAchievement(null);
+  };
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'Escape' && (selectedProject || selectedAchievement)) {
+        closeDetails();
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [selectedProject, selectedAchievement]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-100">
@@ -307,10 +410,14 @@ int32_t main() {
           
           <div className="grid md:grid-cols-2 gap-8">
             {projects.map((project, idx) => (
-              <div key={idx} className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 border border-emerald-500/30 hover:border-emerald-500/50 transition-all hover:shadow-lg hover:shadow-emerald-500/20">
+              <div
+                key={idx}
+                onClick={() => openProjectDetails(project)}
+                className="cursor-pointer bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 border border-emerald-500/30 hover:border-emerald-500/50 transition-all hover:shadow-lg hover:shadow-emerald-500/20"
+              >
                 <h3 className="text-2xl font-bold text-emerald-400 mb-2">{project.title}</h3>
                 <p className="text-gray-400 text-sm mb-4">{project.tech}</p>
-                <p className="text-gray-300 mb-4">{project.description}</p>
+                <p className="text-gray-300 mb-4">{project.short}</p>
                 <div className="flex flex-wrap gap-2 mb-4">
                   {project.highlights.map((h, i) => (
                     <span key={i} className="px-3 py-1 bg-emerald-500/10 text-emerald-400 rounded-full text-xs border border-emerald-500/20">
@@ -322,7 +429,7 @@ int32_t main() {
                   href={project.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={playClickSound}
+                  onClick={(e) => { e.stopPropagation(); playClickSound(); }}
                   className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 transition-colors font-semibold group"
                 >
                   View Project
@@ -343,10 +450,33 @@ int32_t main() {
           
           <div className="grid md:grid-cols-3 gap-6">
             {achievements.map((achievement, idx) => (
-              <div key={idx} className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-emerald-500/30 hover:border-emerald-500/50 transition-all hover:shadow-lg hover:shadow-emerald-500/20 text-center">
+              <div
+                key={idx}
+                onClick={() => openAchievementDetails(achievement)}
+                className="cursor-pointer bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-emerald-500/30 hover:border-emerald-500/50 transition-all hover:shadow-lg hover:shadow-emerald-500/20 text-center"
+              >
                 <div className="text-5xl mb-4">{achievement.icon}</div>
                 <h3 className="text-lg font-bold text-emerald-400 mb-2">{achievement.title}</h3>
-                <p className="text-gray-400 text-sm">{achievement.desc}</p>
+                  <p className="text-gray-400 text-sm">{achievement.short}</p>
+                  <div className="flex flex-wrap gap-2 mt-4 justify-center">
+                    {(achievement.highlights || []).map((h, i) => (
+                      <span key={i} className="px-3 py-1 bg-emerald-500/10 text-emerald-400 rounded-full text-xs border border-emerald-500/20">
+                        {h}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="mt-4">
+                    <a
+                      href={achievement.link || '#'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => { e.stopPropagation(); playClickSound(); }}
+                      className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 transition-colors font-semibold"
+                    >
+                      Learn More
+                      <ExternalLink size={16} />
+                    </a>
+                  </div>
               </div>
             ))}
           </div>
@@ -383,10 +513,10 @@ int32_t main() {
                 </a>
               </div>
               
-              <div className="flex items-center justify-center gap-4 text-lg">
+              {/* <div className="flex items-center justify-center gap-4 text-lg">
                 <Phone className="text-emerald-400" size={24} />
                 <span className="text-gray-300">+880 1971 311958</span>
-              </div>
+              </div> */}
               
               <div className="flex justify-center gap-6 mt-8">
                 <a
@@ -409,6 +539,28 @@ int32_t main() {
                   <Linkedin className="inline mr-2" size={20} />
                   LinkedIn
                 </a>
+                <a
+                  href="https://www.facebook.com/sakib.the.jnr.chatok/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={playClickSound}
+                  aria-label="Facebook"
+                  className="px-8 py-4 bg-emerald-500 text-gray-900 rounded-lg font-semibold hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/50 hover:shadow-emerald-500/70 hover:scale-110 transform"
+                >
+                  <Facebook className="inline mr-2" size={20} />
+                  Facebook
+                </a>
+                  <a
+                    href="https://www.instagram.com/chatok.jr/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={playClickSound}
+                    aria-label="Instagram"
+                    className="px-8 py-4 bg-emerald-500 text-gray-900 rounded-lg font-semibold hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/50 hover:shadow-emerald-500/70 hover:scale-110 transform"
+                  >
+                    <Instagram className="inline mr-2" size={20} />
+                    Instagram
+                  </a>
               </div>
             </div>
           </div>
@@ -421,6 +573,81 @@ int32_t main() {
           <p className="mt-2 text-emerald-400">Competitive Programmer | Backend Developer</p>
         </div>
       </footer>
+
+      {/* Details modal overlay for projects / achievements */}
+      {(selectedProject || selectedAchievement) && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* backdrop that also closes on click */}
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={closeDetails} />
+
+          <div
+            role="dialog"
+            aria-modal="true"
+            className="relative z-50 max-w-3xl w-full mx-4 bg-gray-900/90 rounded-2xl border border-emerald-500/30 p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => closeDetails()}
+              className="absolute top-4 right-4 text-gray-400 hover:text-emerald-400"
+              aria-label="Close details"
+            >
+              <X size={20} />
+            </button>
+
+                {selectedProject && (
+              <div>
+                <h3 className="text-2xl font-bold text-emerald-400 mb-2">{selectedProject.title}</h3>
+                <p className="text-gray-400 text-sm mb-4">{selectedProject.tech}</p>
+                <p className="text-gray-300 mb-4">{selectedProject.details}</p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {selectedProject.highlights.map((h, i) => (
+                    <span key={i} className="px-3 py-1 bg-emerald-500/10 text-emerald-400 rounded-full text-xs border border-emerald-500/20">
+                      {h}
+                    </span>
+                  ))}
+                </div>
+                <a
+                  href={selectedProject.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => playClickSound()}
+                  className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 transition-colors font-semibold"
+                >
+                  Open Project
+                  <ExternalLink size={16} />
+                </a>
+              </div>
+            )}
+
+            {selectedAchievement && (
+              <div>
+                <div className="text-6xl mb-4">{selectedAchievement.icon}</div>
+                <h3 className="text-2xl font-bold text-emerald-400 mb-2">{selectedAchievement.title}</h3>
+                <p className="text-gray-300 mb-4">{selectedAchievement.details}</p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {(selectedAchievement.highlights || []).map((h, i) => (
+                    <span key={i} className="px-3 py-1 bg-emerald-500/10 text-emerald-400 rounded-full text-xs border border-emerald-500/20">
+                      {h}
+                    </span>
+                  ))}
+                </div>
+                {selectedAchievement.link && (
+                  <a
+                    href={selectedAchievement.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => { e.stopPropagation(); playClickSound(); }}
+                    className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 transition-colors font-semibold"
+                  >
+                    Open Link
+                    <ExternalLink size={16} />
+                  </a>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       <style>{`
         @keyframes fade-in {
