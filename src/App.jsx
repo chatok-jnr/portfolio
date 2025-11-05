@@ -92,19 +92,52 @@ int32_t main() {
   }, []);
 
   const colorizeCode = (code) => {
-    // Escape angle brackets first so C++ code like <bits/stdc++.h> shows correctly
+    // First, escape HTML entities
     let result = code
+      .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;');
 
-    result = result
-      .split(/(<[^>]+>)/g)
-      .map((part) =>
-        part.startsWith('<')
-          ? part
-          : part.replace(/\b(\d+)\b/g, '<span class="text-blue-400">$1</span>')
-      )
-      .join('');
+    // Store spans in an array and replace with placeholders
+    const spans = [];
+    let spanId = 0;
+
+    // Helper function to add a span and return a placeholder
+    const addSpan = (className, content) => {
+      const placeholder = `__SPAN_${spanId}__`;
+      spans.push({ id: spanId, html: `<span class="${className}">${content}</span>` });
+      spanId++;
+      return placeholder;
+    };
+
+    // Preprocessor directives (#include)
+    result = result.replace(/#(\w+)(&lt;.*?&gt;)?/g, (match, directive) => {
+      return addSpan('text-cyan-400', match);
+    });
+
+    // Keywords
+    const keywords = ['using', 'namespace', 'std', 'int32_t', 'return', 'cout', 'endl'];
+    keywords.forEach(keyword => {
+      const regex = new RegExp(`\\b${keyword}\\b`, 'g');
+      result = result.replace(regex, match => addSpan('text-purple-400', match));
+    });
+
+    // Strings
+    result = result.replace(/"([^"]*?)"/g, match => addSpan('text-green-400', match));
+
+    // Comments
+    result = result.replace(/\/\/(.*?)$/gm, match => addSpan('text-gray-500', match));
+
+    // Numbers
+    result = result.replace(/\b(\d+)\b/g, match => addSpan('text-blue-400', match));
+
+    // Operators
+    result = result.replace(/(&lt;&lt;|&gt;&gt;)/g, match => addSpan('text-yellow-400', match));
+
+    // Replace all placeholders with their corresponding spans
+    spans.forEach(({ id, html }) => {
+      result = result.replace(`__SPAN_${id}__`, html);
+    });
 
     return result;
   };
