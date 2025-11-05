@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Github, Linkedin, Facebook, Instagram, Mail, Phone, ExternalLink, Code2, Award, Briefcase, GraduationCap, MessageSquare, Volume2, VolumeX, X } from 'lucide-react';
+import { Github, Linkedin, Facebook, Instagram, Mail, Phone, ExternalLink, Code2, Award, Briefcase, GraduationCap, MessageSquare, X } from 'lucide-react';
+import hljs from 'highlight.js/lib/core';
+import cpp from 'highlight.js/lib/languages/cpp';
+import 'highlight.js/styles/atom-one-dark.css';
+
+hljs.registerLanguage('cpp', cpp);
 
 export default function App() {
   const [typedCode, setTypedCode] = useState('');
   const [cursorVisible, setCursorVisible] = useState(true);
   const [activeSection, setActiveSection] = useState('home');
   const [showOutput, setShowOutput] = useState(false);
-  const [soundEnabled, setSoundEnabled] = useState(true);
   const [selectedProject, setSelectedProject] = useState(null);
   const [selectedAchievement, setSelectedAchievement] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -20,60 +24,11 @@ int32_t main() {
   return 0;
 }`;
 
-  const playKeySound = () => {
-    if (!soundEnabled) return;
-    try {
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      const oscillator = audioContext.createOscillator();
-      const gainNode = audioContext.createGain();
-      
-      oscillator.connect(gainNode);
-      gainNode.connect(audioContext.destination);
-      
-      oscillator.frequency.value = 800 + Math.random() * 200;
-      oscillator.type = 'sine';
-      
-      gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.05);
-      
-      oscillator.start(audioContext.currentTime);
-      oscillator.stop(audioContext.currentTime + 0.05);
-    } catch (e) {
-      console.log('Audio not supported');
-    }
-  };
-
-  const playClickSound = () => {
-    if (!soundEnabled) return;
-    try {
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      const oscillator = audioContext.createOscillator();
-      const gainNode = audioContext.createGain();
-      
-      oscillator.connect(gainNode);
-      gainNode.connect(audioContext.destination);
-      
-      oscillator.frequency.value = 300;
-      oscillator.type = 'square';
-      
-      gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-      
-      oscillator.start(audioContext.currentTime);
-      oscillator.stop(audioContext.currentTime + 0.1);
-    } catch (e) {
-      console.log('Audio not supported');
-    }
-  };
-
   useEffect(() => {
     let index = 0;
     const interval = setInterval(() => {
       if (index <= cppCode.length) {
         setTypedCode(cppCode.slice(0, index));
-        if (index > 0 && index <= cppCode.length) {
-          playKeySound();
-        }
         index++;
       } else {
         clearInterval(interval);
@@ -92,54 +47,7 @@ int32_t main() {
   }, []);
 
   const colorizeCode = (code) => {
-    // First, escape HTML entities
-    let result = code
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
-
-    // Store spans in an array and replace with placeholders
-    const spans = [];
-    let spanId = 0;
-
-    // Helper function to add a span and return a placeholder
-    const addSpan = (className, content) => {
-      const placeholder = `__SPAN_${spanId}__`;
-      spans.push({ id: spanId, html: `<span class="${className}">${content}</span>` });
-      spanId++;
-      return placeholder;
-    };
-
-    // Preprocessor directives (#include)
-    result = result.replace(/#(\w+)(&lt;.*?&gt;)?/g, (match, directive) => {
-      return addSpan('text-cyan-400', match);
-    });
-
-    // Keywords
-    const keywords = ['using', 'namespace', 'std', 'int32_t', 'return', 'cout', 'endl'];
-    keywords.forEach(keyword => {
-      const regex = new RegExp(`\\b${keyword}\\b`, 'g');
-      result = result.replace(regex, match => addSpan('text-purple-400', match));
-    });
-
-    // Strings
-    result = result.replace(/"([^"]*?)"/g, match => addSpan('text-green-400', match));
-
-    // Comments
-    result = result.replace(/\/\/(.*?)$/gm, match => addSpan('text-gray-500', match));
-
-    // Numbers
-    result = result.replace(/\b(\d+)\b/g, match => addSpan('text-blue-400', match));
-
-    // Operators
-    result = result.replace(/(&lt;&lt;|&gt;&gt;)/g, match => addSpan('text-yellow-400', match));
-
-    // Replace all placeholders with their corresponding spans
-    spans.forEach(({ id, html }) => {
-      result = result.replace(`__SPAN_${id}__`, html);
-    });
-
-    return result;
+    return hljs.highlight(code, { language: 'cpp' }).value;
   };
 
 
@@ -252,7 +160,6 @@ int32_t main() {
   ];
 
   const scrollToSection = (id) => {
-    playClickSound();
     setActiveSection(id);
     const element = document.getElementById(id);
     if (element) {
@@ -261,17 +168,14 @@ int32_t main() {
   };
 
   const openProjectDetails = (project) => {
-    playClickSound();
     setSelectedProject(project);
   };
 
   const openAchievementDetails = (achievement) => {
-    playClickSound();
     setSelectedAchievement(achievement);
   };
 
   const closeDetails = () => {
-    playClickSound();
     setSelectedProject(null);
     setSelectedAchievement(null);
   };
@@ -288,15 +192,7 @@ int32_t main() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-100">
-      <button
-        onClick={() => {
-          playClickSound();
-          setSoundEnabled(!soundEnabled);
-        }}
-        className="fixed top-20 right-6 z-50 p-3 bg-gray-800/80 backdrop-blur-md rounded-full border border-emerald-500/30 hover:border-emerald-500/50 transition-all hover:scale-110 text-emerald-400"
-      >
-        {soundEnabled ? <Volume2 size={24} /> : <VolumeX size={24} />}
-      </button>
+
 
       <nav className="fixed top-0 w-full bg-gray-900/80 backdrop-blur-md z-50 border-b border-emerald-500/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
@@ -379,7 +275,10 @@ int32_t main() {
                     ))}
                   </div>
                   <pre className="flex-1">
-                    <code dangerouslySetInnerHTML={{ __html: colorizeCode(typedCode) + `<span class="${cursorVisible ? 'opacity-100' : 'opacity-0'} text-emerald-400">|</span>` }} />
+                    <code className="language-cpp" dangerouslySetInnerHTML={{ 
+                      __html: colorizeCode(typedCode) + 
+                      `<span class="${cursorVisible ? 'opacity-100' : 'opacity-0'} text-emerald-400">|</span>` 
+                    }} />
                   </pre>
                 </div>
               </div>
@@ -407,7 +306,6 @@ int32_t main() {
               href="https://github.com/chatok-jnr"
               target="_blank"
               rel="noopener noreferrer"
-              onClick={playClickSound}
               className="px-6 py-3 bg-emerald-500 text-gray-900 rounded-lg font-semibold hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/50 hover:shadow-emerald-500/70 hover:scale-105"
             >
               View GitHub
@@ -421,13 +319,13 @@ int32_t main() {
           </div>
 
           <div className="flex justify-center gap-4 sm:gap-6 mt-8">
-            <a href="https://github.com/chatok-jnr" target="_blank" rel="noopener noreferrer" onClick={playClickSound} className="text-gray-400 hover:text-emerald-400 transition-colors hover:scale-110 transform p-2">
+            <a href="https://github.com/chatok-jnr" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-emerald-400 transition-colors hover:scale-110 transform p-2">
               <Github size={24} className="sm:w-7 sm:h-7" />
             </a>
-            <a href="https://www.linkedin.com/in/chatok-junior/" target="_blank" rel="noopener noreferrer" onClick={playClickSound} className="text-gray-400 hover:text-emerald-400 transition-colors hover:scale-110 transform p-2">
+            <a href="https://www.linkedin.com/in/chatok-junior/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-emerald-400 transition-colors hover:scale-110 transform p-2">
               <Linkedin size={24} className="sm:w-7 sm:h-7" />
             </a>
-            <a href="mailto:md.sakib.hos3n@gmail.com" onClick={playClickSound} className="text-gray-400 hover:text-emerald-400 transition-colors hover:scale-110 transform p-2">
+            <a href="mailto:md.sakib.hos3n@gmail.com" className="text-gray-400 hover:text-emerald-400 transition-colors hover:scale-110 transform p-2">
               <Mail size={24} className="sm:w-7 sm:h-7" />
             </a>
           </div>
@@ -579,7 +477,7 @@ int32_t main() {
             <div className="space-y-6">
               <div className="flex items-center justify-center gap-4 text-lg">
                 <Mail className="text-emerald-400" size={24} />
-                <a href="mailto:md.sakib.hos3n@gmail.com" onClick={playClickSound} className="text-emerald-400 hover:text-emerald-300 transition-colors">
+                <a href="mailto:md.sakib.hos3n@gmail.com" className="text-emerald-400 hover:text-emerald-300 transition-colors">
                   md.sakib.hos3n@gmail.com
                 </a>
               </div>
@@ -594,7 +492,6 @@ int32_t main() {
                   href="https://github.com/chatok-jnr"
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={playClickSound}
                   className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-emerald-500 text-gray-900 rounded-lg font-semibold hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/50 hover:shadow-emerald-500/70 hover:scale-105 transform"
                 >
                   <Github className="inline mr-2" size={20} />
@@ -604,7 +501,6 @@ int32_t main() {
                   href="https://www.linkedin.com/in/chatok-junior/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={playClickSound}
                   className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-emerald-500 text-gray-900 rounded-lg font-semibold hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/50 hover:shadow-emerald-500/70 hover:scale-105 transform"
                 >
                   <Linkedin className="inline mr-2" size={20} />
@@ -614,7 +510,6 @@ int32_t main() {
                   href="https://www.facebook.com/sakib.the.jnr.chatok/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={playClickSound}
                   aria-label="Facebook"
                   className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-emerald-500 text-gray-900 rounded-lg font-semibold hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/50 hover:shadow-emerald-500/70 hover:scale-105 transform"
                 >
@@ -625,7 +520,6 @@ int32_t main() {
                   href="https://www.instagram.com/chatok.jr/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={playClickSound}
                   aria-label="Instagram"
                   className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-emerald-500 text-gray-900 rounded-lg font-semibold hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/50 hover:shadow-emerald-500/70 hover:scale-105 transform"
                 >
@@ -638,10 +532,10 @@ int32_t main() {
         </div>
       </section>
 
-      <footer className="bg-gray-900 border-t border-emerald-500/20 py-6 sm:py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center text-gray-400">
-          <p className="text-sm sm:text-base">© 2025 Md. Sakib Hosen. Built with React & Tailwind CSS</p>
-          <p className="mt-2 text-emerald-400 text-sm sm:text-base">Competitive Programmer | Backend Developer</p>
+      <footer className="bg-gray-900 border-t border-emerald-500/20 py-8">
+        <div className="max-w-7xl mx-auto px-6 text-center text-gray-400">
+          <p>© 2025 Md. Sakib Hosen AKA Chatok Junior</p>
+          <p className="mt-2 text-emerald-400">Competitive Programmer | Backend Developer</p>
         </div>
       </footer>
 
@@ -681,7 +575,6 @@ int32_t main() {
                   href={selectedProject.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() => playClickSound()}
                   className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 transition-colors font-semibold"
                 >
                   Open Project
@@ -707,7 +600,6 @@ int32_t main() {
                     href={selectedAchievement.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={(e) => { e.stopPropagation(); playClickSound(); }}
                     className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 transition-colors font-semibold"
                   >
                     Open Link
