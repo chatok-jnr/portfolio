@@ -1,8 +1,5 @@
 import React, { useState, useEffect, Suspense } from 'react';
-import { Github, Linkedin, Facebook, Instagram, Mail, Phone, ExternalLink, Code2, Award, Briefcase, GraduationCap, MessageSquare, X } from 'lucide-react';
-import hljs from 'highlight.js/lib/core';
-import cpp from 'highlight.js/lib/languages/cpp';
-import 'highlight.js/styles/atom-one-dark.css';
+import { Github, Linkedin, Mail, Phone, ExternalLink, Award, Briefcase, GraduationCap, MessageSquare, X, Facebook, Instagram } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import StatsSection from './component/StatsSection';
 
@@ -10,45 +7,69 @@ const ProjectsSection = React.lazy(() => import('./component/ProjectsSection'));
 const AchievementsSection = React.lazy(() => import('./component/AchievementsSection'));
 const SkillsSection = React.lazy(() => import('./component/SkillsSection'));
 
-hljs.registerLanguage('cpp', cpp);
-
 export default function App() {
-  const [typedCode, setTypedCode] = useState('');
+  const [typedText, setTypedText] = useState('');
+  const [typedRole, setTypedRole] = useState('');
   const [cursorVisible, setCursorVisible] = useState(true);
-  const [showOutput, setShowOutput] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   const [selectedAchievement, setSelectedAchievement] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const cppCode = `#include<bits/stdc++.h>
-using namespace std;
-
-int32_t main() {
-  ios_base::sync_with_stdio(false);cin.tie(nullptr);cout.tie(nullptr);
-  cout << "Hello, I am Chatok Junior" << endl;
-  cout << "Compititive Programmer | Backend Developer" << endl;
-  return 0;
-}`;
+  const firstName = "Hello, I am ";
+  const lastName = "CHA70K JUNIOR";
+  const roles = ["Competitive Programmer", "Back-end Developer"];
 
   useEffect(() => {
-    let index = 0;
-    const interval = setInterval(() => {
-      if (index <= cppCode.length) {
-        setTypedCode(cppCode.slice(0, index));
-        index++;
+    let nameIndex = 0;
+    let currentRole = 0;
+    let roleIndex = 0;
+    let isDeleting = false;
+    let nameInterval;
+    let roleInterval;
+    let cursorInterval;
+    
+    // Type the name first
+    nameInterval = setInterval(() => {
+      const fullName = firstName + lastName;
+      if (nameIndex <= fullName.length) {
+        setTypedText(fullName.slice(0, nameIndex));
+        nameIndex++;
       } else {
-        clearInterval(interval);
-        setTimeout(() => setShowOutput(true), 500);
+        clearInterval(nameInterval);
+        
+        // Start typing roles after name is complete
+        roleInterval = setInterval(() => {
+          if (!isDeleting) {
+            if (roleIndex <= roles[currentRole].length) {
+              setTypedRole(roles[currentRole].slice(0, roleIndex));
+              roleIndex++;
+            } else {
+              // Pause before deleting
+              setTimeout(() => {
+                isDeleting = true;
+              }, 1500);
+            }
+          } else {
+            if (roleIndex > 0) {
+              roleIndex--;
+              setTypedRole(roles[currentRole].slice(0, roleIndex));
+            } else {
+              isDeleting = false;
+              currentRole = (currentRole + 1) % roles.length; // Continuously cycle through roles
+            }
+          }
+        }, 100);
       }
-    }, 15);
+    }, 100);
 
-    const cursorInterval = setInterval(() => {
+    cursorInterval = setInterval(() => {
       setCursorVisible(prev => !prev);
     }, 500);
 
     return () => {
-      clearInterval(interval);
-      clearInterval(cursorInterval);
+      if (nameInterval) clearInterval(nameInterval);
+      if (roleInterval) clearInterval(roleInterval);
+      if (cursorInterval) clearInterval(cursorInterval);
     };
   }, []);
 
@@ -68,11 +89,6 @@ int32_t main() {
       try { delete window.help; } catch {}
     };
   }, []);
-
-  const colorizeCode = (code) => {
-    return hljs.highlight(code, { language: 'cpp' }).value;
-  };
-
 
   const skills = {
     languages: ['C++', 'JavaScript'],
@@ -289,55 +305,19 @@ int32_t main() {
       </nav>
 
       <section id="home" className="min-h-screen flex items-center justify-center px-4 sm:px-6 pt-20">
-        <div className="w-full max-w-3xl">
-          <div className="grid grid-cols-1 gap-4 sm:gap-6 mx-auto glass overflow-hidden">
-            <div className="p-6 bg-gray-900/80">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="flex gap-2">
-                  <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                  <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                  <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                </div>
-                <div className="flex items-center gap-2 text-emerald-400 ml-4">
-                  <Code2 size={20} />
-                  <span className="font-mono text-sm">main.cpp</span>
-                </div>
-              </div>
-              <div className="bg-gray-950/50 rounded-lg p-4 font-mono text-sm overflow-x-auto min-h-[200px]">
-                <div className="flex">
-                  <div className="pr-4 text-gray-600 select-none border-r border-gray-700 mr-4">
-                    {[1,2,3,4,5,6,7,8,9].map(i => (
-                      <div key={i}>{i}</div>
-                    ))}
-                  </div>
-                  <pre className="flex-1">
-                    <code className="language-cpp" dangerouslySetInnerHTML={{ 
-                      __html: colorizeCode(typedCode) + 
-                      `<span class="${cursorVisible ? 'opacity-100' : 'opacity-0'} text-emerald-400">|</span>` 
-                    }} />
-                  </pre>
-                </div>
-              </div>
+        <div className="w-full max-w-5xl text-center">
+          <div className="space-y-4">
+            <div className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold">
+              <span className="text-white glowing-text">{typedText.slice(0, 11)}</span>
+              <span className="text-emerald-400 glowing-text">{typedText.slice(11)}</span>
             </div>
-
-            <div className="p-6 bg-gray-900/60 border-t border-emerald-500/20">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="text-emerald-400 font-mono text-sm">Output</div>
-              </div>
-              <div className="bg-gray-950/50 rounded-lg p-4 font-mono text-sm min-h-[140px]">
-                {showOutput && (
-                  <div className="space-y-2 animate-fade-in">
-                    <div className="text-gray-400">$ ./main</div>
-                    <div className="text-emerald-400 text-lg font-semibold">Hello, I am Chatok Junior</div>
-                    <div className="text-cyan-400">Competitive Programmer | Backend Developer</div>
-                    <div className="text-gray-500 mt-4">Process finished with exit code 0</div>
-                  </div>
-                )}
-              </div>
+            <div className="glowing-text text-2xl sm:text-3xl md:text-4xl">
+              {typedRole}
+              <span className={`typing-cursor ${cursorVisible ? 'opacity-100' : 'opacity-0'}`}></span>
             </div>
           </div>
 
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
+          <div className="mt-12 sm:mt-16 flex flex-wrap justify-center gap-4">
             <a
               href="https://github.com/chatok-jnr"
               target="_blank"
