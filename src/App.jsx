@@ -1,15 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { Github, Linkedin, Facebook, Instagram, Mail, Phone, ExternalLink, Code2, Award, Briefcase, GraduationCap, MessageSquare, X } from 'lucide-react';
 import hljs from 'highlight.js/lib/core';
 import cpp from 'highlight.js/lib/languages/cpp';
 import 'highlight.js/styles/atom-one-dark.css';
+import { Helmet } from 'react-helmet-async';
+import StatsSection from './component/StatsSection';
+
+const ProjectsSection = React.lazy(() => import('./component/ProjectsSection'));
+const AchievementsSection = React.lazy(() => import('./component/AchievementsSection'));
+const SkillsSection = React.lazy(() => import('./component/SkillsSection'));
 
 hljs.registerLanguage('cpp', cpp);
 
 export default function App() {
   const [typedCode, setTypedCode] = useState('');
   const [cursorVisible, setCursorVisible] = useState(true);
-  const [activeSection, setActiveSection] = useState('home');
   const [showOutput, setShowOutput] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   const [selectedAchievement, setSelectedAchievement] = useState(null);
@@ -19,8 +24,9 @@ export default function App() {
 using namespace std;
 
 int32_t main() {
-  cout << "I am Chatok Junior" << endl;
-  cout << "Backend Developer | Compititive Programmer" << endl;
+  ios_base::sync_with_stdio(false);cin.tie(nullptr);cout.tie(nullptr);
+  cout << "Hello, I am Chatok Junior" << endl;
+  cout << "Compititive Programmer | Backend Developer" << endl;
   return 0;
 }`;
 
@@ -34,7 +40,7 @@ int32_t main() {
         clearInterval(interval);
         setTimeout(() => setShowOutput(true), 500);
       }
-    }, 50);
+    }, 15);
 
     const cursorInterval = setInterval(() => {
       setCursorVisible(prev => !prev);
@@ -43,6 +49,23 @@ int32_t main() {
     return () => {
       clearInterval(interval);
       clearInterval(cursorInterval);
+    };
+  }, []);
+
+  // Console easter egg + help()
+  useEffect(() => {
+    try {
+      const style = 'color:#34d399;font-weight:700;font-size:14px';
+      console.log('%cWelcome curious dev 👋', style);
+      console.log('%cBackend running on Express & MongoDB 💚', 'color:#10b981;font-weight:600');
+      console.log('%cType help() for a surprise!', 'color:#a7f3d0');
+    } catch {}
+
+    window.help = () => {
+      console.log('Open GitHub → https://github.com/chatok-jnr');
+    };
+    return () => {
+      try { delete window.help; } catch {}
     };
   }, []);
 
@@ -97,6 +120,42 @@ int32_t main() {
 
   const achievements = [
     { 
+      icon: '🌐', 
+      title: 'ICPC Dhaka Regional 2024', 
+      short: 'Team UITS_ACES participant', 
+      details: `A huge shoutout to my incredible teammates for their dedication, passion, and perseverance. 💪 It was a privilege to be part of this journey together!`, 
+      link: '#',
+      highlights: ['ICPC Regional Participant', 'Team Competition']
+    },
+
+    { 
+      icon: '🌐', 
+      title: 'Competed in 5 Different Inter University Programming Contest', 
+      short: 'Team UITS_ACES participant', 
+      details: `A huge shoutout to my incredible teammates for their dedication, passion, and perseverance. 💪 It was a privilege to be part of this journey together!`, 
+      link: '#',
+      highlights: ['IUT', 'KUET', 'UIU', 'AUST', 'UU']
+    },
+
+    { 
+      icon: '🟢', 
+      title: 'Codeforces Pupil', 
+      short: 'Max Rating: 1344 | 600+ problems solved', 
+      details: ``,
+      link: `https://codeforces.com/profile/chatok.jr`,
+      highlights: ['600+ Problems', 'Active Contestant']
+    },
+
+    { 
+      icon: '⭐', 
+      title: 'CodeChef 3-Star', 
+      short: 'Max Rating: 1724', 
+      details: ``,
+      link: 'https://www.codechef.com/users/chatok_junior',
+      highlights: ['3-Star', 'Contest Performance']
+    },
+
+    { 
       icon: '🏆', 
       title: 'Champion – UITS Hackify Fest 2025', 
       short: 'Team UITS_ACES - 1st place among top university programmers', 
@@ -122,24 +181,6 @@ int32_t main() {
       link: `https://www.linkedin.com/posts/chatok-junior_i-am-happy-to-share-that-i-became-the-first-activity-7182949932599840769-iTSU?utm_source=social_share_send&utm_medium=member_desktop_web&rcm=ACoAADWQgRYBTcu-Rldj4Z0YC59wEOuxG-zfjNA`,
       highlights: ['Solo Victory', 'Problem Solving']
     },
-    
-    { 
-      icon: '🟢', 
-      title: 'Codeforces Pupil', 
-      short: 'Max Rating: 1344 | 600+ problems solved', 
-      details: ``,
-      link: `https://codeforces.com/profile/chatok.jr`,
-      highlights: ['600+ Problems', 'Active Contestant']
-    },
-
-    { 
-      icon: '⭐', 
-      title: 'CodeChef 3-Star', 
-      short: 'Max Rating: 1724', 
-      details: ``,
-      link: 'https://www.codechef.com/users/chatok_junior',
-      highlights: ['3-Star', 'Contest Performance']
-    },
 
     { 
       icon: '🎯', 
@@ -147,20 +188,10 @@ int32_t main() {
       short: 'Solved across multiple online judges', 
       details: '',
       highlights: ['1000+ Problems', 'Wide Platform Coverage']
-    },
-
-    { 
-      icon: '🌐', 
-      title: 'ICPC Dhaka Regional 2024', 
-      short: 'Team UITS_ACES participant', 
-      details: `A huge shoutout to my incredible teammates for their dedication, passion, and perseverance. 💪 It was a privilege to be part of this journey together!`, 
-      link: '#',
-      highlights: ['ICPC Regional Participant', 'Team Competition']
     }
   ];
 
   const scrollToSection = (id) => {
-    setActiveSection(id);
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
@@ -194,10 +225,19 @@ int32_t main() {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-100">
 
 
+      <Helmet>
+        <title>Chatok Junior | Portfolio</title>
+        <meta name="description" content="Competitive Programmer and Backend Developer — projects, achievements, and contact info." />
+        <meta property="og:title" content="Chatok Junior | Portfolio" />
+        <meta property="og:description" content="Competitive Programmer and Backend Developer — projects, achievements, and contact info." />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="/og-image.png" />
+      </Helmet>
+
       <nav className="fixed top-0 w-full bg-gray-900/80 backdrop-blur-md z-50 border-b border-emerald-500/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex justify-between items-center">
-            <div className="text-xl sm:text-2xl font-bold text-emerald-400">{'<Chatok Junior/>'}</div>
+            <div className="text-xl sm:text-2xl font-bold text-emerald-400">{'< Chatok Junior />'}</div>
             {/* Mobile menu button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -215,13 +255,11 @@ int32_t main() {
             </button>
             {/* Desktop menu */}
             <div className="hidden md:flex gap-8">
-              {['home', 'about', 'projects', 'achievements', 'contact'].map(item => (
+              {['home', 'skills', 'projects', 'achievements', 'contact'].map(item => (
                 <button
                   key={item}
                   onClick={() => scrollToSection(item)}
-                  className={`capitalize hover:text-emerald-400 transition-colors ${
-                    activeSection === item ? 'text-emerald-400' : 'text-gray-300'
-                  }`}
+                  className="capitalize text-gray-300 hover:text-emerald-400 transition-colors"
                 >
                   {item}
                 </button>
@@ -232,16 +270,14 @@ int32_t main() {
           {isMobileMenuOpen && (
             <div className="md:hidden pt-4">
               <div className="flex flex-col space-y-4 pb-3">
-                {['home', 'about', 'projects', 'achievements', 'contact'].map(item => (
+                {['home', 'skills', 'projects', 'achievements', 'contact'].map(item => (
                   <button
                     key={item}
                     onClick={() => {
                       scrollToSection(item);
                       setIsMobileMenuOpen(false);
                     }}
-                    className={`capitalize hover:text-emerald-400 transition-colors ${
-                      activeSection === item ? 'text-emerald-400' : 'text-gray-300'
-                    }`}
+                    className="capitalize text-gray-300 hover:text-emerald-400 transition-colors"
                   >
                     {item}
                   </button>
@@ -254,7 +290,7 @@ int32_t main() {
 
       <section id="home" className="min-h-screen flex items-center justify-center px-4 sm:px-6 pt-20">
         <div className="w-full max-w-3xl">
-          <div className="grid grid-cols-1 gap-4 sm:gap-6 mx-auto bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-emerald-500/30 shadow-2xl shadow-emerald-500/10 overflow-hidden">
+          <div className="grid grid-cols-1 gap-4 sm:gap-6 mx-auto glass overflow-hidden">
             <div className="p-6 bg-gray-900/80">
               <div className="flex items-center gap-2 mb-4">
                 <div className="flex gap-2">
@@ -306,13 +342,13 @@ int32_t main() {
               href="https://github.com/chatok-jnr"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-6 py-3 bg-emerald-500 text-gray-900 rounded-lg font-semibold hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/50 hover:shadow-emerald-500/70 hover:scale-105"
+              className="px-6 py-3 bg-emerald-500 text-gray-900 rounded-lg font-semibold transition-all glow"
             >
               View GitHub
             </a>
             <button
               onClick={() => scrollToSection('contact')}
-              className="px-6 py-3 border-2 border-emerald-500 text-emerald-400 rounded-lg font-semibold hover:bg-emerald-500/10 transition-all shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/50 hover:scale-105"
+              className="px-6 py-3 border-2 border-emerald-500 text-emerald-400 rounded-lg font-semibold transition-all glow"
             >
               Get In Touch
             </button>
@@ -332,136 +368,19 @@ int32_t main() {
         </div>
       </section>
 
-      <section id="about" className="min-h-screen flex items-center justify-center px-4 sm:px-6 py-16 sm:py-20">
-        <div className="max-w-6xl w-full">
-          <h2 className="text-3xl sm:text-5xl font-bold text-emerald-400 mb-8 sm:mb-12 text-center">
-            <GraduationCap className="inline mr-2 sm:mr-3 w-8 h-8 sm:w-12 sm:h-12" />
-            About Me
-          </h2>
-          
-          <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-            <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 border border-emerald-500/30 hover:border-emerald-500/50 transition-all hover:shadow-lg hover:shadow-emerald-500/20">
-              <h3 className="text-2xl font-bold text-emerald-400 mb-4">Education</h3>
-              <p className="text-xl font-semibold mb-2">University of Information Technology & Sciences</p>
-              <p className="text-gray-400 mb-2">B.Sc. in Computer Science and Engineering</p>
-              <p className="text-emerald-400 font-semibold">CGPA: 3.60 / 4.00</p>
-              <p className="text-gray-400">Expected Graduation: June 2026</p>
-              <p className="mt-4 text-gray-300">Focus: Data Structures, Algorithms, and Backend Development</p>
-            </div>
+      <Suspense fallback={<section id="skills" className="px-4 sm:px-6 py-16 text-center text-gray-400">Loading skills…</section>}>
+        <SkillsSection skills={skills} />
+      </Suspense>
 
-            <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 border border-emerald-500/30 hover:border-emerald-500/50 transition-all hover:shadow-lg hover:shadow-emerald-500/20">
-              <h3 className="text-2xl font-bold text-emerald-400 mb-4">Skills</h3>
-              <div className="space-y-4">
-                {Object.entries(skills).map(([category, items]) => (
-                  <div key={category}>
-                    <p className="text-gray-400 capitalize font-semibold mb-2">{category}:</p>
-                    <div className="flex flex-wrap gap-2">
-                      {items.map(skill => (
-                        <span key={skill} className="px-4 py-2 bg-emerald-500/20 text-emerald-400 rounded-lg text-sm border border-emerald-500/30 hover:bg-emerald-500/30 transition-all hover:scale-105">
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Live developer stats */}
+      <StatsSection githubUser="chatok-jnr" codeforcesUser="chatok.jr" />
+      <Suspense fallback={<section id="projects" className="px-4 sm:px-6 py-16 text-center text-gray-400">Loading projects…</section>}>
+        <ProjectsSection projects={projects} onOpen={openProjectDetails} />
+      </Suspense>
 
-      <section id="projects" className="min-h-screen flex items-center justify-center px-4 sm:px-6 py-16 sm:py-20 bg-gray-900/50">
-        <div className="max-w-6xl w-full">
-          <h2 className="text-3xl sm:text-5xl font-bold text-emerald-400 mb-8 sm:mb-12 text-center">
-            <Briefcase className="inline mr-2 sm:mr-3 w-8 h-8 sm:w-12 sm:h-12" />
-            Projects
-          </h2>
-          
-          <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-            {projects.map((project, idx) => (
-              <div
-                key={idx}
-                onClick={() => openProjectDetails(project)}
-                className="cursor-pointer bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 border border-emerald-500/30 hover:border-emerald-500/50 transition-all hover:shadow-lg hover:shadow-emerald-500/20"
-              >
-                <h3 className="text-2xl font-bold text-emerald-400 mb-2">{project.title}</h3>
-                <p className="text-gray-400 text-sm mb-4">{project.tech}</p>
-                <p className="text-gray-300 mb-4">{project.short}</p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {project.highlights.map((h, i) => (
-                    <span key={i} className="px-3 py-1 bg-emerald-500/10 text-emerald-400 rounded-full text-xs border border-emerald-500/20">
-                      {h}
-                    </span>
-                  ))}
-                </div>
-                <a
-                  href={project.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => { e.stopPropagation(); playClickSound(); }}
-                  className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 transition-colors font-semibold group"
-                >
-                  View Project
-                  <ExternalLink size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                </a>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="achievements" className="min-h-screen flex items-center justify-center px-4 sm:px-6 py-16 sm:py-20">
-        <div className="max-w-6xl w-full">
-          <h2 className="text-3xl sm:text-5xl font-bold text-emerald-400 mb-8 sm:mb-12 text-center">
-            <Award className="inline mr-2 sm:mr-3 w-8 h-8 sm:w-12 sm:h-12" />
-            Achievements
-          </h2>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
-            {achievements.map((achievement, idx) => (
-              <div
-                key={idx}
-                onClick={() => openAchievementDetails(achievement)}
-                className="cursor-pointer bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-emerald-500/30 hover:border-emerald-500/50 transition-all hover:shadow-lg hover:shadow-emerald-500/20 text-center"
-              >
-                <div className="text-5xl mb-4">{achievement.icon}</div>
-                <h3 className="text-lg font-bold text-emerald-400 mb-2">{achievement.title}</h3>
-                  <p className="text-gray-400 text-sm">{achievement.short}</p>
-                  <div className="flex flex-wrap gap-2 mt-4 justify-center">
-                    {(achievement.highlights || []).map((h, i) => (
-                      <span key={i} className="px-3 py-1 bg-emerald-500/10 text-emerald-400 rounded-full text-xs border border-emerald-500/20">
-                        {h}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="mt-4">
-                    <a
-                      href={achievement.link || '#'}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) => { e.stopPropagation(); playClickSound(); }}
-                      className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 transition-colors font-semibold"
-                    >
-                      Learn More
-                      <ExternalLink size={16} />
-                    </a>
-                  </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-12 bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 border border-emerald-500/30">
-            <h3 className="text-2xl font-bold text-emerald-400 mb-4 flex items-center gap-2">
-              <MessageSquare size={28} />
-              Mentorship & Community
-            </h3>
-            <p className="text-gray-300">
-              Regularly mentor junior students in Competitive Programming, organizing problem-solving sessions 
-              and guiding them through algorithmic concepts to improve their logical reasoning and contest performance.
-            </p>
-          </div>
-        </div>
-      </section>
+      <Suspense fallback={<section id="achievements" className="px-4 sm:px-6 py-16 text-center text-gray-400">Loading achievements…</section>}>
+        <AchievementsSection achievements={achievements} onOpen={openAchievementDetails} />
+      </Suspense>
 
       <section id="contact" className="min-h-screen flex items-center justify-center px-4 sm:px-6 py-16 sm:py-20 bg-gray-900/50">
         <div className="max-w-4xl w-full text-center">
@@ -469,7 +388,7 @@ int32_t main() {
             Get In Touch
           </h2>
           
-          <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 sm:p-12 border border-emerald-500/30">
+          <div className="glass glow p-6 sm:p-12">
             <p className="text-xl text-gray-300 mb-8">
               I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.
             </p>
@@ -492,7 +411,7 @@ int32_t main() {
                   href="https://github.com/chatok-jnr"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-emerald-500 text-gray-900 rounded-lg font-semibold hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/50 hover:shadow-emerald-500/70 hover:scale-105 transform"
+                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-emerald-500 text-gray-900 rounded-lg font-semibold transition-all glow transform"
                 >
                   <Github className="inline mr-2" size={20} />
                   GitHub
@@ -501,17 +420,28 @@ int32_t main() {
                   href="https://www.linkedin.com/in/chatok-junior/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-emerald-500 text-gray-900 rounded-lg font-semibold hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/50 hover:shadow-emerald-500/70 hover:scale-105 transform"
+                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-emerald-500 text-gray-900 rounded-lg font-semibold transition-all glow transform"
                 >
                   <Linkedin className="inline mr-2" size={20} />
                   LinkedIn
+                </a>
+                {/* TODO: Replace `your-user-id` with your actual Discord user ID (Settings -> Advanced -> Developer Mode -> copy ID) */}
+                <a
+                  href="https://discord.com/users/741680363453022279"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Discord"
+                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-emerald-500 text-gray-900 rounded-lg font-semibold transition-all glow transform"
+                >
+                  <MessageSquare className="inline mr-2" size={20} />
+                  Discord
                 </a>
                 <a
                   href="https://www.facebook.com/sakib.the.jnr.chatok/"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Facebook"
-                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-emerald-500 text-gray-900 rounded-lg font-semibold hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/50 hover:shadow-emerald-500/70 hover:scale-105 transform"
+                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-emerald-500 text-gray-900 rounded-lg font-semibold transition-all glow transform"
                 >
                   <Facebook className="inline mr-2" size={20} />
                   Facebook
@@ -521,7 +451,7 @@ int32_t main() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Instagram"
-                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-emerald-500 text-gray-900 rounded-lg font-semibold hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/50 hover:shadow-emerald-500/70 hover:scale-105 transform"
+                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-emerald-500 text-gray-900 rounded-lg font-semibold transition-all glow transform"
                 >
                   <Instagram className="inline mr-2" size={20} />
                   Instagram

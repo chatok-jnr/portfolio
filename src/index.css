@@ -13,3 +13,27 @@ body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI"
 .content{width:100%;max-width:900px;background:rgba(255,255,255,0.02);padding:1.25rem;border-radius:8px;box-shadow:0 6px 18px rgba(2,6,23,0.6)}
 .content section{margin-bottom:1rem}
 .footer{margin-top:2rem;opacity:0.7}
+
+/* Custom utility classes */
+@layer utilities {
+	/* Glassmorphism surface */
+	.glass {
+		@apply rounded-2xl border border-emerald-500/20 bg-white/5 backdrop-blur-md shadow-lg shadow-emerald-500/10;
+	}
+
+	/* Subtle emerald glow with hover lift */
+	.glow {
+		transition: box-shadow 200ms ease, transform 200ms ease, border-color 200ms ease;
+		box-shadow: 0 2px 16px rgba(16, 185, 129, 0.1);
+	}
+
+	.glow:hover {
+		box-shadow: 0 8px 40px rgba(16, 185, 129, 0.25), 0 0 0 1px rgba(16, 185, 129, 0.15);
+		transform: translateY(-2px);
+		border-color: rgba(16, 185, 129, 0.4) !important;
+	}
+
+	.btn-glass {
+		@apply glass glow px-6 py-3 font-semibold transition-all;
+	}
+}
