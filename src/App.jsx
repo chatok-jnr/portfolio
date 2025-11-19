@@ -1,5 +1,6 @@
 import React, { useState, useEffect, Suspense } from 'react';
-import { Github, Linkedin, Mail, Phone, ExternalLink, Award, Briefcase, GraduationCap, MessageSquare, X, Facebook, Instagram } from 'lucide-react';
+import { Github, Linkedin, Mail, Phone, ExternalLink, Award, Briefcase, GraduationCap, X, Facebook, Instagram } from 'lucide-react';
+import { UilDiscord } from '@iconscout/react-unicons';
 import { Helmet } from 'react-helmet-async';
 import StatsSection from './component/StatsSection';
 
@@ -140,7 +141,7 @@ export default function App() {
       title: 'ICPC Dhaka Regional 2024', 
       short: 'Team UITS_ACES participant', 
       details: `A huge shoutout to my incredible teammates for their dedication, passion, and perseverance. 💪 It was a privilege to be part of this journey together!`, 
-      link: '#',
+      link: 'https://ln.run/XHCRL',
       highlights: ['ICPC Regional Participant', 'Team Competition']
     },
 
@@ -149,7 +150,7 @@ export default function App() {
       title: 'Competed in 5 Different Inter University Programming Contest', 
       short: 'Team UITS_ACES participant', 
       details: `A huge shoutout to my incredible teammates for their dedication, passion, and perseverance. 💪 It was a privilege to be part of this journey together!`, 
-      link: '#',
+      //link: '#',
       highlights: ['IUT', 'KUET', 'UIU', 'AUST', 'UU']
     },
 
@@ -200,10 +201,10 @@ export default function App() {
 
     { 
       icon: '🎯', 
-      title: '1000+ Problems', 
+      title: 'Solved 1000+ Problems', 
       short: 'Solved across multiple online judges', 
       details: '',
-      highlights: ['1000+ Problems', 'Wide Platform Coverage']
+      highlights: ['Codeforces', 'Atcoder', 'Light Oj', 'Toph', 'UVA', 'Spoj', 'Codechef', 'Beecrowd']
     }
   ];
 
@@ -334,15 +335,18 @@ export default function App() {
             </button>
           </div>
 
-          <div className="flex justify-center gap-4 sm:gap-6 mt-8">
-            <a href="https://github.com/chatok-jnr" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-emerald-400 transition-colors hover:scale-110 transform p-2">
-              <Github size={24} className="sm:w-7 sm:h-7" />
+          <div className="flex justify-center gap-6 sm:gap-8 mt-8">
+            <a href="https://github.com/chatok-jnr" target="_blank" rel="noopener noreferrer" className="text-emerald-400 hover:text-emerald-300 transition-colors social-icon-glow">
+              <Github size={28} className="sm:w-8 sm:h-8" />
             </a>
-            <a href="https://www.linkedin.com/in/chatok-junior/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-emerald-400 transition-colors hover:scale-110 transform p-2">
-              <Linkedin size={24} className="sm:w-7 sm:h-7" />
+            <a href="https://www.linkedin.com/in/chatok-junior/" target="_blank" rel="noopener noreferrer" className="text-emerald-400 hover:text-emerald-300 transition-colors social-icon-glow">
+              <Linkedin size={28} className="sm:w-8 sm:h-8" />
             </a>
-            <a href="mailto:md.sakib.hos3n@gmail.com" className="text-gray-400 hover:text-emerald-400 transition-colors hover:scale-110 transform p-2">
-              <Mail size={24} className="sm:w-7 sm:h-7" />
+            <a href="mailto:md.sakib.hos3n@gmail.com" className="text-emerald-400 hover:text-emerald-300 transition-colors social-icon-glow">
+              <Mail size={28} className="sm:w-8 sm:h-8" />
+            </a>
+            <a href="https://discord.com/users/741680363453022279" target="_blank" rel="noopener noreferrer" className="text-emerald-400 hover:text-emerald-300 transition-colors social-icon-glow">
+              <UilDiscord size={28} className="sm:w-8 sm:h-8" />
             </a>
           </div>
         </div>
@@ -405,7 +409,6 @@ export default function App() {
                   <Linkedin className="inline mr-2" size={20} />
                   LinkedIn
                 </a>
-                {/* TODO: Replace `your-user-id` with your actual Discord user ID (Settings -> Advanced -> Developer Mode -> copy ID) */}
                 <a
                   href="https://discord.com/users/741680363453022279"
                   target="_blank"
@@ -413,28 +416,8 @@ export default function App() {
                   aria-label="Discord"
                   className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-emerald-500 text-gray-900 rounded-lg font-semibold transition-all glow transform"
                 >
-                  <MessageSquare className="inline mr-2" size={20} />
+                  <UilDiscord className="inline mr-2" size={20} />
                   Discord
-                </a>
-                <a
-                  href="https://www.facebook.com/sakib.the.jnr.chatok/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Facebook"
-                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-emerald-500 text-gray-900 rounded-lg font-semibold transition-all glow transform"
-                >
-                  <Facebook className="inline mr-2" size={20} />
-                  Facebook
-                </a>
-                <a
-                  href="https://www.instagram.com/chatok.jr/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Instagram"
-                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-emerald-500 text-gray-900 rounded-lg font-semibold transition-all glow transform"
-                >
-                  <Instagram className="inline mr-2" size={20} />
-                  Instagram
                 </a>
               </div>
             </div>
@@ -533,8 +516,27 @@ export default function App() {
             transform: translateY(0);
           }
         }
+        @keyframes pulse-glow {
+          0% {
+            filter: drop-shadow(0 0 5px rgba(52, 211, 153, 0.4));
+          }
+          50% {
+            filter: drop-shadow(0 0 15px rgba(52, 211, 153, 0.8));
+          }
+          100% {
+            filter: drop-shadow(0 0 5px rgba(52, 211, 153, 0.4));
+          }
+        }
         .animate-fade-in {
           animation: fade-in 0.5s ease-out;
+        }
+        .social-icon-glow {
+          animation: pulse-glow 2s ease-in-out infinite;
+          transition: transform 0.3s ease;
+        }
+        .social-icon-glow:hover {
+          transform: scale(1.1);
+          animation: pulse-glow 1s ease-in-out infinite;
         }
       `}</style>
     </div>
