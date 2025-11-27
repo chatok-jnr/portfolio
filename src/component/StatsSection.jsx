@@ -52,16 +52,17 @@ export default function StatsSection({ githubUser, codeforcesUser }) {
   }, [githubUser, codeforcesUser]);
 
   return (
-    <section id="stats" className="px-4 sm:px-6 py-16 sm:py-20">
+    <section id="stats" className="px-4 sm:px-6 py-16 sm:py-20 relative">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl sm:text-5xl font-bold text-emerald-400 mb-8 sm:mb-12 text-center">
-          Live Developer Stats
+          📊 Live Developer Stats
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
           {/* GitHub card */}
-          <div className="glass glow p-6">
-            <h3 className="text-xl font-semibold text-emerald-400 mb-4">GitHub</h3>
+          <div className="glass glow p-6 transition-all duration-300 relative overflow-hidden group">
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <h3 className="text-xl font-semibold text-emerald-400 mb-4 relative z-10">🐙 GitHub</h3>
             {github.loading && <p className="text-gray-400">Loading stats…</p>}
             {!github.loading && github.error && (
               <p className="text-red-400">Unable to fetch data: {github.error}</p>
@@ -84,8 +85,9 @@ export default function StatsSection({ githubUser, codeforcesUser }) {
           </div>
 
           {/* Codeforces card */}
-          <div className="glass glow p-6">
-            <h3 className="text-xl font-semibold text-emerald-400 mb-4">Codeforces</h3>
+          <div className="glass glow p-6 transition-all duration-300 relative overflow-hidden group">
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <h3 className="text-xl font-semibold text-emerald-400 mb-4 relative z-10">💻 Codeforces</h3>
             {cf.loading && <p className="text-gray-400">Loading stats…</p>}
             {!cf.loading && cf.error && (
               <p className="text-red-400">Unable to fetch data: {cf.error}</p>

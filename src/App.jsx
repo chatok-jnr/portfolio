@@ -1,8 +1,10 @@
 import React, { useState, useEffect, Suspense } from 'react';
-import { Github, Linkedin, Mail, Phone, ExternalLink, Award, Briefcase, GraduationCap, X, Facebook, Instagram } from 'lucide-react';
+import { Github, Linkedin, Mail, Phone, ExternalLink, Award, Briefcase, GraduationCap, X, Facebook, Instagram, Download } from 'lucide-react';
 import { UilDiscord } from '@iconscout/react-unicons';
 import { Helmet } from 'react-helmet-async';
 import StatsSection from './component/StatsSection';
+import profilePhoto from './assets/Md. Sakib Hosen.png';
+import cvPdf from './assets/cv.pdf';
 
 const ProjectsSection = React.lazy(() => import('./component/ProjectsSection'));
 const AchievementsSection = React.lazy(() => import('./component/AchievementsSection'));
@@ -15,10 +17,34 @@ export default function App() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [selectedAchievement, setSelectedAchievement] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [hoveredLink, setHoveredLink] = useState(null);
+  const [orbitAngle, setOrbitAngle] = useState(0);
+  const [isOrbitPaused, setIsOrbitPaused] = useState(false);
+  const [particles, setParticles] = useState([]);
+  const particleIdRef = React.useRef(0);
+  const emitAccumRef = React.useRef(0);
+
+  // Orbital links configuration
+  const socialLinks = [
+    { id: 'github', url: 'https://github.com/chatok-jnr', icon: Github, label: 'GitHub' },
+    { id: 'codeforces', url: 'https://codeforces.com/profile/chatok.jr', text: 'CF', label: 'Codeforces' },
+    { id: 'codechef', url: 'https://www.codechef.com/users/chatok_junior', text: 'CC', label: 'CodeChef' },
+    { id: 'linkedin', url: 'https://www.linkedin.com/in/chatok-junior/', icon: Linkedin, label: 'LinkedIn' },
+    { id: 'email', url: 'mailto:md.sakib.hos3n@gmail.com', icon: Mail, label: 'Email' },
+    { id: 'discord', url: 'https://discord.com/users/741680363453022279', icon: UilDiscord, label: 'Discord' }
+  ];
+
+  // Calculate orbital positions using trigonometry
+  const getOrbitalPosition = (index, total, radius, baseAngle = 0) => {
+    const angle = ((index * 2 * Math.PI) / total) + baseAngle - Math.PI / 2; // Start from top
+    const x = radius * Math.cos(angle);
+    const y = radius * Math.sin(angle);
+    return { x, y };
+  };
 
   const firstName = "Hello, I am ";
   const lastName = "CHA70K JUNIOR";
-  const roles = ["Competitive Programmer", "Back-end Developer"];
+  const roles = ["Competitive Programmer", "Back-End Developer"];
 
   useEffect(() => {
     let nameIndex = 0;
@@ -73,6 +99,69 @@ export default function App() {
       if (cursorInterval) clearInterval(cursorInterval);
     };
   }, []);
+
+  // Orbit animation using requestAnimationFrame
+  useEffect(() => {
+    let rafId;
+    let lastTime = performance.now();
+    const speed = 0.0002; // radians per ms (~0.0005 rad/ms ≈ 1 rev ~ 12,566ms)
+
+    const tick = (now) => {
+      const dt = now - lastTime;
+      lastTime = now;
+      if (!isOrbitPaused) {
+        // advance angle first
+        setOrbitAngle(prev => (prev + dt * speed) % (Math.PI * 2));
+
+        // Emit particles at a controlled cadence (every ~60ms)
+        emitAccumRef.current += dt;
+        const shouldEmit = emitAccumRef.current >= 60; // ms
+        if (shouldEmit) {
+          emitAccumRef.current = 0;
+          const currentAngle = (orbitAngle + dt * speed) % (Math.PI * 2);
+          setParticles(prev => {
+            const next = [...prev];
+            const imageRadius = { base: 112, sm: 128, md: 144 };
+            const margin = 36;
+            const radius = imageRadius.base + margin + 40;
+            socialLinks.forEach((_, index) => {
+              const pos = getOrbitalPosition(index, socialLinks.length, radius, currentAngle);
+              const id = particleIdRef.current++;
+              next.push({
+                id,
+                x: pos.x + (Math.random() - 0.5) * 6,
+                y: pos.y + (Math.random() - 0.5) * 6,
+                size: 3 + Math.random() * 2,
+                opacity: 0.9,
+                life: 800
+              });
+            });
+            // Age particles
+            const aged = next.map(p => ({
+              ...p,
+              life: p.life - dt,
+              opacity: Math.max(0, p.opacity - (dt / 800)),
+              size: Math.max(1, p.size - (dt / 800) * 1.5)
+            }));
+            return aged.filter(p => p.life > 0).slice(-600);
+          });
+        } else {
+          // Even if not emitting this frame, continue aging existing particles
+          setParticles(prev => prev.map(p => ({
+            ...p,
+            life: p.life - dt,
+            opacity: Math.max(0, p.opacity - (dt / 800)),
+            size: Math.max(1, p.size - (dt / 800) * 1.5)
+          })).filter(p => p.life > 0));
+        }
+      }
+      rafId = requestAnimationFrame(tick);
+    };
+    rafId = requestAnimationFrame(tick);
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+    };
+  }, [isOrbitPaused, socialLinks.length]);
 
   // Console easter egg + help()
   useEffect(() => {
@@ -136,6 +225,15 @@ export default function App() {
   ];
 
   const achievements = [
+    { 
+      icon: '🌐', 
+      title: 'ICPC Dhaka Regional 2025', 
+      short: 'Team UITS_ACES participant', 
+    //  details: `A huge shoutout to my incredible teammates for their dedication, passion, and perseverance. 💪 It was a privilege to be part of this journey together!`, 
+      //link: 'https://ln.run/XHCRL',
+      highlights: ['ICPC Regional Participant', 'Team Competition']
+    },
+
     { 
       icon: '🌐', 
       title: 'ICPC Dhaka Regional 2024', 
@@ -239,7 +337,15 @@ export default function App() {
   }, [selectedProject, selectedAchievement]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-100 relative overflow-hidden">
+      {/* Floating particles */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="absolute top-20 left-10 w-2 h-2 bg-emerald-400 rounded-full animate-ping opacity-75"></div>
+        <div className="absolute top-40 right-20 w-3 h-3 bg-emerald-300 rounded-full" style={{animation: 'float 6s ease-in-out infinite'}}></div>
+        <div className="absolute top-60 left-1/4 w-2 h-2 bg-emerald-500 rounded-full" style={{animation: 'float 8s ease-in-out infinite 1s'}}></div>
+        <div className="absolute bottom-40 right-1/3 w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+        <div className="absolute bottom-20 left-1/2 w-3 h-3 bg-emerald-300 rounded-full" style={{animation: 'float 7s ease-in-out infinite 2s'}}></div>
+      </div>
 
 
       <Helmet>
@@ -251,10 +357,10 @@ export default function App() {
         <meta property="og:image" content="/og-image.png" />
       </Helmet>
 
-      <nav className="fixed top-0 w-full bg-gray-900/80 backdrop-blur-md z-50 border-b border-emerald-500/20">
+      <nav className="fixed top-0 w-full bg-gray-900/60 backdrop-blur-xl z-50 border-b border-emerald-400/30 shadow-lg shadow-emerald-500/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex justify-between items-center">
-            <div className="text-xl sm:text-2xl font-bold text-emerald-400">{'< Chatok Junior />'}</div>
+            <div className="text-xl sm:text-2xl font-bold text-emerald-400 transition-colors hover:text-emerald-300 cursor-pointer">{'< Chatok Junior />'}</div>
             {/* Mobile menu button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -305,49 +411,160 @@ export default function App() {
         </div>
       </nav>
 
-      <section id="home" className="min-h-screen flex items-center justify-center px-4 sm:px-6 pt-20">
-        <div className="w-full max-w-5xl text-center">
-          <div className="space-y-4">
-            <div className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold">
-              <span className="text-white glowing-text">{typedText.slice(0, 11)}</span>
-              <span className="text-emerald-400 glowing-text">{typedText.slice(11)}</span>
-            </div>
-            <div className="glowing-text text-2xl sm:text-3xl md:text-4xl">
-              {typedRole}
-              <span className={`typing-cursor ${cursorVisible ? 'opacity-100' : 'opacity-0'}`}></span>
-            </div>
-          </div>
+      <section id="home" className="min-h-screen flex items-center justify-center px-4 sm:px-6 pt-20 relative">
+        <div className="w-full max-w-7xl">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            
+            {/* Left Side - Text Content */}
+            <div className="space-y-6 text-center lg:text-left order-2 lg:order-1">
+              <div className="space-y-4">
+                <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
+                  <div className="text-white glowing-text">Hello,</div>
+                  <div>
+                    <span className="text-white glowing-text">I am </span>
+                    <span className="text-emerald-400 glowing-text">CHA70K JUNIOR</span>
+                  </div>
+                </div>
+                <div className="glowing-text text-xl sm:text-2xl md:text-3xl text-emerald-300">
+                  {typedRole}
+                  <span className={`typing-cursor ${cursorVisible ? 'opacity-100' : 'opacity-0'}`}></span>
+                </div>
+              </div>
 
-          <div className="mt-12 sm:mt-16 flex flex-wrap justify-center gap-4">
-            <a
-              href="https://github.com/chatok-jnr"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-6 py-3 bg-emerald-500 text-gray-900 rounded-lg font-semibold transition-all glow"
-            >
-              View GitHub
-            </a>
-            <button
-              onClick={() => scrollToSection('contact')}
-              className="px-6 py-3 border-2 border-emerald-500 text-emerald-400 rounded-lg font-semibold transition-all glow"
-            >
-              Get In Touch
-            </button>
-          </div>
+              <div className="mt-8 lg:mt-12 flex flex-wrap justify-center lg:justify-start gap-4">
+                {/* <a
+                  href="https://github.com/chatok-jnr"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-8 py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 text-gray-900 rounded-xl font-bold transition-all glow hover:from-emerald-400 hover:to-emerald-500 shadow-xl shadow-emerald-500/40"
+                >
+                  🚀 View GitHub
+                </a> */}
+                <a
+                  href={cvPdf}
+                  download="Chatok_Junior_CV.pdf"
+                  className="px-8 py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 text-gray-900 rounded-xl font-bold transition-all glow hover:from-emerald-400 hover:to-emerald-500 shadow-xl shadow-emerald-500/40 flex items-center gap-2"
+                >
+                  <Download size={20} />
+                  Download CV
+                </a>
+                <button
+                  onClick={() => scrollToSection('contact')}
+                  className="px-8 py-4 border-2 border-emerald-400 bg-emerald-500/10 text-emerald-300 rounded-xl font-bold transition-all glow hover:bg-emerald-500/20 hover:border-emerald-300 shadow-lg shadow-emerald-500/20"
+                >
+                  💬 Get In Touch
+                </button>
+              </div>
+            </div>
 
-          <div className="flex justify-center gap-6 sm:gap-8 mt-8">
-            <a href="https://github.com/chatok-jnr" target="_blank" rel="noopener noreferrer" className="text-emerald-400 hover:text-emerald-300 transition-colors social-icon-glow">
-              <Github size={28} className="sm:w-8 sm:h-8" />
-            </a>
-            <a href="https://www.linkedin.com/in/chatok-junior/" target="_blank" rel="noopener noreferrer" className="text-emerald-400 hover:text-emerald-300 transition-colors social-icon-glow">
-              <Linkedin size={28} className="sm:w-8 sm:h-8" />
-            </a>
-            <a href="mailto:md.sakib.hos3n@gmail.com" className="text-emerald-400 hover:text-emerald-300 transition-colors social-icon-glow">
-              <Mail size={28} className="sm:w-8 sm:h-8" />
-            </a>
-            <a href="https://discord.com/users/741680363453022279" target="_blank" rel="noopener noreferrer" className="text-emerald-400 hover:text-emerald-300 transition-colors social-icon-glow">
-              <UilDiscord size={28} className="sm:w-8 sm:h-8" />
-            </a>
+            {/* Right Side - Profile Image with Orbital Links */}
+            <div className="flex justify-center lg:justify-end order-1 lg:order-2">
+              <div className="relative w-[320px] h-[320px] sm:w-[400px] sm:h-[400px] md:w-[480px] md:h-[480px]">
+                {/* Center Profile Image */}
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
+                  <div className="relative group">
+                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-full blur-xl opacity-75 group-hover:opacity-100 transition-opacity animate-pulse"></div>
+                    <div className="relative w-56 h-56 sm:w-64 sm:h-64 md:w-72 md:h-72 rounded-full overflow-hidden border-4 border-emerald-400 shadow-2xl shadow-emerald-500/50">
+                      <img 
+                        src={profilePhoto} 
+                        alt="Chatok Junior" 
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </div>
+                </div>
+                {/* Dynamically positioned orbital links with rotation */}
+                <div
+                  className="absolute inset-0"
+                  onClick={() => setIsOrbitPaused(p => !p)}
+                  aria-label="Orbit container"
+                >
+                  {/* Particle trail layer (behind icons) */}
+                  <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 15 }}>
+                    {particles.map(p => (
+                      <div
+                        key={p.id}
+                        className="absolute rounded-full"
+                        style={{
+                          left: `calc(50% + ${p.x}px)`,
+                          top: `calc(50% + ${p.y}px)`,
+                          width: `${p.size}px`,
+                          height: `${p.size}px`,
+                          transform: 'translate(-50%, -50%)',
+                          background: 'rgba(16,185,129,0.9)', // emerald-500
+                          boxShadow: '0 0 8px rgba(16,185,129,0.6)',
+                          opacity: p.opacity
+                        }}
+                      />
+                    ))}
+                  </div>
+                  {socialLinks.map((link, index) => {
+                    // Ensure icons don't overlap the image: set radius > imageRadius + margin
+                    const imageRadius = {
+                      base: 112, // w-56 -> diameter 224 -> radius 112
+                      sm: 128,    // w-64 -> 256 -> 128
+                      md: 144     // w-72 -> 288 -> 144
+                    };
+                    const margin = 36; // gap between image edge and orbit
+                    const radius = imageRadius.base + margin + 40; // extra for icon size
+                    const radiusSm = imageRadius.sm + margin + 40;
+                    const radiusMd = imageRadius.md + margin + 40;
+
+                    const pos = getOrbitalPosition(index, socialLinks.length, radius, orbitAngle);
+                    const posSm = getOrbitalPosition(index, socialLinks.length, radiusSm, orbitAngle);
+                    const posMd = getOrbitalPosition(index, socialLinks.length, radiusMd, orbitAngle);
+
+                    const Icon = link.icon;
+
+                    const pauseOnHover = () => { setHoveredLink(link.id); setIsOrbitPaused(true); };
+                    const resumeOnLeave = () => { setHoveredLink(null); setIsOrbitPaused(false); };
+
+                    return (
+                      <a
+                        key={link.id}
+                        href={link.url}
+                        target={link.id !== 'email' ? '_blank' : undefined}
+                        rel={link.id !== 'email' ? 'noopener noreferrer' : undefined}
+                        onMouseEnter={pauseOnHover}
+                        onMouseLeave={resumeOnLeave}
+                        className="absolute z-20 transition-transform duration-300"
+                        style={{
+                          left: `calc(50% + ${pos.x}px)`,
+                          top: `calc(50% + ${pos.y}px)`,
+                          transform: 'translate(-50%, -50%)'
+                        }}
+                        title={link.label}
+                      >
+                        <style>{`
+                          @media (min-width: 640px) {
+                            a[title="${link.label}"] {
+                              left: calc(50% + ${posSm.x}px) !important;
+                              top: calc(50% + ${posSm.y}px) !important;
+                            }
+                          }
+                          @media (min-width: 768px) {
+                            a[title="${link.label}"] {
+                              left: calc(50% + ${posMd.x}px) !important;
+                              top: calc(50% + ${posMd.y}px) !important;
+                            }
+                          }
+                        `}</style>
+                        <div className="p-4 rounded-full bg-gray-800/90 border-2 border-emerald-400/50 transition-all duration-300 hover:scale-110 hover:border-emerald-400 hover:shadow-xl hover:shadow-emerald-500/50 orbital-glow flex items-center justify-center min-w-[56px] min-h-[56px]">
+                          {Icon ? (
+                            <Icon size={24} className={`transition-colors ${hoveredLink === link.id ? 'text-emerald-400' : 'text-gray-300'}`} />
+                          ) : (
+                            <span className={`text-xl font-bold transition-colors ${hoveredLink === link.id ? 'text-emerald-400' : 'text-gray-300'}`}>
+                              {link.text}
+                            </span>
+                          )}
+                        </div>
+                      </a>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
@@ -366,21 +583,21 @@ export default function App() {
         <AchievementsSection achievements={achievements} onOpen={openAchievementDetails} />
       </Suspense>
 
-      <section id="contact" className="min-h-screen flex items-center justify-center px-4 sm:px-6 py-16 sm:py-20 bg-gray-900/50">
+      <section id="contact" className="min-h-screen flex items-center justify-center px-4 sm:px-6 py-16 sm:py-20 bg-gray-900/50 relative">
         <div className="max-w-4xl w-full text-center">
           <h2 className="text-3xl sm:text-5xl font-bold text-emerald-400 mb-8 sm:mb-12">
-            Get In Touch
+            💬 Get In Touch
           </h2>
           
-          <div className="glass glow p-6 sm:p-12">
-            <p className="text-xl text-gray-300 mb-8">
-              I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.
+          <div className="glass glow p-6 sm:p-12 transition-all">
+            <p className="text-xl text-gray-300 mb-8 leading-relaxed">
+              I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision. 🚀
             </p>
             
             <div className="space-y-6">
-              <div className="flex items-center justify-center gap-4 text-lg">
-                <Mail className="text-emerald-400" size={24} />
-                <a href="mailto:md.sakib.hos3n@gmail.com" className="text-emerald-400 hover:text-emerald-300 transition-colors">
+              <div className="flex items-center justify-center gap-4 text-lg group">
+                <Mail className="text-emerald-400 transition-transform" size={24} />
+                <a href="mailto:md.sakib.hos3n@gmail.com" className="text-emerald-400 hover:text-emerald-300 transition-all font-semibold" style={{textShadow: '0 0 10px rgba(16,185,129,0.3)'}}>
                   md.sakib.hos3n@gmail.com
                 </a>
               </div>
@@ -395,7 +612,7 @@ export default function App() {
                   href="https://github.com/chatok-jnr"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-emerald-500 text-gray-900 rounded-lg font-semibold transition-all glow transform"
+                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 text-gray-900 rounded-xl font-bold transition-all glow hover:from-emerald-400 hover:to-emerald-500 shadow-xl shadow-emerald-500/40"
                 >
                   <Github className="inline mr-2" size={20} />
                   GitHub
@@ -404,7 +621,7 @@ export default function App() {
                   href="https://www.linkedin.com/in/chatok-junior/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-emerald-500 text-gray-900 rounded-lg font-semibold transition-all glow transform"
+                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 text-gray-900 rounded-xl font-bold transition-all glow hover:from-emerald-400 hover:to-emerald-500 shadow-xl shadow-emerald-500/40"
                 >
                   <Linkedin className="inline mr-2" size={20} />
                   LinkedIn
@@ -414,7 +631,7 @@ export default function App() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Discord"
-                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-emerald-500 text-gray-900 rounded-lg font-semibold transition-all glow transform"
+                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 text-gray-900 rounded-xl font-bold transition-all glow hover:from-emerald-400 hover:to-emerald-500 shadow-xl shadow-emerald-500/40"
                 >
                   <UilDiscord className="inline mr-2" size={20} />
                   Discord
@@ -425,41 +642,45 @@ export default function App() {
         </div>
       </section>
 
-      <footer className="bg-gray-900 border-t border-emerald-500/20 py-8">
-        <div className="max-w-7xl mx-auto px-6 text-center text-gray-400">
-          <p>© 2025 Md. Sakib Hosen AKA Chatok Junior</p>
-          <p className="mt-2 text-emerald-400">Competitive Programmer | Backend Developer</p>
+      <footer className="bg-gray-900/90 backdrop-blur-md border-t border-emerald-400/30 py-8 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-t from-emerald-500/5 to-transparent"></div>
+        <div className="max-w-7xl mx-auto px-6 text-center text-gray-400 relative z-10">
+          <p className="font-semibold text-gray-300">© 2025 Md. Sakib Hosen <span className="text-emerald-400">AKA</span> Chatok Junior</p>
+          <p className="mt-2 text-emerald-400 font-bold text-lg">
+            🏆 Competitive Programmer | Backend Developer 💻
+          </p>
+          <p className="mt-3 text-sm text-gray-500">Built with React + Vite • Styled with Tailwind CSS</p>
         </div>
       </footer>
 
       {/* Details modal overlay for projects / achievements */}
       {(selectedProject || selectedAchievement) && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center animate-fade-in">
           {/* backdrop that also closes on click */}
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={closeDetails} />
+          <div className="absolute inset-0 bg-black/70 backdrop-blur-lg" onClick={closeDetails} />
 
           <div
             role="dialog"
             aria-modal="true"
-            className="relative z-50 max-w-3xl w-full mx-4 bg-gray-900/90 rounded-2xl border border-emerald-500/30 p-6"
+            className="relative z-50 max-w-3xl w-full mx-4 glass glow p-8 shadow-2xl shadow-emerald-500/30 transition-all"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => closeDetails()}
-              className="absolute top-4 right-4 text-gray-400 hover:text-emerald-400"
+              className="absolute top-4 right-4 text-gray-400 hover:text-emerald-400 p-2 rounded-full bg-gray-800/50 hover:bg-emerald-500/20 transition-all hover:rotate-90"
               aria-label="Close details"
             >
-              <X size={20} />
+              <X size={24} />
             </button>
 
                 {selectedProject && (
-              <div>
-                <h3 className="text-2xl font-bold text-emerald-400 mb-2">{selectedProject.title}</h3>
-                <p className="text-gray-400 text-sm mb-4">{selectedProject.tech}</p>
-                <p className="text-gray-300 mb-4">{selectedProject.details}</p>
-                <div className="flex flex-wrap gap-2 mb-4">
+              <div className="animate-fade-in">
+                <h3 className="text-3xl font-bold text-emerald-400 mb-3">{selectedProject.title}</h3>
+                <p className="text-gray-400 text-sm mb-4 font-semibold">{selectedProject.tech}</p>
+                <p className="text-gray-300 mb-6 leading-relaxed text-lg">{selectedProject.details}</p>
+                <div className="flex flex-wrap gap-2 mb-6">
                   {selectedProject.highlights.map((h, i) => (
-                    <span key={i} className="px-3 py-1 bg-emerald-500/10 text-emerald-400 rounded-full text-xs border border-emerald-500/20">
+                    <span key={i} className="px-4 py-2 bg-gradient-to-r from-emerald-500/20 to-emerald-600/20 text-emerald-300 rounded-full text-sm border border-emerald-400/40 font-bold">
                       {h}
                     </span>
                   ))}
@@ -468,22 +689,22 @@ export default function App() {
                   href={selectedProject.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 transition-colors font-semibold"
+                  className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-gray-900 rounded-xl font-bold transition-all hover:from-emerald-400 hover:to-emerald-500 shadow-xl shadow-emerald-500/50"
                 >
-                  Open Project
-                  <ExternalLink size={16} />
+                  🚀 Open Project
+                  <ExternalLink size={20} />
                 </a>
               </div>
             )}
 
             {selectedAchievement && (
-              <div>
-                <div className="text-6xl mb-4">{selectedAchievement.icon}</div>
-                <h3 className="text-2xl font-bold text-emerald-400 mb-2">{selectedAchievement.title}</h3>
-                <p className="text-gray-300 mb-4">{selectedAchievement.details}</p>
-                <div className="flex flex-wrap gap-2 mb-4">
+              <div className="animate-fade-in">
+                <div className="text-7xl mb-6 animate-bounce">{selectedAchievement.icon}</div>
+                <h3 className="text-3xl font-bold text-emerald-400 mb-3">{selectedAchievement.title}</h3>
+                <p className="text-gray-300 mb-6 leading-relaxed text-lg">{selectedAchievement.details}</p>
+                <div className="flex flex-wrap gap-2 mb-6">
                   {(selectedAchievement.highlights || []).map((h, i) => (
-                    <span key={i} className="px-3 py-1 bg-emerald-500/10 text-emerald-400 rounded-full text-xs border border-emerald-500/20">
+                    <span key={i} className="px-4 py-2 bg-gradient-to-r from-emerald-500/20 to-emerald-600/20 text-emerald-300 rounded-full text-sm border border-emerald-400/40 font-bold">
                       {h}
                     </span>
                   ))}
@@ -493,10 +714,10 @@ export default function App() {
                     href={selectedAchievement.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 transition-colors font-semibold"
+                    className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-gray-900 rounded-xl font-bold transition-all hover:from-emerald-400 hover:to-emerald-500 shadow-xl shadow-emerald-500/50"
                   >
-                    Open Link
-                    <ExternalLink size={16} />
+                    🏆 Open Link
+                    <ExternalLink size={20} />
                   </a>
                 )}
               </div>
@@ -518,25 +739,41 @@ export default function App() {
         }
         @keyframes pulse-glow {
           0% {
-            filter: drop-shadow(0 0 5px rgba(52, 211, 153, 0.4));
+            filter: drop-shadow(0 0 8px rgba(52, 211, 153, 0.5));
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
           }
           50% {
-            filter: drop-shadow(0 0 15px rgba(52, 211, 153, 0.8));
+            filter: drop-shadow(0 0 20px rgba(52, 211, 153, 1));
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.6);
           }
           100% {
-            filter: drop-shadow(0 0 5px rgba(52, 211, 153, 0.4));
+            filter: drop-shadow(0 0 8px rgba(52, 211, 153, 0.5));
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
           }
         }
+        @keyframes orbital-pulse {
+          0%, 100% {
+            box-shadow: 0 0 10px rgba(52, 211, 153, 0.3);
+            border-color: rgba(52, 211, 153, 0.5);
+          }
+          50% {
+            box-shadow: 0 0 20px rgba(52, 211, 153, 0.6);
+            border-color: rgba(52, 211, 153, 0.8);
+          }
+        }
+        /* Removed orbital rotation for stable layout */
         .animate-fade-in {
           animation: fade-in 0.5s ease-out;
         }
         .social-icon-glow {
-          animation: pulse-glow 2s ease-in-out infinite;
-          transition: transform 0.3s ease;
+          animation: pulse-glow 3s ease-in-out infinite;
+          transition: all 0.3s ease;
         }
         .social-icon-glow:hover {
           transform: scale(1.1);
-          animation: pulse-glow 1s ease-in-out infinite;
+        }
+        .orbital-glow {
+          animation: orbital-pulse 2s ease-in-out infinite;
         }
       `}</style>
     </div>
