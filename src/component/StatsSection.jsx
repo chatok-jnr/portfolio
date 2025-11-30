@@ -11,6 +11,14 @@ export default function StatsSection({ githubUser, codeforcesUser }) {
   const [github, setGithub] = useState({ loading: true, error: null, data: null });
   const [cf, setCf] = useState({ loading: true, error: null, data: null });
   const { elementRef, isVisible } = useIntersectionObserver({ threshold: 0.15 });
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     let alive = true;
@@ -57,13 +65,15 @@ export default function StatsSection({ githubUser, codeforcesUser }) {
     <section 
       ref={elementRef}
       id="stats" 
-      className={`px-4 sm:px-6 py-16 sm:py-20 relative transition-all duration-700 ease-out ${
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+      className={`px-4 sm:px-6 py-16 sm:py-20 relative ${
+        isMobile
+          ? ''
+          : `transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`
       }`}
     >
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl sm:text-5xl font-bold text-emerald-400 mb-8 sm:mb-12 text-center">
-          📊 Live Developer Stats
+          {!isMobile && <span>📊</span>} Live Developer Stats
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">

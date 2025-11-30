@@ -2,6 +2,16 @@ import { useState, useEffect } from 'react';
 
 const FlippingName = () => {
   const [showFirst, setShowFirst] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -11,6 +21,48 @@ const FlippingName = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // On mobile, use simple fade instead of 3D rotation
+  if (isMobile) {
+    return (
+      <div 
+        className="text-xl sm:text-2xl font-bold text-emerald-400 transition-colors hover:text-emerald-300 cursor-pointer whitespace-nowrap"
+        style={{
+          minWidth: '280px',
+          position: 'relative',
+        }}
+      >
+        <div
+          style={{
+            opacity: showFirst ? 1 : 0,
+            transition: 'opacity 0.5s ease-in-out',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+          }}
+        >
+          Chatok Junior
+        </div>
+        <div
+          style={{
+            opacity: !showFirst ? 1 : 0,
+            transition: 'opacity 0.5s ease-in-out',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+          }}
+        >
+          Md. Sakib Hosen
+        </div>
+        <div style={{ opacity: 0, pointerEvents: 'none' }}>
+          Md. Sakib Hosen
+        </div>
+      </div>
+    );
+  }
+
+  // Desktop: keep 3D flip animation
   return (
     <div 
       className="text-xl sm:text-2xl font-bold text-emerald-400 transition-colors hover:text-emerald-300 cursor-pointer whitespace-nowrap"

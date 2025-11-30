@@ -38,12 +38,23 @@ export default function App() {
       return 'previous';
     }
   }); // 'current' | 'previous'
+  const [isMobile, setIsMobile] = useState(false);
   const particleIdRef = React.useRef(0);
   const emitAccumRef = React.useRef(0);
 
   // Intersection observers for sections
   const { elementRef: homeRef, isVisible: homeVisible } = useIntersectionObserver({ threshold: 0.2 });
   const { elementRef: contactRef, isVisible: contactVisible } = useIntersectionObserver({ threshold: 0.2 });
+
+  // Detect mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Orbital links configuration
   const socialLinks = [
@@ -138,6 +149,8 @@ export default function App() {
 
   // Orbit animation using requestAnimationFrame
   useEffect(() => {
+    if (isMobile) return; // Skip animation on mobile
+    
     let rafId;
     let lastTime = performance.now();
     const speed = 0.0002; // radians per ms (~0.0005 rad/ms ≈ 1 rev ~ 12,566ms)
@@ -197,29 +210,32 @@ export default function App() {
     return () => {
       if (rafId) cancelAnimationFrame(rafId);
     };
-  }, [isOrbitPaused, socialLinks.length]);
+  }, [isOrbitPaused, socialLinks.length, isMobile]);
 
   // Initialize stars
   useEffect(() => {
     const generateStars = () => {
       const newStars = [];
-      for (let i = 0; i < 200; i++) {
+      const starCount = isMobile ? 30 : 200; // Fewer stars on mobile
+      for (let i = 0; i < starCount; i++) {
         newStars.push({
           id: i,
           x: Math.random() * 100,
           y: Math.random() * 100,
           size: Math.random() * 2 + 1,
-          speed: Math.random() * 0.5 + 0.2,
+          speed: isMobile ? 0 : Math.random() * 0.5 + 0.2, // Static stars on mobile
           opacity: Math.random() * 0.5 + 0.5
         });
       }
       setStars(newStars);
     };
     generateStars();
-  }, []);
+  }, [isMobile]);
 
   // Animate stars
   useEffect(() => {
+    if (isMobile) return; // Skip star animation on mobile
+    
     const interval = setInterval(() => {
       setStars(prevStars =>
         prevStars.map(star => ({
@@ -229,7 +245,7 @@ export default function App() {
       );
     }, 50);
     return () => clearInterval(interval);
-  }, []);
+  }, [isMobile]);
 
   // Animate carousel with pause
   useEffect(() => {
@@ -257,27 +273,33 @@ export default function App() {
 
   // Animate Earth rotation
   useEffect(() => {
+    if (isMobile) return; // Skip Earth rotation on mobile
+    
     const interval = setInterval(() => {
       setEarthRotation(prev => (prev + 1) % (360 * 100));
     }, 50); // Rotate 1 degree every 50ms
     return () => clearInterval(interval);
-  }, []);
+  }, [isMobile]);
 
   // Animate Moon orbit around Earth
   useEffect(() => {
+    if (isMobile) return; // Skip Moon orbit on mobile
+    
     const interval = setInterval(() => {
       setMoonAngle(prev => (prev + 2) % 360);
     }, 50); // Orbit 2 degrees every 50ms
     return () => clearInterval(interval);
-  }, []);
+  }, [isMobile]);
 
   // Animate JavaScript orbit around Earth
   useEffect(() => {
+    if (isMobile) return; // Skip JavaScript orbit on mobile
+    
     const interval = setInterval(() => {
       setJsAngle(prev => (prev + 2) % 360);
     }, 50); // Orbit 2 degrees every 50ms
     return () => clearInterval(interval);
-  }, []);
+  }, [isMobile]);
 
   // Console easter egg + help()
   useEffect(() => {
@@ -473,7 +495,8 @@ export default function App() {
           />
         ))}
         
-        {/* Earth with rotation and C++ logo orbit container */}
+        {/* Earth with rotation and C++ logo orbit container - Hidden on mobile */}
+        {!isMobile && (
         <div 
           className="absolute"
           style={{
@@ -601,6 +624,7 @@ export default function App() {
             JS
           </div>
         </div>
+        )}
       </div>
 
 

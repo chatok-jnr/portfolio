@@ -2,8 +2,15 @@ import React from 'react';
 import { Code2 } from 'lucide-react';
 import useIntersectionObserver from '../hooks/useIntersectionObserver';
 
-export default function SkillsSection({ skills = {} }) {
+const SkillsSection = ({ skills = {} }) => {
   const { elementRef, isVisible } = useIntersectionObserver({ threshold: 0.15 });
+  const [isMobile, setIsMobile] = React.useState(false);
+  React.useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const iconMap = {
     languages: '💻',
@@ -24,8 +31,10 @@ export default function SkillsSection({ skills = {} }) {
     <section 
       ref={elementRef}
       id="skills" 
-      className={`min-h-screen flex items-center justify-center px-4 sm:px-6 py-16 sm:py-20 relative transition-all duration-700 ease-out ${
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+      className={`min-h-screen flex items-center justify-center px-4 sm:px-6 py-16 sm:py-20 relative ${
+        isMobile
+          ? ''
+          : `transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`
       }`}
     >
       <div className="max-w-6xl w-full">
@@ -44,7 +53,9 @@ export default function SkillsSection({ skills = {} }) {
                 key={category} 
                 className="glass glow p-6 text-center transition-all duration-300 group"
               >
-                <div className="text-5xl mb-4 transition-transform duration-300" style={{animation: 'float 6s ease-in-out infinite'}}>{icon}</div>
+                {!isMobile && (
+                  <div className="text-5xl mb-4 transition-transform duration-300" style={{animation: 'float 6s ease-in-out infinite'}}>{icon}</div>
+                )}
                 <h3 className="text-lg font-bold text-emerald-400 mb-3 group-hover:text-emerald-300">{title}</h3>
                 <div className="flex flex-wrap gap-2 justify-center">
                   {items.map((item) => (
@@ -63,4 +74,6 @@ export default function SkillsSection({ skills = {} }) {
       </div>
     </section>
   );
-}
+};
+
+export default SkillsSection;

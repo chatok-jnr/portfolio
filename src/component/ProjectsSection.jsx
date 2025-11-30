@@ -4,18 +4,27 @@ import useIntersectionObserver from '../hooks/useIntersectionObserver';
 
 export default function ProjectsSection({ projects = [], onOpen }) {
   const { elementRef, isVisible } = useIntersectionObserver({ threshold: 0.15 });
+  const [isMobile, setIsMobile] = React.useState(false);
+  React.useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   return (
     <section 
       ref={elementRef}
       id="projects" 
-      className={`min-h-screen flex items-center justify-center px-4 sm:px-6 py-16 sm:py-20 relative transition-all duration-700 ease-out ${
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+      className={`min-h-screen flex items-center justify-center px-4 sm:px-6 py-16 sm:py-20 relative ${
+        isMobile
+          ? ''
+          : `transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`
       }`}
     >
       <div className="max-w-6xl w-full">
         <h2 className="text-3xl sm:text-5xl font-bold text-emerald-400 mb-8 sm:mb-12 text-center">
-          <Briefcase className="inline mr-2 sm:mr-3 w-8 h-8 sm:w-12 sm:h-12" />
+          {!isMobile && <Briefcase className="inline mr-2 sm:mr-3 w-8 h-8 sm:w-12 sm:h-12" />}
           Projects
         </h2>
         <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
@@ -42,8 +51,8 @@ export default function ProjectsSection({ projects = [], onOpen }) {
                 onClick={(e) => e.stopPropagation()}
                 className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 transition-all font-bold group-hover:gap-3"
               >
-                View Project 🚀
-                <ExternalLink size={18} className="group-hover:translate-x-1 transition-transform" />
+                View Project {!isMobile && <span>🚀</span>}
+                {!isMobile && <ExternalLink size={18} className="group-hover:translate-x-1 transition-transform" />}
               </a>
             </div>
           ))}
