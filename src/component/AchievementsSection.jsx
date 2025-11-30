@@ -1,16 +1,25 @@
 import React from 'react';
 import { Award, ExternalLink, MessageSquare } from 'lucide-react';
+import useIntersectionObserver from '../hooks/useIntersectionObserver';
 
 export default function AchievementsSection({ achievements = [], onOpen }) {
+  const { elementRef, isVisible } = useIntersectionObserver({ threshold: 0.15 });
+
   return (
-    <section id="achievements" className="min-h-screen flex items-center justify-center px-4 sm:px-6 py-16 sm:py-20 bg-gray-900/30 relative">
+    <section 
+      ref={elementRef}
+      id="achievements" 
+      className={`min-h-screen flex items-center justify-center px-4 sm:px-6 py-16 sm:py-20 relative transition-all duration-700 ease-out ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+      }`}
+    >
       <div className="max-w-6xl w-full">
         <h2 className="text-3xl sm:text-5xl font-bold text-emerald-400 mb-8 sm:mb-12 text-center">
           <Award className="inline mr-2 sm:mr-3 w-8 h-8 sm:w-12 sm:h-12" />
           Achievements & Awards
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-6 gap-x-10 sm:gap-y-8 sm:gap-x-12">
           {achievements.map((achievement, idx) => (
             <div
               key={idx}

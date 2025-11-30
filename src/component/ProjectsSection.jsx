@@ -1,9 +1,18 @@
 import React from 'react';
 import { Briefcase, ExternalLink } from 'lucide-react';
+import useIntersectionObserver from '../hooks/useIntersectionObserver';
 
 export default function ProjectsSection({ projects = [], onOpen }) {
+  const { elementRef, isVisible } = useIntersectionObserver({ threshold: 0.15 });
+
   return (
-    <section id="projects" className="min-h-screen flex items-center justify-center px-4 sm:px-6 py-16 sm:py-20 bg-gray-900/50 relative">
+    <section 
+      ref={elementRef}
+      id="projects" 
+      className={`min-h-screen flex items-center justify-center px-4 sm:px-6 py-16 sm:py-20 relative transition-all duration-700 ease-out ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+      }`}
+    >
       <div className="max-w-6xl w-full">
         <h2 className="text-3xl sm:text-5xl font-bold text-emerald-400 mb-8 sm:mb-12 text-center">
           <Briefcase className="inline mr-2 sm:mr-3 w-8 h-8 sm:w-12 sm:h-12" />

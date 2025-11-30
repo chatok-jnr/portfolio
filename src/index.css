@@ -4,7 +4,9 @@
 @tailwind components;
 @tailwind utilities;
 
-:root{--bg:#0f172a;--card:#0b1220;--accent:#60a5fa;--text:#e6eef8}
+:root{--bg:#000000;--card:#0b1220;--accent:#60a5fa;--text:#e6eef8}
+/* Previous gradient theme variables override */
+.theme-previous:root{--bg:#0f172a;--card:#0b1220;--accent:#60a5fa;--text:#e6eef8}
 *{box-sizing:border-box}
 html,body,#root{height:100%}
 
@@ -32,11 +34,16 @@ html,body,#root{height:100%}
 body{
   margin:0;
   font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+  background-color: var(--bg);
+  color:var(--text);
+  overflow-x: hidden;
+}
+
+/* Previous theme background gradient */
+body.theme-previous{
   background: linear-gradient(-45deg, #0a0e1a, #0f1728, #10b981, #059669, #0f172a);
   background-size: 400% 400%;
   animation: gradientShift 15s ease infinite;
-  color:var(--text);
-  overflow-x: hidden;
 }
 
 /* Particle effects */
@@ -47,12 +54,18 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: 
+  display: none;
+}
+
+/* Particle overlay for previous theme */
+body.theme-previous::before{
+  background-image:
     radial-gradient(circle at 20% 50%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
     radial-gradient(circle at 80% 80%, rgba(52, 211, 153, 0.08) 0%, transparent 50%),
     radial-gradient(circle at 40% 20%, rgba(167, 243, 208, 0.05) 0%, transparent 50%);
   pointer-events: none;
   z-index: 1;
+  display: block;
 }
 
 .app{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:3rem;position:relative;z-index:2;}
@@ -89,6 +102,11 @@ div > .glowing-text {
   50% { opacity: 0; }
 }
 
+@keyframes scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
 .subtitle{opacity:0.9}
 .content{width:100%;max-width:900px;background:rgba(255,255,255,0.02);padding:1.25rem;border-radius:8px;box-shadow:0 6px 18px rgba(2,6,23,0.6)}
 .content section{margin-bottom:1rem}
@@ -98,11 +116,22 @@ div > .glowing-text {
 @layer utilities {
 	/* Glassmorphism surface with enhanced depth */
 	.glass {
-		@apply rounded-2xl border border-emerald-400/30 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl shadow-2xl shadow-emerald-500/20;
-		background-image: 
-			linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%),
-			linear-gradient(to bottom right, rgba(16,185,129,0.05), transparent);
+    @apply rounded-2xl border border-emerald-400/40 bg-gradient-to-br from-black/20 to-black/5 backdrop-blur-xl shadow-2xl shadow-emerald-500/25;
+    background-image:
+      linear-gradient(135deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.1) 100%),
+      linear-gradient(to bottom right, rgba(16,185,129,0.08), rgba(16,185,129,0.02));
+    outline: 1px solid rgba(16,185,129,0.12);
+    box-shadow: 0 0 0 1px rgba(16,185,129,0.12) inset, 0 8px 24px rgba(16,185,129,0.12);
 	}
+
+  /* Previous theme variant for glass */
+  .theme-previous .glass{
+    border-color: rgba(16,185,129,0.30);
+    background-image:
+      linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%),
+      linear-gradient(to bottom right, rgba(16,185,129,0.05), transparent);
+    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.2), 0 0 40px rgba(16, 185, 129, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
 
 	/* Enhanced emerald glow with subtle hover */
 	.glow {
@@ -124,4 +153,170 @@ div > .glowing-text {
 	.btn-glass {
 		@apply glass glow px-6 py-3 font-semibold transition-all;
 	}
+}
+
+/* Slow rotation animation */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
+
+/* Tech card hover effects */
+.tech-card-left:hover,
+.tech-card-right:hover {
+  filter: brightness(1.2);
+}
+
+/* Section transition animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+/* Section transition classes */
+.section-hidden {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.section-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.section-exit {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.6s ease-in, transform 0.6s ease-in;
+}
+
+/* Animation variants */
+.animate-fadeInUp {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.animate-fadeInDown {
+  animation: fadeInDown 0.8s ease-out forwards;
+}
+
+.animate-fadeInLeft {
+  animation: fadeInLeft 0.8s ease-out forwards;
+}
+
+.animate-fadeInRight {
+  animation: fadeInRight 0.8s ease-out forwards;
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.8s ease-out forwards;
+}
+
+/* 3D Flip Animation */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.rotate-x-0 {
+  transform: rotateX(0deg);
+}
+
+.rotate-x-90 {
+  transform: rotateX(90deg);
+}
+
+.-rotate-x-90 {
+  transform: rotateX(-90deg);
+}
+
+@keyframes flipIn {
+  from {
+    transform: rotateX(-90deg);
+    opacity: 0;
+  }
+  to {
+    transform: rotateX(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes flipOut {
+  from {
+    transform: rotateX(0deg);
+    opacity: 1;
+  }
+  to {
+    transform: rotateX(90deg);
+    opacity: 0;
+  }
 }

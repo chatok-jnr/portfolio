@@ -1,10 +1,12 @@
-import React, { useState, useEffect, Suspense } from 'react';
-import { Github, Linkedin, Mail, Phone, ExternalLink, Award, Briefcase, GraduationCap, X, Facebook, Instagram, Download } from 'lucide-react';
+import React, { useState, useEffect, Suspense, useRef } from 'react';
+import { Github, Linkedin, Mail, Phone, ExternalLink, Award, Briefcase, GraduationCap, X, Facebook, Instagram, Download, Sun, Moon } from 'lucide-react';
 import { UilDiscord } from '@iconscout/react-unicons';
 import { Helmet } from 'react-helmet-async';
 import StatsSection from './component/StatsSection';
+import useIntersectionObserver from './hooks/useIntersectionObserver';
 import profilePhoto from './assets/Md. Sakib Hosen.png';
 import cvPdf from './assets/cv.pdf';
+import FlippingName from './component/FlippingName';
 
 const ProjectsSection = React.lazy(() => import('./component/ProjectsSection'));
 const AchievementsSection = React.lazy(() => import('./component/AchievementsSection'));
@@ -21,8 +23,27 @@ export default function App() {
   const [orbitAngle, setOrbitAngle] = useState(0);
   const [isOrbitPaused, setIsOrbitPaused] = useState(false);
   const [particles, setParticles] = useState([]);
+  const [stars, setStars] = useState([]);
+  const [earthRotation, setEarthRotation] = useState(0);
+  const [moonAngle, setMoonAngle] = useState(0);
+  const [jsAngle, setJsAngle] = useState(180); // Start JavaScript at opposite side
+  const [profileOrbitAngle, setProfileOrbitAngle] = useState(0);
+  const [isSliderPaused, setIsSliderPaused] = useState(false);
+  const [carouselPosition, setCarouselPosition] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [theme, setTheme] = useState(() => {
+    try {
+      return localStorage.getItem('theme') ?? 'previous';
+    } catch {
+      return 'previous';
+    }
+  }); // 'current' | 'previous'
   const particleIdRef = React.useRef(0);
   const emitAccumRef = React.useRef(0);
+
+  // Intersection observers for sections
+  const { elementRef: homeRef, isVisible: homeVisible } = useIntersectionObserver({ threshold: 0.2 });
+  const { elementRef: contactRef, isVisible: contactVisible } = useIntersectionObserver({ threshold: 0.2 });
 
   // Orbital links configuration
   const socialLinks = [
@@ -100,6 +121,21 @@ export default function App() {
     };
   }, []);
 
+  // Theme persistence and class application
+
+  useEffect(() => {
+    const body = document.body;
+    body.classList.remove('theme-previous');
+    if (theme === 'previous') {
+      body.classList.add('theme-previous');
+    }
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => (prev === 'current' ? 'previous' : 'current'));
+  };
+
   // Orbit animation using requestAnimationFrame
   useEffect(() => {
     let rafId;
@@ -162,6 +198,86 @@ export default function App() {
       if (rafId) cancelAnimationFrame(rafId);
     };
   }, [isOrbitPaused, socialLinks.length]);
+
+  // Initialize stars
+  useEffect(() => {
+    const generateStars = () => {
+      const newStars = [];
+      for (let i = 0; i < 200; i++) {
+        newStars.push({
+          id: i,
+          x: Math.random() * 100,
+          y: Math.random() * 100,
+          size: Math.random() * 2 + 1,
+          speed: Math.random() * 0.5 + 0.2,
+          opacity: Math.random() * 0.5 + 0.5
+        });
+      }
+      setStars(newStars);
+    };
+    generateStars();
+  }, []);
+
+  // Animate stars
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setStars(prevStars =>
+        prevStars.map(star => ({
+          ...star,
+          x: star.x + star.speed > 100 ? 0 : star.x + star.speed
+        }))
+      );
+    }, 50);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Animate carousel with pause
+  useEffect(() => {
+    if (isSliderPaused) return;
+    
+    const timeout = setTimeout(() => {
+      setIsTransitioning(true);
+      setCarouselPosition(prev => {
+        const nextPos = prev + 1;
+        // Create infinite loop effect - when reaching end, wrap to beginning
+        if (nextPos >= 6) {
+          return 0;
+        }
+        return nextPos;
+      });
+      
+      // After transition completes, wait before next transition
+      setTimeout(() => {
+        setIsTransitioning(false);
+      }, 600);
+    }, isTransitioning ? 600 : 1800); // Wait 1.8 seconds when stopped, 0.6s during transition
+    
+    return () => clearTimeout(timeout);
+  }, [carouselPosition, isSliderPaused, isTransitioning]);
+
+  // Animate Earth rotation
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setEarthRotation(prev => (prev + 1) % (360 * 100));
+    }, 50); // Rotate 1 degree every 50ms
+    return () => clearInterval(interval);
+  }, []);
+
+  // Animate Moon orbit around Earth
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setMoonAngle(prev => (prev + 2) % 360);
+    }, 50); // Orbit 2 degrees every 50ms
+    return () => clearInterval(interval);
+  }, []);
+
+  // Animate JavaScript orbit around Earth
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setJsAngle(prev => (prev + 2) % 360);
+    }, 50); // Orbit 2 degrees every 50ms
+    return () => clearInterval(interval);
+  }, []);
 
   // Console easter egg + help()
   useEffect(() => {
@@ -337,14 +453,154 @@ export default function App() {
   }, [selectedProject, selectedAchievement]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-100 relative overflow-hidden">
-      {/* Floating particles */}
+    <div className="min-h-screen text-gray-100 relative overflow-hidden" style={{
+      background: 'radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%)'
+    }}>
+      {/* Space background with moving stars */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-20 left-10 w-2 h-2 bg-emerald-400 rounded-full animate-ping opacity-75"></div>
-        <div className="absolute top-40 right-20 w-3 h-3 bg-emerald-300 rounded-full" style={{animation: 'float 6s ease-in-out infinite'}}></div>
-        <div className="absolute top-60 left-1/4 w-2 h-2 bg-emerald-500 rounded-full" style={{animation: 'float 8s ease-in-out infinite 1s'}}></div>
-        <div className="absolute bottom-40 right-1/3 w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
-        <div className="absolute bottom-20 left-1/2 w-3 h-3 bg-emerald-300 rounded-full" style={{animation: 'float 7s ease-in-out infinite 2s'}}></div>
+        {stars.map(star => (
+          <div
+            key={star.id}
+            className="absolute rounded-full bg-white"
+            style={{
+              left: `${star.x}%`,
+              top: `${star.y}%`,
+              width: `${star.size}px`,
+              height: `${star.size}px`,
+              opacity: star.opacity,
+              boxShadow: `0 0 ${star.size * 2}px rgba(255, 255, 255, ${star.opacity * 0.5})`
+            }}
+          />
+        ))}
+        
+        {/* Earth with rotation and C++ logo orbit container */}
+        <div 
+          className="absolute"
+          style={{
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '120px',
+            height: '120px',
+            transformStyle: 'preserve-3d',
+            perspective: '1000px'
+          }}
+        >
+          {/* C++ logo orbiting Earth (behind) - rendered first so it appears behind */}
+          <div
+            className="absolute flex items-center justify-center font-bold text-blue-400"
+            style={{
+              width: `${40 * (1 + Math.sin(moonAngle * Math.PI / 180) * 0.3)}px`,
+              height: `${40 * (1 + Math.sin(moonAngle * Math.PI / 180) * 0.3)}px`,
+              left: '50%',
+              top: '50%',
+              transform: `
+                translate(-50%, -50%)
+                translateX(${Math.cos(moonAngle * Math.PI / 180) * 90}px)
+                translateY(${Math.sin(moonAngle * Math.PI / 180) * 20}px)
+              `,
+              opacity: Math.sin(moonAngle * Math.PI / 180) < 0 ? 1 : 0,
+              zIndex: Math.sin(moonAngle * Math.PI / 180) < 0 ? 1 : 3,
+              transition: 'all 0.05s linear',
+              fontSize: `${16 * (1 + Math.sin(moonAngle * Math.PI / 180) * 0.3)}px`,
+              textShadow: `0 0 ${15 * (1 + Math.sin(moonAngle * Math.PI / 180) * 0.3)}px rgba(59, 130, 246, 0.9), 0 0 ${30 * (1 + Math.sin(moonAngle * Math.PI / 180) * 0.3)}px rgba(59, 130, 246, 0.6)`
+            }}
+          >
+            C++
+          </div>
+          
+          {/* Earth */}
+          <div
+            className="w-full h-full rounded-full relative overflow-hidden"
+            style={{
+              background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 30%, #10b981 50%, #059669 70%, #1e3a8a 100%)',
+              boxShadow: '0 0 40px rgba(59, 130, 246, 0.6), inset -20px -20px 40px rgba(0, 0, 0, 0.5)',
+              transform: `rotate(${earthRotation}deg)`,
+              transition: 'transform 0.05s linear',
+              zIndex: 2
+            }}
+          >
+            {/* Earth texture overlay */}
+            <div 
+              className="absolute inset-0 opacity-30"
+              style={{
+                background: `
+                  radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3) 0%, transparent 50%),
+                  radial-gradient(circle at 70% 60%, rgba(16, 185, 129, 0.4) 0%, transparent 40%)
+                `
+              }}
+            />
+          </div>
+          
+          {/* C++ logo orbiting Earth (in front) */}
+          <div
+            className="absolute flex items-center justify-center font-bold text-blue-400"
+            style={{
+              width: `${40 * (1 + Math.sin(moonAngle * Math.PI / 180) * 0.3)}px`,
+              height: `${40 * (1 + Math.sin(moonAngle * Math.PI / 180) * 0.3)}px`,
+              left: '50%',
+              top: '50%',
+              transform: `
+                translate(-50%, -50%)
+                translateX(${Math.cos(moonAngle * Math.PI / 180) * 90}px)
+                translateY(${Math.sin(moonAngle * Math.PI / 180) * 20}px)
+              `,
+              opacity: Math.sin(moonAngle * Math.PI / 180) >= 0 ? 1 : 0,
+              zIndex: Math.sin(moonAngle * Math.PI / 180) >= 0 ? 3 : 1,
+              transition: 'all 0.05s linear',
+              fontSize: `${16 * (1 + Math.sin(moonAngle * Math.PI / 180) * 0.3)}px`,
+              textShadow: `0 0 ${15 * (1 + Math.sin(moonAngle * Math.PI / 180) * 0.3)}px rgba(59, 130, 246, 0.9), 0 0 ${30 * (1 + Math.sin(moonAngle * Math.PI / 180) * 0.3)}px rgba(59, 130, 246, 0.6)`
+            }}
+          >
+            C++
+          </div>
+
+          {/* JavaScript logo orbiting Earth (behind) */}
+          <div
+            className="absolute flex items-center justify-center font-bold text-yellow-400"
+            style={{
+              width: `${40 * (1 + Math.sin(jsAngle * Math.PI / 180) * 0.3)}px`,
+              height: `${40 * (1 + Math.sin(jsAngle * Math.PI / 180) * 0.3)}px`,
+              left: '50%',
+              top: '50%',
+              transform: `
+                translate(-50%, -50%)
+                translateX(${Math.cos(jsAngle * Math.PI / 180) * 90}px)
+                translateY(${Math.sin(jsAngle * Math.PI / 180) * 20}px)
+              `,
+              opacity: Math.sin(jsAngle * Math.PI / 180) < 0 ? 1 : 0,
+              zIndex: Math.sin(jsAngle * Math.PI / 180) < 0 ? 1 : 3,
+              transition: 'all 0.05s linear',
+              fontSize: `${16 * (1 + Math.sin(jsAngle * Math.PI / 180) * 0.3)}px`,
+              textShadow: `0 0 ${15 * (1 + Math.sin(jsAngle * Math.PI / 180) * 0.3)}px rgba(250, 204, 21, 0.9), 0 0 ${30 * (1 + Math.sin(jsAngle * Math.PI / 180) * 0.3)}px rgba(250, 204, 21, 0.6)`
+            }}
+          >
+            JS
+          </div>
+
+          {/* JavaScript logo orbiting Earth (in front) */}
+          <div
+            className="absolute flex items-center justify-center font-bold text-yellow-400"
+            style={{
+              width: `${40 * (1 + Math.sin(jsAngle * Math.PI / 180) * 0.3)}px`,
+              height: `${40 * (1 + Math.sin(jsAngle * Math.PI / 180) * 0.3)}px`,
+              left: '50%',
+              top: '50%',
+              transform: `
+                translate(-50%, -50%)
+                translateX(${Math.cos(jsAngle * Math.PI / 180) * 90}px)
+                translateY(${Math.sin(jsAngle * Math.PI / 180) * 20}px)
+              `,
+              opacity: Math.sin(jsAngle * Math.PI / 180) >= 0 ? 1 : 0,
+              zIndex: Math.sin(jsAngle * Math.PI / 180) >= 0 ? 3 : 1,
+              transition: 'all 0.05s linear',
+              fontSize: `${16 * (1 + Math.sin(jsAngle * Math.PI / 180) * 0.3)}px`,
+              textShadow: `0 0 ${15 * (1 + Math.sin(jsAngle * Math.PI / 180) * 0.3)}px rgba(250, 204, 21, 0.9), 0 0 ${30 * (1 + Math.sin(jsAngle * Math.PI / 180) * 0.3)}px rgba(250, 204, 21, 0.6)`
+            }}
+          >
+            JS
+          </div>
+        </div>
       </div>
 
 
@@ -357,27 +613,30 @@ export default function App() {
         <meta property="og:image" content="/og-image.png" />
       </Helmet>
 
-      <nav className="fixed top-0 w-full bg-gray-900/60 backdrop-blur-xl z-50 border-b border-emerald-400/30 shadow-lg shadow-emerald-500/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
-          <div className="flex justify-between items-center">
-            <div className="text-xl sm:text-2xl font-bold text-emerald-400 transition-colors hover:text-emerald-300 cursor-pointer">{'< Chatok Junior />'}</div>
-            {/* Mobile menu button */}
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 rounded-md text-gray-300 hover:text-emerald-400 focus:outline-none"
-            >
-              {isMobileMenuOpen ? (
-                <X size={24} />
-              ) : (
-                <div className="space-y-2">
-                  <div className="w-6 h-0.5 bg-current"></div>
-                  <div className="w-6 h-0.5 bg-current"></div>
-                  <div className="w-6 h-0.5 bg-current"></div>
-                </div>
-              )}
-            </button>
+      <nav className="fixed top-4 left-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-md z-50 border border-white/20 shadow-lg shadow-white/5 rounded-[2.5rem]">
+        <div className="px-4 sm:px-6 py-2">
+          <div className="flex justify-between items-center gap-2 sm:gap-3">
+            <FlippingName />
+            {/* Theme toggle */}
+            <div className="flex items-center gap-3">
+              {/* Mobile menu button */}
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="md:hidden p-2 rounded-md text-gray-300 hover:text-emerald-400 focus:outline-none"
+              >
+                {isMobileMenuOpen ? (
+                  <X size={24} />
+                ) : (
+                  <div className="space-y-2">
+                    <div className="w-6 h-0.5 bg-current"></div>
+                    <div className="w-6 h-0.5 bg-current"></div>
+                    <div className="w-6 h-0.5 bg-current"></div>
+                  </div>
+                )}
+              </button>
+            </div>
             {/* Desktop menu */}
-            <div className="hidden md:flex gap-8">
+            <div className="hidden md:flex gap-8 items-center">
               {['home', 'skills', 'projects', 'achievements', 'contact'].map(item => (
                 <button
                   key={item}
@@ -387,6 +646,18 @@ export default function App() {
                   {item}
                 </button>
               ))}
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-md text-gray-300 hover:text-emerald-400 hover:bg-emerald-400/10 transition-colors"
+                title={theme === 'current' ? 'Switch to previous theme' : 'Switch to current theme'}
+                aria-label="Toggle theme"
+              >
+                {theme === 'current' ? (
+                  <Sun size={20} />
+                ) : (
+                  <Moon size={20} />
+                )}
+              </button>
             </div>
           </div>
           {/* Mobile menu panel */}
@@ -405,167 +676,208 @@ export default function App() {
                     {item}
                   </button>
                 ))}
+                <button
+                  onClick={() => { toggleTheme(); setIsMobileMenuOpen(false); }}
+                  className="p-2 rounded-md text-gray-300 hover:text-emerald-400 hover:bg-emerald-400/10 transition-colors self-start"
+                  title={theme === 'current' ? 'Switch to previous theme' : 'Switch to current theme'}
+                  aria-label="Toggle theme"
+                >
+                  {theme === 'current' ? (
+                    <Sun size={20} />
+                  ) : (
+                    <Moon size={20} />
+                  )}
+                </button>
               </div>
             </div>
           )}
         </div>
       </nav>
 
-      <section id="home" className="min-h-screen flex items-center justify-center px-4 sm:px-6 pt-20 relative">
+      <section 
+        ref={homeRef}
+        id="home" 
+        className={`min-h-screen flex items-center justify-center px-4 sm:px-6 pt-20 relative overflow-hidden transition-all duration-700 ease-out ${
+          homeVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+        }`}
+      >
         <div className="w-full max-w-7xl">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            
-            {/* Left Side - Text Content */}
-            <div className="space-y-6 text-center lg:text-left order-2 lg:order-1">
-              <div className="space-y-4">
-                <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
-                  <div className="text-white glowing-text">Hello,</div>
-                  <div>
-                    <span className="text-white glowing-text">I am </span>
-                    <span className="text-emerald-400 glowing-text">CHA70K JUNIOR</span>
+          {/* Hero Layout - Image Right, Text Left */}
+          <div className="relative min-h-[700px] md:min-h-[800px] flex items-center justify-center py-12">
+            <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-32 lg:gap-48 items-center">
+              
+              {/* Left Side - Text Content */}
+              <div className="flex items-center justify-center lg:justify-start order-2 lg:order-1">
+                <div className="space-y-6 text-center lg:text-left">
+                <div className="space-y-4">
+                  <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
+                    <div className="text-white glowing-text text-xl sm:text-2xl md:text-3xl">Hello,</div>
+                    <div>
+                      <span className="text-white glowing-text">I AM </span>
+                      <span className="text-emerald-400 glowing-text">CHA7OK JUNIOR</span>
+                    </div>
+                  </div>
+                  <div className="glowing-text text-xl sm:text-2xl md:text-3xl text-emerald-300">
+                    {typedRole}
+                    <span className={`typing-cursor ${cursorVisible ? 'opacity-100' : 'opacity-0'}`}></span>
                   </div>
                 </div>
-                <div className="glowing-text text-xl sm:text-2xl md:text-3xl text-emerald-300">
-                  {typedRole}
-                  <span className={`typing-cursor ${cursorVisible ? 'opacity-100' : 'opacity-0'}`}></span>
+
+                <div className="mt-8 lg:mt-12 flex flex-wrap justify-center lg:justify-start gap-4">
+                  <a
+                    href={cvPdf}
+                    download="Chatok_Junior_CV.pdf"
+                    className="px-8 py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 text-gray-900 rounded-xl font-bold transition-all glow hover:from-emerald-400 hover:to-emerald-500 shadow-xl shadow-emerald-500/40 flex items-center gap-2"
+                  >
+                    <Download size={20} />
+                    Download CV
+                  </a>
+                  <button
+                    onClick={() => scrollToSection('contact')}
+                    className="px-8 py-4 border-2 border-emerald-400 bg-emerald-500/10 text-emerald-300 rounded-xl font-bold transition-all glow hover:bg-emerald-500/20 hover:border-emerald-300 shadow-lg shadow-emerald-500/20"
+                  >
+                    💬 Get In Touch
+                  </button>
                 </div>
               </div>
-
-              <div className="mt-8 lg:mt-12 flex flex-wrap justify-center lg:justify-start gap-4">
-                {/* <a
-                  href="https://github.com/chatok-jnr"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-8 py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 text-gray-900 rounded-xl font-bold transition-all glow hover:from-emerald-400 hover:to-emerald-500 shadow-xl shadow-emerald-500/40"
-                >
-                  🚀 View GitHub
-                </a> */}
-                <a
-                  href={cvPdf}
-                  download="Chatok_Junior_CV.pdf"
-                  className="px-8 py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 text-gray-900 rounded-xl font-bold transition-all glow hover:from-emerald-400 hover:to-emerald-500 shadow-xl shadow-emerald-500/40 flex items-center gap-2"
-                >
-                  <Download size={20} />
-                  Download CV
-                </a>
-                <button
-                  onClick={() => scrollToSection('contact')}
-                  className="px-8 py-4 border-2 border-emerald-400 bg-emerald-500/10 text-emerald-300 rounded-xl font-bold transition-all glow hover:bg-emerald-500/20 hover:border-emerald-300 shadow-lg shadow-emerald-500/20"
-                >
-                  💬 Get In Touch
-                </button>
               </div>
-            </div>
 
-            {/* Right Side - Profile Image with Orbital Links */}
-            <div className="flex justify-center lg:justify-end order-1 lg:order-2">
-              <div className="relative w-[320px] h-[320px] sm:w-[400px] sm:h-[400px] md:w-[480px] md:h-[480px]">
-                {/* Center Profile Image */}
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
-                  <div className="relative group">
-                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-full blur-xl opacity-75 group-hover:opacity-100 transition-opacity animate-pulse"></div>
-                    <div className="relative w-56 h-56 sm:w-64 sm:h-64 md:w-72 md:h-72 rounded-full overflow-hidden border-4 border-emerald-400 shadow-2xl shadow-emerald-500/50">
+              {/* Right Side - Profile Image with Sliding Window Icons */}
+              <div className="relative flex flex-col items-center justify-center order-1 lg:order-2 gap-8" style={{ zIndex: 20 }}>
+                {/* Profile Image - Refined Professional Design */}
+                <div className="relative group">
+                  {/* Soft ambient glow */}
+                  <div className="absolute -inset-6 bg-emerald-500/20 rounded-full blur-3xl opacity-50 group-hover:opacity-70 transition-opacity duration-700"></div>
+                  
+                  {/* Main container with subtle border */}
+                  <div className="relative">
+                    {/* Gradient border wrapper */}
+                    <div className="absolute -inset-0.5 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-full opacity-75"></div>
+                    
+                    {/* Image container */}
+                    <div className="relative w-72 h-72 md:w-80 md:h-80 rounded-full overflow-hidden bg-black">
                       <img 
                         src={profilePhoto} 
                         alt="Chatok Junior" 
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                       />
+                      {/* Subtle vignette */}
+                      <div className="absolute inset-0 shadow-[inset_0_0_60px_rgba(0,0,0,0.3)]"></div>
                     </div>
                   </div>
                 </div>
-                {/* Dynamically positioned orbital links with rotation */}
-                <div
-                  className="absolute inset-0"
-                  onClick={() => setIsOrbitPaused(p => !p)}
-                  aria-label="Orbit container"
+
+                {/* Sliding Window Icons - Only 3 at a time with center highlight */}
+                <div 
+                  className="relative w-full max-w-md py-4 mt-8"
+                  onMouseEnter={() => setIsSliderPaused(true)}
+                  onMouseLeave={() => setIsSliderPaused(false)}
                 >
-                  {/* Particle trail layer (behind icons) */}
-                  <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 15 }}>
-                    {particles.map(p => (
-                      <div
-                        key={p.id}
-                        className="absolute rounded-full"
-                        style={{
-                          left: `calc(50% + ${p.x}px)`,
-                          top: `calc(50% + ${p.y}px)`,
-                          width: `${p.size}px`,
-                          height: `${p.size}px`,
-                          transform: 'translate(-50%, -50%)',
-                          background: 'rgba(16,185,129,0.9)', // emerald-500
-                          boxShadow: '0 0 8px rgba(16,185,129,0.6)',
-                          opacity: p.opacity
-                        }}
-                      />
-                    ))}
+                  <div className="flex items-center justify-center gap-6">
+                    {(() => {
+                      const items = [
+                        { href: 'https://github.com/chatok-jnr', icon: Github, color: 'emerald', label: 'GitHub', name: 'GitHub' },
+                        { href: 'https://codeforces.com/profile/chatok.jr', text: 'CF', color: 'emerald', label: 'Codeforces', name: 'Codeforces' },
+                        { href: 'https://www.linkedin.com/in/chatok-junior/', icon: Linkedin, color: 'emerald', label: 'LinkedIn', name: 'LinkedIn' },
+                        { href: 'https://discord.com/users/741680363453022279', icon: UilDiscord, color: 'emerald', label: 'Discord', name: 'Discord' },
+                        { href: 'mailto:md.sakib.hos3n@gmail.com', icon: Mail, color: 'emerald', label: 'Email', name: 'Email' },
+                        { href: 'https://www.codechef.com/users/chatok_junior', text: 'CC', color: 'emerald', label: 'CodeChef', name: 'CodeChef' }
+                      ];
+                      
+                      const currentIndex = Math.floor(carouselPosition) % items.length;
+                      
+                      // Show 3 icons: previous, current (center), next
+                      const positions = [-1, 0, 1]; // left, center, right
+                      
+                      return positions.map((offset) => {
+                        const itemIndex = (currentIndex + offset + items.length) % items.length;
+                        const item = items[itemIndex];
+                        const Icon = item.icon;
+                        const isCenter = offset === 0;
+                        
+                        // Slide animation: icons slide from right to center to left
+                        const translateX = offset === -1 ? '-120%' : offset === 1 ? '120%' : '0%';
+                        
+                        const [isHovered, setIsHovered] = React.useState(false);
+                        
+                        return (
+                          <a
+                            key={`${itemIndex}-${offset}`}
+                            href={item.href}
+                            target={item.href.startsWith('mailto') ? undefined : '_blank'}
+                            rel={item.href.startsWith('mailto') ? undefined : 'noopener noreferrer'}
+                            className="flex-shrink-0 absolute"
+                            style={{
+                              width: isCenter ? '100px' : '80px',
+                              left: '50%',
+                              transition: 'all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                              transform: `translateX(calc(-50% + ${offset * 105}px)) translateY(${isCenter ? '0px' : '-35px'}) scale(${isCenter ? 1.1 : 0.8})`,
+                              opacity: isCenter ? 1 : 0.5,
+                              filter: isCenter ? 'blur(0px)' : 'blur(1px)',
+                              zIndex: isCenter ? 10 : 5
+                            }}
+                            title={item.label}
+                            onMouseEnter={() => setIsHovered(true)}
+                            onMouseLeave={() => setIsHovered(false)}
+                          >
+                            <div 
+                              className={`relative px-3 py-2 rounded-xl backdrop-blur-md border-2 flex flex-col items-center gap-1.5 ${
+                                isCenter ? 'shadow-2xl shadow-emerald-500/50' : ''
+                              }`}
+                              style={{
+                                backgroundColor: isCenter 
+                                  ? 'rgba(255, 255, 255, 0.15)' 
+                                  : 'rgba(255, 255, 255, 0.08)',
+                                borderColor: isHovered ? '#10b981' : 'rgba(255, 255, 255, 0.3)',
+                                boxShadow: isCenter ? `0 0 25px rgba(16, 185, 129, 0.6), 0 0 45px rgba(16, 185, 129, 0.3)` : 'none',
+                                transform: isCenter ? 'translateY(-5px)' : 'translateY(0)',
+                                transition: 'all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                              }}
+                            >
+                              {Icon ? (
+                                <Icon 
+                                  className={`${isCenter ? 'w-6 h-6' : 'w-5 h-5'}`}
+                                  style={{
+                                    color: isHovered ? '#10b981' : '#34d399',
+                                    transition: 'color 0.3s ease',
+                                    filter: isCenter ? 'drop-shadow(0 0 8px currentColor)' : 'none',
+                                    strokeWidth: 2
+                                  }}
+                                />
+                              ) : (
+                                <div 
+                                  className={`${isCenter ? 'w-6 h-6' : 'w-5 h-5'} flex items-center justify-center font-bold`}
+                                  style={{
+                                    color: isHovered ? '#10b981' : '#34d399',
+                                    transition: 'color 0.3s ease',
+                                    filter: isCenter ? 'drop-shadow(0 0 6px currentColor)' : 'none',
+                                    fontSize: isCenter ? '16px' : '14px'
+                                  }}
+                                >
+                                  {item.text}
+                                </div>
+                              )}
+                              <span 
+                                className={`${isCenter ? 'text-xs' : 'text-[10px]'} font-semibold whitespace-nowrap`}
+                                style={{
+                                  color: isHovered ? '#10b981' : '#34d399',
+                                  transition: 'color 0.3s ease',
+                                  opacity: isCenter ? 1 : 0.8
+                                }}
+                              >
+                                {item.name}
+                              </span>
+                            </div>
+                          </a>
+                        );
+                      });
+                    })()}
                   </div>
-                  {socialLinks.map((link, index) => {
-                    // Ensure icons don't overlap the image: set radius > imageRadius + margin
-                    const imageRadius = {
-                      base: 112, // w-56 -> diameter 224 -> radius 112
-                      sm: 128,    // w-64 -> 256 -> 128
-                      md: 144     // w-72 -> 288 -> 144
-                    };
-                    const margin = 36; // gap between image edge and orbit
-                    const radius = imageRadius.base + margin + 40; // extra for icon size
-                    const radiusSm = imageRadius.sm + margin + 40;
-                    const radiusMd = imageRadius.md + margin + 40;
-
-                    const pos = getOrbitalPosition(index, socialLinks.length, radius, orbitAngle);
-                    const posSm = getOrbitalPosition(index, socialLinks.length, radiusSm, orbitAngle);
-                    const posMd = getOrbitalPosition(index, socialLinks.length, radiusMd, orbitAngle);
-
-                    const Icon = link.icon;
-
-                    const pauseOnHover = () => { setHoveredLink(link.id); setIsOrbitPaused(true); };
-                    const resumeOnLeave = () => { setHoveredLink(null); setIsOrbitPaused(false); };
-
-                    return (
-                      <a
-                        key={link.id}
-                        href={link.url}
-                        target={link.id !== 'email' ? '_blank' : undefined}
-                        rel={link.id !== 'email' ? 'noopener noreferrer' : undefined}
-                        onMouseEnter={pauseOnHover}
-                        onMouseLeave={resumeOnLeave}
-                        className="absolute z-20 transition-transform duration-300"
-                        style={{
-                          left: `calc(50% + ${pos.x}px)`,
-                          top: `calc(50% + ${pos.y}px)`,
-                          transform: 'translate(-50%, -50%)'
-                        }}
-                        title={link.label}
-                      >
-                        <style>{`
-                          @media (min-width: 640px) {
-                            a[title="${link.label}"] {
-                              left: calc(50% + ${posSm.x}px) !important;
-                              top: calc(50% + ${posSm.y}px) !important;
-                            }
-                          }
-                          @media (min-width: 768px) {
-                            a[title="${link.label}"] {
-                              left: calc(50% + ${posMd.x}px) !important;
-                              top: calc(50% + ${posMd.y}px) !important;
-                            }
-                          }
-                        `}</style>
-                        <div className="p-4 rounded-full bg-gray-800/90 border-2 border-emerald-400/50 transition-all duration-300 hover:scale-110 hover:border-emerald-400 hover:shadow-xl hover:shadow-emerald-500/50 orbital-glow flex items-center justify-center min-w-[56px] min-h-[56px]">
-                          {Icon ? (
-                            <Icon size={24} className={`transition-colors ${hoveredLink === link.id ? 'text-emerald-400' : 'text-gray-300'}`} />
-                          ) : (
-                            <span className={`text-xl font-bold transition-colors ${hoveredLink === link.id ? 'text-emerald-400' : 'text-gray-300'}`}>
-                              {link.text}
-                            </span>
-                          )}
-                        </div>
-                      </a>
-                    );
-                  })}
                 </div>
               </div>
             </div>
-
           </div>
+
         </div>
       </section>
 
@@ -583,7 +895,13 @@ export default function App() {
         <AchievementsSection achievements={achievements} onOpen={openAchievementDetails} />
       </Suspense>
 
-      <section id="contact" className="min-h-screen flex items-center justify-center px-4 sm:px-6 py-16 sm:py-20 bg-gray-900/50 relative">
+      <section 
+        ref={contactRef}
+        id="contact" 
+        className={`min-h-screen flex items-center justify-center px-4 sm:px-6 py-16 sm:py-20 relative transition-all duration-700 ease-out ${
+          contactVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+        }`}
+      >
         <div className="max-w-4xl w-full text-center">
           <h2 className="text-3xl sm:text-5xl font-bold text-emerald-400 mb-8 sm:mb-12">
             💬 Get In Touch
@@ -642,7 +960,7 @@ export default function App() {
         </div>
       </section>
 
-      <footer className="bg-gray-900/90 backdrop-blur-md border-t border-emerald-400/30 py-8 relative overflow-hidden">
+      <footer className="bg-black/90 backdrop-blur-md border-t border-emerald-400/30 py-8 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-t from-emerald-500/5 to-transparent"></div>
         <div className="max-w-7xl mx-auto px-6 text-center text-gray-400 relative z-10">
           <p className="font-semibold text-gray-300">© 2025 Md. Sakib Hosen <span className="text-emerald-400">AKA</span> Chatok Junior</p>
