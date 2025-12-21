@@ -281,16 +281,22 @@ const RotatingCube = () => {
       {/* Navigation dots */}
       <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex gap-2">
         {[0, 1, 2, 3, 4, 5].map((index) => (
-          <button
-            key={index}
-            onClick={() => handleFaceClick(index)}
-            className="w-2 h-2 rounded-full transition-all"
-            style={{
-              backgroundColor: currentFace === index ? '#10b981' : 'rgba(255, 255, 255, 0.3)',
-              transform: currentFace === index ? 'scale(1.2)' : 'scale(1)',
-            }}
-            aria-label={`View face ${index + 1}`}
-          />
+          <div key={index} className="relative group">
+            <button
+              onClick={() => handleFaceClick(index)}
+              className="w-2 h-2 rounded-full transition-all"
+              style={{
+                backgroundColor: currentFace === index ? '#10b981' : 'rgba(255, 255, 255, 0.3)',
+                transform: currentFace === index ? 'scale(1.2)' : 'scale(1)',
+              }}
+              aria-label={`View ${faces[index].label}`}
+            />
+            {/* Tooltip */}
+            <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+              {faces[index].label}
+              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-gray-900"></div>
+            </div>
+          </div>
         ))}
       </div>
     </div>

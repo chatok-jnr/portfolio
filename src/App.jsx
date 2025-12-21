@@ -3,7 +3,6 @@ import { Github, Linkedin, Mail, Phone, ExternalLink, Award, Briefcase, Graduati
 import { UilDiscord } from '@iconscout/react-unicons';
 import { Helmet } from 'react-helmet-async';
 import useIntersectionObserver from './hooks/useIntersectionObserver';
-import profilePhoto from './assets/Md. Sakib Hosen.png';
 import cvPdf from './assets/cv.pdf';
 import FlippingName from './component/FlippingName';
 import VideoBackground from './component/VideoBackground';
@@ -479,40 +478,14 @@ export default function App() {
               </div>
               </div>
 
-              {/* Right Side - Profile Image with Sliding Window Icons */}
+              {/* Right Side - Rotating Cube */}
               <div className="relative flex flex-col items-center justify-center order-1 lg:order-2" style={{ zIndex: 20 }}>
-                {/* Profile Image - Refined Professional Design */}
-                <div className="relative group">
-                  {/* Soft ambient glow */}
-                  <div className="absolute -inset-6 bg-emerald-500/20 rounded-full blur-3xl opacity-50 group-hover:opacity-70 transition-opacity duration-700"></div>
-                  
-                  {/* Main container with subtle border */}
-                  <div className="relative">
-                    {/* Gradient border wrapper */}
-                    <div className="absolute -inset-0.5 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-full opacity-75"></div>
-                    
-                    {/* Image container */}
-                    <div className="relative w-72 h-72 md:w-80 md:h-80 rounded-full overflow-hidden bg-black">
-                      <img 
-                        src={profilePhoto} 
-                        alt="Chatok Junior" 
-                        className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
-                      />
-                      {/* Subtle vignette */}
-                      <div className="absolute inset-0 shadow-[inset_0_0_60px_rgba(0,0,0,0.3)]"></div>
-                    </div>
+                {/* Rotating Cube - Same size as the previous image */}
+                <div className="w-72 h-72 md:w-80 md:h-80 flex items-center justify-center">
+                  <div className="scale-[2.4] md:scale-[2.9]">
+                    <RotatingCube />
                   </div>
                 </div>
-              </div>
-
-              {/* 3D Rotating Cube with Social Links - Centered between image and text */}
-              <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 hidden lg:block" style={{ zIndex: 25 }}>
-                <RotatingCube />
-              </div>
-
-              {/* Mobile: Show cube below on smaller screens */}
-              <div className="lg:hidden w-full flex justify-center order-3">
-                <RotatingCube />
               </div>
             </div>
           </div>
