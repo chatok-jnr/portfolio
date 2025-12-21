@@ -25,7 +25,7 @@ const FlippingName = () => {
   if (isMobile) {
     return (
       <div 
-        className="text-xl sm:text-2xl font-bold text-emerald-400 transition-colors hover:text-emerald-300 cursor-pointer whitespace-nowrap"
+        className="text-xl sm:text-2xl font-bold text-white transition-colors hover:text-white cursor-pointer whitespace-nowrap"
         style={{
           minWidth: '280px',
           position: 'relative',
@@ -65,7 +65,7 @@ const FlippingName = () => {
   // Desktop: keep 3D flip animation
   return (
     <div 
-      className="text-xl sm:text-2xl font-bold text-emerald-400 transition-colors hover:text-emerald-300 cursor-pointer whitespace-nowrap"
+      className="text-xl sm:text-2xl font-bold text-white transition-colors hover:text-white cursor-pointer whitespace-nowrap"
       style={{
         perspective: '1000px',
         transformStyle: 'preserve-3d',

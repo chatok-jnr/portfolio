@@ -23,7 +23,7 @@ export default function AchievementsSection({ achievements = [], onOpen }) {
       }`}
     >
       <div className="max-w-6xl w-full">
-        <h2 className="text-3xl sm:text-5xl font-bold text-emerald-400 mb-8 sm:mb-12 text-center">
+        <h2 className="text-3xl sm:text-5xl font-bold text-white mb-8 sm:mb-12 text-center">
           {!isMobile && <Award className="inline mr-2 sm:mr-3 w-8 h-8 sm:w-12 sm:h-12" />}
           Achievements & Awards
         </h2>
@@ -38,11 +38,11 @@ export default function AchievementsSection({ achievements = [], onOpen }) {
               {!isMobile && (
                 <div className="text-5xl mb-4 transition-transform duration-300" style={{animation: 'float 5s ease-in-out infinite'}}>{achievement.icon}</div>
               )}
-              <h3 className="text-lg font-bold text-emerald-400 mb-2 group-hover:text-emerald-300">{achievement.title}</h3>
-              <p className="text-gray-400 text-sm leading-relaxed">{achievement.short}</p>
+              <h3 className="text-lg font-bold text-white mb-2">{achievement.title}</h3>
+              <p className="text-white text-sm leading-relaxed">{achievement.short}</p>
               <div className="flex flex-wrap gap-2 mt-4 justify-center">
                 {(achievement.highlights || []).map((h, i) => (
-                  <span key={i} className="px-3 py-1 bg-gradient-to-r from-emerald-500/20 to-emerald-600/20 text-emerald-300 rounded-full text-xs border border-emerald-400/40 font-semibold">
+                  <span key={i} className="px-3 py-1 bg-black text-white rounded-full text-xs border border-white font-semibold">
                     {h}
                   </span>
                 ))}
@@ -53,7 +53,7 @@ export default function AchievementsSection({ achievements = [], onOpen }) {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 transition-all font-bold group-hover:gap-3"
+                  className="inline-flex items-center gap-2 text-white hover:text-white transition-all font-bold group-hover:gap-3"
                 >
                   Learn More {!isMobile && <span>🏆</span>}
                   {!isMobile && <ExternalLink size={16} className="group-hover:translate-x-1 transition-transform" />}
@@ -64,11 +64,11 @@ export default function AchievementsSection({ achievements = [], onOpen }) {
         </div>
 
         <div className="glass glow p-8 mt-12 transition-all">
-          <h3 className="text-2xl font-bold text-emerald-400 mb-4 flex items-center gap-3">
+          <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
             {!isMobile && <MessageSquare size={28} />}
             {!isMobile && <span>👨‍🎓</span>} Mentorship & Community
           </h3>
-          <p className="text-gray-300 leading-relaxed text-lg">
+          <p className="text-white leading-relaxed text-lg">
             Regularly mentor junior students in Competitive Programming, organizing problem-solving sessions
             and guiding them through algorithmic concepts to improve their logical reasoning and contest performance.
           </p>

@@ -12,17 +12,35 @@ const SkillsSection = ({ skills = {} }) => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const iconMap = {
-    languages: '💻',
-    language: '💻',
-    frameworks: '🧩',
-    framework: '🧩',
-    database: '🗄️',
-    databases: '🗄️',
-    db: '🗄️',
-    concepts: '🎓',
-    tools: '🛠️',
-    cloud: '☁️',
+  // Skill icons mapping
+  const skillIcons = {
+    'C++': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg',
+    'JavaScript': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg',
+    'Node.js': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',
+    'Express': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg',
+    'Mongoose': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongoose/mongoose-original.svg',
+    'MongoDB': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
+    'OOP': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/objectivec/objectivec-plain.svg',
+    'Algorithms': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
+    'Problem Solving': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/codepen/codepen-plain.svg',
+    'DSA': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-line.svg',
+    'Linux': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg',
+    'Git/Github': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg',
+    'MongoDB Compass': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
+    'Postman': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postman/postman-original.svg'
+  };
+
+  const categoryTitles = {
+    languages: 'Languages',
+    language: 'Languages',
+    frameworks: 'Frameworks',
+    framework: 'Frameworks',
+    database: 'Database',
+    databases: 'Database',
+    db: 'Database',
+    concepts: 'Concepts',
+    tools: 'Tools',
+    tool: 'Tools'
   };
 
   const entries = Object.entries(skills);
@@ -38,33 +56,44 @@ const SkillsSection = ({ skills = {} }) => {
       }`}
     >
       <div className="max-w-6xl w-full">
-        <h2 className="text-3xl sm:text-5xl font-bold text-emerald-400 mb-8 sm:mb-12 text-center">
+        <h2 className="text-3xl sm:text-5xl font-bold text-white mb-8 sm:mb-12 text-center">
           <Code2 className="inline mr-2 sm:mr-3 w-8 h-8 sm:w-12 sm:h-12" />
           Skills & Technologies
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+        <div className="space-y-8">
           {entries.map(([category, items], index) => {
             const key = String(category).toLowerCase();
-            const icon = iconMap[key] || '🔹';
-            const title = category.charAt(0).toUpperCase() + category.slice(1);
+            const title = categoryTitles[key] || category.charAt(0).toUpperCase() + category.slice(1);
+            const isConcepts = key === 'concepts' || key === 'concept';
+            
             return (
-              <div 
-                key={category} 
-                className="glass glow p-6 text-center transition-all duration-300 group"
-              >
-                {!isMobile && (
-                  <div className="text-5xl mb-4 transition-transform duration-300" style={{animation: 'float 6s ease-in-out infinite'}}>{icon}</div>
-                )}
-                <h3 className="text-lg font-bold text-emerald-400 mb-3 group-hover:text-emerald-300">{title}</h3>
-                <div className="flex flex-wrap gap-2 justify-center">
+              <div key={category} className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8">
+                <h3 className="text-xl sm:text-2xl font-bold text-white min-w-[140px] sm:min-w-[160px] text-center sm:text-left">{title}</h3>
+                <div className="flex flex-wrap gap-4 sm:gap-6 justify-center">
                   {items.map((item) => (
-                    <span
+                    <div
                       key={item}
-                      className="px-3 py-1 bg-gradient-to-r from-emerald-500/20 to-emerald-600/20 text-emerald-300 rounded-full text-xs border border-emerald-400/40 font-semibold cursor-default"
+                      className="group cursor-default transition-all duration-200 hover:scale-110"
+                      title={item}
                     >
-                      {item}
-                    </span>
+                      {isConcepts ? (
+                        <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center bg-white/10 rounded-lg transition-all duration-200 hover:bg-white/20">
+                          <p className="text-xs sm:text-sm text-white font-semibold text-center leading-tight">{item}</p>
+                        </div>
+                      ) : (
+                        <>
+                          <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center bg-white/10 rounded-lg p-3 transition-all duration-200 hover:bg-white/20">
+                            <img 
+                              src={skillIcons[item] || 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/devicon/devicon-original.svg'} 
+                              alt={item}
+                              className="w-full h-full object-contain"
+                            />
+                          </div>
+                          <p className="text-xs text-white text-center mt-2 opacity-80">{item}</p>
+                        </>
+                      )}
+                    </div>
                   ))}
                 </div>
               </div>

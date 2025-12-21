@@ -23,7 +23,7 @@ export default function ProjectsSection({ projects = [], onOpen }) {
       }`}
     >
       <div className="max-w-6xl w-full">
-        <h2 className="text-3xl sm:text-5xl font-bold text-emerald-400 mb-8 sm:mb-12 text-center">
+        <h2 className="text-3xl sm:text-5xl font-bold text-white mb-8 sm:mb-12 text-center">
           {!isMobile && <Briefcase className="inline mr-2 sm:mr-3 w-8 h-8 sm:w-12 sm:h-12" />}
           Projects
         </h2>
@@ -34,12 +34,12 @@ export default function ProjectsSection({ projects = [], onOpen }) {
               onClick={() => onOpen && onOpen(project)}
               className="cursor-pointer glass glow p-8 group transition-all duration-300"
             >
-              <h3 className="text-2xl font-bold text-emerald-400 mb-2 group-hover:text-emerald-300 transition-colors">{project.title}</h3>
-              <p className="text-gray-400 text-sm mb-4 font-semibold">{project.tech}</p>
-              <p className="text-gray-300 mb-4 leading-relaxed">{project.short}</p>
+              <h3 className="text-2xl font-bold text-white mb-2 transition-colors">{project.title}</h3>
+              <p className="text-white text-sm mb-4 font-semibold">{project.tech}</p>
+              <p className="text-white mb-4 leading-relaxed">{project.short}</p>
               <div className="flex flex-wrap gap-2 mb-4">
                 {project.highlights.map((h, i) => (
-                  <span key={i} className="px-3 py-1 bg-gradient-to-r from-emerald-500/20 to-emerald-600/20 text-emerald-300 rounded-full text-xs border border-emerald-400/40 font-semibold">
+                  <span key={i} className="px-3 py-1 bg-black text-white rounded-full text-xs border border-white font-semibold">
                     {h}
                   </span>
                 ))}
@@ -49,7 +49,7 @@ export default function ProjectsSection({ projects = [], onOpen }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
-                className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 transition-all font-bold group-hover:gap-3"
+                className="inline-flex items-center gap-2 text-white hover:text-white transition-all font-bold group-hover:gap-3"
               >
                 View Project {!isMobile && <span>🚀</span>}
                 {!isMobile && <ExternalLink size={18} className="group-hover:translate-x-1 transition-transform" />}
