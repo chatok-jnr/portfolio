@@ -33,8 +33,7 @@ const FlippingName = () => {
       >
         <div
           style={{
-            opacity: showFirst ? 1 : 0,
-            transition: 'opacity 0.5s ease-in-out',
+            // opacity and transition removed
             position: 'absolute',
             top: 0,
             left: 0,
@@ -45,8 +44,7 @@ const FlippingName = () => {
         </div>
         <div
           style={{
-            opacity: !showFirst ? 1 : 0,
-            transition: 'opacity 0.5s ease-in-out',
+            // opacity and transition removed
             position: 'absolute',
             top: 0,
             left: 0,
@@ -76,8 +74,7 @@ const FlippingName = () => {
       <div
         style={{
           transform: showFirst ? 'rotateX(0deg)' : 'rotateX(90deg)',
-          opacity: showFirst ? 1 : 0,
-          transition: 'all 0.5s ease-in-out',
+          // opacity and transition removed
           position: 'absolute',
           top: 0,
           left: 0,
@@ -89,8 +86,7 @@ const FlippingName = () => {
       <div
         style={{
           transform: !showFirst ? 'rotateX(0deg)' : 'rotateX(-90deg)',
-          opacity: !showFirst ? 1 : 0,
-          transition: 'all 0.5s ease-in-out',
+          // opacity and transition removed
           position: 'absolute',
           top: 0,
           left: 0,
