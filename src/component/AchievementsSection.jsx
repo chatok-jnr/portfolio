@@ -19,7 +19,7 @@ export default function AchievementsSection({ achievements = [], onOpen }) {
       className={`min-h-screen flex items-center justify-center px-4 sm:px-6 py-16 sm:py-20 relative ${
         isMobile
           ? ''
-          : `transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`
+          : ''
       }`}
     >
       <div className="max-w-6xl w-full">

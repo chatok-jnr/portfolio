@@ -68,7 +68,7 @@ export default function StatsSection({ githubUser, codeforcesUser }) {
       className={`px-4 sm:px-6 py-16 sm:py-20 relative ${
         isMobile
           ? ''
-          : `transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`
+          : ''
       }`}
     >
       <div className="max-w-6xl mx-auto">
