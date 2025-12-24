@@ -1,5 +1,5 @@
 import React from 'react';
-import { Briefcase, ExternalLink } from 'lucide-react';
+import { Briefcase, ExternalLink, Code, Info } from 'lucide-react';
 import useIntersectionObserver from '../hooks/useIntersectionObserver';
 
 export default function ProjectsSection({ projects = [], onOpen }) {
@@ -22,38 +22,88 @@ export default function ProjectsSection({ projects = [], onOpen }) {
           : ''
       }`}
     >
-      <div className="max-w-6xl w-full">
+      <div className="max-w-7xl w-full">
         <h2 className="text-3xl sm:text-5xl font-bold text-white mb-8 sm:mb-12 text-center">
           {!isMobile && <Briefcase className="inline mr-2 sm:mr-3 w-8 h-8 sm:w-12 sm:h-12" />}
           Projects
         </h2>
-        <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project, idx) => (
             <div
               key={idx}
+              className="cursor-pointer glass glow p-6 transition-all duration-300 group flex flex-col"
               onClick={() => onOpen && onOpen(project)}
-              className="cursor-pointer glass glow p-8 group transition-all duration-300"
             >
-              <h3 className="text-2xl font-bold text-white mb-2 transition-colors">{project.title}</h3>
-              <p className="text-white text-sm mb-4 font-semibold">{project.tech}</p>
-              <p className="text-white mb-4 leading-relaxed">{project.short}</p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {project.highlights.map((h, i) => (
-                  <span key={i} className="px-3 py-1 bg-black text-white rounded-full text-xs border border-white font-semibold">
-                    {h}
-                  </span>
-                ))}
+              {/* Project Image */}
+              <div className="w-full h-48 bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center relative overflow-hidden rounded-lg mb-4">
+                {project.image ? (
+                  <img 
+                    src={project.image} 
+                    alt={project.title}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="text-white text-6xl font-bold opacity-20">
+                    {project.title.charAt(0)}
+                  </div>
+                )}
               </div>
-              <a
-                href={project.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="inline-flex items-center gap-2 text-white hover:text-white transition-all font-bold group-hover:gap-3"
-              >
-                View Project {!isMobile && <span>🚀</span>}
-                {!isMobile && <ExternalLink size={18} className="group-hover:translate-x-1 transition-transform" />}
-              </a>
+
+              {/* Content */}
+              <div className="flex-grow flex flex-col">
+                {/* Title */}
+                <h3 className="text-xl font-bold text-white mb-3">{project.title}</h3>
+                
+                {/* Tags */}
+                <div className="flex flex-wrap gap-2 mb-auto">
+                  {project.highlights.map((h, i) => (
+                    <span 
+                      key={i} 
+                      className="px-3 py-1 bg-black text-white rounded-full text-xs border border-white font-semibold"
+                    >
+                      {h}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Buttons */}
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {project.projectLink && (
+                    <a
+                      href={project.projectLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-lg text-sm font-semibold transition-all duration-300 hover:bg-white/20 hover:border-white/50 flex items-center gap-2"
+                    >
+                      <ExternalLink size={16} />
+                      View Project
+                    </a>
+                  )}
+                  {project.githubLink && (
+                    <a
+                      href={project.githubLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-lg text-sm font-semibold transition-all duration-300 hover:bg-white/20 hover:border-white/50 flex items-center gap-2"
+                    >
+                      <Code size={16} />
+                      View Code
+                    </a>
+                  )}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onOpen && onOpen(project);
+                    }}
+                    className="px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-lg text-sm font-semibold transition-all duration-300 hover:bg-white/20 hover:border-white/50 flex items-center gap-2"
+                  >
+                    <Info size={16} />
+                    Details
+                  </button>
+                </div>
+              </div>
             </div>
           ))}
         </div>

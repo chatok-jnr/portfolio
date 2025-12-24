@@ -237,3 +237,43 @@ div > .glowing-text {
     opacity: 0;
   }
 }
+
+/* Fix for white effect around cube in Chrome/Brave */
+.cube-3d {
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.cube-face {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Prevent white edges in webkit browsers */
+  outline: 1px solid transparent;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+
+/* Additional fix for cube container */
+.perspective-container {
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+
+/* Prevent button vibration/jitter on mobile */
+button,
+a {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-font-smoothing: subpixel-antialiased;
+}
+
+.will-change-auto {
+  will-change: auto;
+  transform: translateZ(0);
+}

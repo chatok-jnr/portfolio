@@ -68,34 +68,70 @@ const SkillsSection = ({ skills = {} }) => {
             const isConcepts = key === 'concepts' || key === 'concept';
             
             return (
-              <div key={category} className="flex flex-row items-center gap-4 sm:gap-8 w-full max-w-5xl mx-auto pl-16 sm:pl-32">
-                <h3 className="text-xl sm:text-2xl font-bold text-white w-[140px] sm:w-[160px] text-right flex-shrink-0">{title}</h3>
-                <div className="flex flex-wrap gap-4 sm:gap-6 flex-1">
-                    {items.map((item) => (
-                    <div
-                      key={item}
-                      className="group cursor-default transition-all duration-200 hover:scale-110"
-                      title={item}
-                    >
-                      {isConcepts ? (
-                        <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center bg-white/10 rounded-lg transition-all duration-200 hover:bg-white/20">
-                          <p className="text-xs sm:text-sm text-white font-semibold text-center leading-tight">{item}</p>
+              <div key={category} className={`w-full max-w-5xl mx-auto ${isMobile ? 'px-4' : 'pl-16 sm:pl-32'}`}>
+                {isMobile ? (
+                  // Mobile Layout: Title on top, skills below in rows of 3
+                  <div className="flex flex-col gap-4">
+                    <h3 className="text-xl font-bold text-white text-center">{title}</h3>
+                    <div className="grid grid-cols-3 gap-4">
+                      {items.map((item) => (
+                        <div
+                          key={item}
+                          className="group cursor-default transition-all duration-200 hover:scale-110 flex flex-col items-center"
+                          title={item}
+                        >
+                          {isConcepts ? (
+                            <div className="w-16 h-16 flex items-center justify-center bg-white/10 rounded-lg transition-all duration-200 hover:bg-white/20">
+                              <p className="text-xs text-white font-semibold text-center leading-tight px-1">{item}</p>
+                            </div>
+                          ) : (
+                            <>
+                              <div className="w-16 h-16 flex items-center justify-center bg-white/10 rounded-lg p-3 transition-all duration-200 hover:bg-white/20">
+                                <img 
+                                  src={skillIcons[item] || 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/devicon/devicon-original.svg'} 
+                                  alt={item}
+                                  className="w-full h-full object-contain"
+                                />
+                              </div>
+                              <p className="text-xs text-white text-center mt-2 opacity-80">{item}</p>
+                            </>
+                          )}
                         </div>
-                      ) : (
-                        <>
-                          <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center bg-white/10 rounded-lg p-3 transition-all duration-200 hover:bg-white/20">
-                            <img 
-                              src={skillIcons[item] || 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/devicon/devicon-original.svg'} 
-                              alt={item}
-                              className="w-full h-full object-contain"
-                            />
-                          </div>
-                          <p className="text-xs text-white text-center mt-2 opacity-80">{item}</p>
-                        </>
-                      )}
+                      ))}
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ) : (
+                  // Desktop Layout: Side-by-side
+                  <div className="flex flex-row items-center gap-4 sm:gap-8">
+                    <h3 className="text-xl sm:text-2xl font-bold text-white w-[140px] sm:w-[160px] text-right flex-shrink-0">{title}</h3>
+                    <div className="flex flex-wrap gap-4 sm:gap-6 flex-1">
+                      {items.map((item) => (
+                        <div
+                          key={item}
+                          className="group cursor-default transition-all duration-200 hover:scale-110"
+                          title={item}
+                        >
+                          {isConcepts ? (
+                            <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center bg-white/10 rounded-lg transition-all duration-200 hover:bg-white/20">
+                              <p className="text-xs sm:text-sm text-white font-semibold text-center leading-tight">{item}</p>
+                            </div>
+                          ) : (
+                            <>
+                              <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center bg-white/10 rounded-lg p-3 transition-all duration-200 hover:bg-white/20">
+                                <img 
+                                  src={skillIcons[item] || 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/devicon/devicon-original.svg'} 
+                                  alt={item}
+                                  className="w-full h-full object-contain"
+                                />
+                              </div>
+                              <p className="text-xs text-white text-center mt-2 opacity-80">{item}</p>
+                            </>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             );
           })}

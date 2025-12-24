@@ -1,9 +1,12 @@
 import React, { useState, useEffect, Suspense, useRef } from 'react';
-import { Github, Linkedin, Mail, Phone, ExternalLink, Award, Briefcase, GraduationCap, X, Facebook, Instagram, Download, Sun, Moon } from 'lucide-react';
+import { Github, Linkedin, Mail, Phone, ExternalLink, Award, Briefcase, GraduationCap, X, Facebook, Instagram, Download, Sun, Moon, Code } from 'lucide-react';
 import { UilDiscord } from '@iconscout/react-unicons';
 import { Helmet } from 'react-helmet-async';
 import useIntersectionObserver from './hooks/useIntersectionObserver';
 import cvPdf from './assets/cv.pdf';
+import tazaBazarImg from './assets/project_images/tazaBazar.png';
+import solveSudokuImg from './assets/project_images/solveSudoku.png';
+import icpc25Img from './assets/achievement_images/icpc_25.png';
 import FlippingName from './component/FlippingName';
 import VideoBackground from './component/VideoBackground';
 import RotatingCube from './component/RotatingCube';
@@ -193,16 +196,19 @@ export default function App() {
       by MongoDB (via Mongoose). It implements REST routes organized by feature, uses 
       JWT + bcrypt for auth, and is set up for local development with nodemon and production start via node server.js`,
 
-      details: `The backend is a Node.js + Express (v5) REST API using MongoDB (accessed through Mongoose and the native mongodb package) 
-      with configuration via dotenv; its primary entry point is server.js (scripts in package.json expose start and dev), and the codebase 
-      follows a modular MVC-like layout with feature-separated folders — controllers for request handlers, models for Mongoose schemas, routes 
-      for endpoint wiring, middleware for auth and request guards. 
-      Authentication is JWT-based (jsonwebtoken) with password hashing via bcrypt/bcryptjs and route protection implemented in authMiddleware.js; 
-      cors and morgan are used for cross-origin handling and request logging, secrets live in config.env (see config.env.example), 
-      and common request flows include register → bcrypt-hash → login → JWT issuance → protected-route validation.`,
+      details: [
+        '**RESTful API Server**: Express.js-based backend serving the TazaBazar agricultural marketplace platform',
+        '**Multi-Role Authentication**: JWT-based authentication system supporting farmers, consumers, buyers, and administrators with role-specific access control',
+        '**Agricultural Marketplace Features**: Manages farmer product listings, consumer requests, bidding system, and real-time alerts for both farmers and consumers',
+        '**Admin Management System**: Comprehensive admin panel with user management, content moderation, announcements, and audit logging capabilities',
+        '**MongoDB Database**: Mongoose ODM for data modeling with schemas for users, products, bids, alerts, and administrative records',
+        '**Production-Ready**: Configured with CORS, security middleware, error handling, and deployment support for Render hosting'
+      ],
 
-      link: 'https://taza-bazar-app-4l7i.onrender.com/',
-      highlights: ['JWT Authentication', 'RESTful API', 'Secure Backend']
+      image: tazaBazarImg,
+      projectLink: 'https://taza-bazar.netlify.app/',
+      githubLink: 'https://github.com/chatok-jnr/taza-bazar-app',
+      highlights: ['JWT Authentication', 'RESTful API', 'Multi-Role System', 'Admin Panel', 'MongoDB', 'Production-Ready']
     },
     {
       title: 'Sudoku Solver',
@@ -215,8 +221,10 @@ export default function App() {
       tool implemented in plain HTML, CSS, and JavaScript. It provides an interactive grid UI where users 
       can enter known numbers, then run the solver to compute and display a solution. The repository is 
       ideal for learning about puzzle solving algorithms, DOM manipulation, and small front-end app structure.`,
-
-      link: 'https://chatok-jnr.github.io/sudokuSolver/',
+      
+      image: solveSudokuImg,
+      projectLink: 'https://chatok-jnr.github.io/sudokuSolver/',
+      githubLink: 'https://github.com/chatok-jnr/sudokuSolver',
       highlights: ['Backtracking Algorithm', 'Client-side Processing', 'Responsive Design']
     }
   ];
@@ -226,7 +234,8 @@ export default function App() {
       icon: '🌐', 
       title: 'ICPC Dhaka Regional 2025', 
       short: 'Team UITS_ACES participant', 
-    //  details: `A huge shoutout to my incredible teammates for their dedication, passion, and perseverance. 💪 It was a privilege to be part of this journey together!`, 
+      details: `A huge shoutout to my incredible teammates for their dedication, passion, and perseverance. 💪 It was a privilege to be part of this journey together!`, 
+      image: icpc25Img,
       //link: 'https://ln.run/XHCRL',
       highlights: ['ICPC Regional Participant', 'Team Competition']
     },
@@ -463,14 +472,14 @@ export default function App() {
                   <a
                     href={cvPdf}
                     download="Chatok_Junior_CV.pdf"
-                    className="px-8 py-4 bg-black border-2 border-white text-white rounded-xl font-bold transition-all hover:bg-white hover:text-black flex items-center gap-2"
+                    className="px-8 py-4 bg-black border-2 border-white text-white rounded-xl font-bold transition-all hover:bg-white hover:text-black flex items-center gap-2 will-change-auto"
                   >
                     <Download size={20} />
                     Download CV
                   </a>
                   <button
                     onClick={() => scrollToSection('contact')}
-                    className="px-8 py-4 border-2 border-white text-white rounded-xl font-bold transition-all hover:bg-white hover:text-black"
+                    className="px-8 py-4 border-2 border-white text-white rounded-xl font-bold transition-all hover:bg-white hover:text-black will-change-auto"
                   >
                     💬 Get In Touch
                   </button>
@@ -479,7 +488,7 @@ export default function App() {
               </div>
 
               {/* Right Side - Rotating Cube */}
-              <div className="relative flex flex-col items-center justify-center order-1 lg:order-2" style={{ zIndex: 20 }}>
+              <div className="relative flex flex-col items-center justify-center order-1 lg:order-2" style={{ zIndex: 1, marginTop: isMobile ? '0px' : '-170px' }}>
                 {/* Rotating Cube - Same size as the previous image */}
                 <div className="w-72 h-72 md:w-80 md:h-80 flex items-center justify-center">
                   <div className="scale-[2.4] md:scale-[2.9]">
@@ -583,29 +592,58 @@ export default function App() {
 
       {/* Details modal overlay for projects / achievements */}
       {(selectedProject || selectedAchievement) && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center animate-fade-in p-4">
           {/* backdrop that also closes on click */}
           <div className="absolute inset-0 bg-black/70 backdrop-blur-lg" onClick={closeDetails} />
 
           <div
             role="dialog"
             aria-modal="true"
-            className="relative z-50 max-w-3xl w-full mx-4 glass glow p-8 shadow-2xl shadow-white/30 transition-all"
+            className="relative z-50 max-w-3xl w-full mx-4 glass glow shadow-2xl shadow-white/30 transition-all max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
-            <button
-              onClick={() => closeDetails()}
-              className="absolute top-4 right-4 text-white hover:text-white p-2 rounded-full bg-gray-800/50 transition-all hover:rotate-90"
-              aria-label="Close details"
-            >
-              <X size={24} />
-            </button>
+            <div className="sticky top-0 right-0 flex justify-end p-4 bg-gradient-to-b from-black/50 to-transparent z-10">
+              <button
+                onClick={() => closeDetails()}
+                className="text-white hover:text-white p-2 rounded-full bg-gray-800/50 transition-all hover:rotate-90"
+                aria-label="Close details"
+              >
+                <X size={24} />
+              </button>
+            </div>
 
-                {selectedProject && (
+            <div className="px-8 pb-8 -mt-4">{selectedProject && (
               <div className="animate-fade-in">
+                {selectedProject.image && (
+                  <div className="w-full bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center relative overflow-hidden rounded-lg mb-4">
+                    <img 
+                      src={selectedProject.image} 
+                      alt={selectedProject.title}
+                      className="w-full h-auto object-contain"
+                    />
+                  </div>
+                )}
                 <h3 className="text-3xl font-bold text-white mb-3">{selectedProject.title}</h3>
                 <p className="text-white text-sm mb-4 font-semibold">{selectedProject.tech}</p>
-                <p className="text-white mb-6 leading-relaxed text-lg">{selectedProject.details}</p>
+                {Array.isArray(selectedProject.details) ? (
+                  <ul className="text-white mb-6 leading-relaxed text-lg space-y-3 list-none">
+                    {selectedProject.details.map((detail, i) => {
+                      const parts = detail.split('**');
+                      return (
+                        <li key={i} className="flex items-start">
+                          <span className="mr-2 text-white">•</span>
+                          <span>
+                            {parts.map((part, j) => 
+                              j % 2 === 1 ? <strong key={j} className="text-white">{part}</strong> : part
+                            )}
+                          </span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                ) : (
+                  <p className="text-white mb-6 leading-relaxed text-lg">{selectedProject.details}</p>
+                )}
                 <div className="flex flex-wrap gap-2 mb-6">
                   {selectedProject.highlights.map((h, i) => (
                     <span key={i} className="px-4 py-2 bg-black text-white rounded-full text-sm border border-white font-bold">
@@ -613,21 +651,46 @@ export default function App() {
                     </span>
                   ))}
                 </div>
-                <a
-                  href={selectedProject.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-3 px-6 py-3 bg-black border-2 border-white text-white rounded-xl font-bold transition-all hover:bg-white hover:text-black"
-                >
-                  🚀 Open Project
-                  <ExternalLink size={20} />
-                </a>
+                <div className="flex flex-wrap gap-2">
+                  {selectedProject.projectLink && (
+                    <a
+                      href={selectedProject.projectLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-lg text-sm font-semibold transition-all duration-300 hover:bg-white/20 hover:border-white/50 flex items-center gap-2"
+                    >
+                      <ExternalLink size={16} />
+                      View Project
+                    </a>
+                  )}
+                  {selectedProject.githubLink && (
+                    <a
+                      href={selectedProject.githubLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-lg text-sm font-semibold transition-all duration-300 hover:bg-white/20 hover:border-white/50 flex items-center gap-2"
+                    >
+                      <Code size={16} />
+                      View Code
+                    </a>
+                  )}
+                </div>
               </div>
             )}
 
             {selectedAchievement && (
               <div className="animate-fade-in">
-                <div className="text-7xl mb-6 animate-bounce">{selectedAchievement.icon}</div>
+                {selectedAchievement.image ? (
+                  <div className="w-full bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center relative overflow-hidden rounded-lg mb-4">
+                    <img 
+                      src={selectedAchievement.image} 
+                      alt={selectedAchievement.title}
+                      className="w-full h-auto object-contain"
+                    />
+                  </div>
+                ) : (
+                  <div className="text-7xl mb-6 animate-bounce">{selectedAchievement.icon}</div>
+                )}
                 <h3 className="text-3xl font-bold text-white mb-3">{selectedAchievement.title}</h3>
                 <p className="text-white mb-6 leading-relaxed text-lg">{selectedAchievement.details}</p>
                 <div className="flex flex-wrap gap-2 mb-6">
@@ -650,6 +713,7 @@ export default function App() {
                 )}
               </div>
             )}
+            </div>
           </div>
         </div>
       )}
