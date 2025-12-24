@@ -5,26 +5,14 @@ const RotatingCube = () => {
   const [autoRotate, setAutoRotate] = useState(true);
   const [currentFace, setCurrentFace] = useState(0);
 
-  // Helper function to determine if a face should be visible
-  const getFaceVisibility = (faceRotation) => {
-    const totalRotationY = (rotation.y + faceRotation.y) % 360;
-    const totalRotationX = (rotation.x + faceRotation.x) % 360;
-    
-    // A face is visible if it's facing forward (within 90 degrees of facing the viewer)
-    const isYVisible = Math.abs(totalRotationY) <= 90 || Math.abs(totalRotationY) >= 270;
-    const isXVisible = Math.abs(totalRotationX) <= 90 || Math.abs(totalRotationX) >= 270;
-    
-    return isYVisible && isXVisible ? 1 : 0;
-  };
-
   // Social links for each face of the cube
   const faces = [
     { href: 'https://github.com/chatok-jnr', svg: 'https://cdn.simpleicons.org/github/FFFFFF', label: 'GitHub', color: '#10b981', rotation: { x: 0, y: 0 } },
     { href: 'https://www.linkedin.com/in/chatok-junior/', svg: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg', label: 'LinkedIn', color: '#0077b5', rotation: { x: 0, y: 90 } },
     { href: 'https://discord.com/users/741680363453022279', svg: 'https://cdn.simpleicons.org/discord/5865F2', label: 'Discord', color: '#5865f2', rotation: { x: 0, y: 180 } },
     { href: 'mailto:md.sakib.hos3n@gmail.com', svg: 'https://cdn.simpleicons.org/gmail/EA4335', label: 'Email', color: '#ea4335', rotation: { x: 0, y: 270 } },
-    { href: 'https://codeforces.com/profile/chatok.jr', svg: 'https://cdn.simpleicons.org/codeforces/1F8ACB', label: 'Codeforces', color: '#1f8acb', rotation: { x: 90, y: 0 } },
-    { href: 'https://www.codechef.com/users/chatok_junior', svg: 'https://cdn.simpleicons.org/codechef/5B4638', label: 'CodeChef', color: '#5b4638', rotation: { x: -90, y: 0 } }
+    { href: 'https://codeforces.com/profile/chatok.jr', svg: 'https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/codeforces.svg', label: 'Codeforces', color: '#1f8acb', rotation: { x: 90, y: 0 } },
+    { href: 'https://www.codechef.com/users/chatok_junior', svg: 'https://avatars.githubusercontent.com/u/11960354?s=200&v=4', label: 'CodeChef', color: '#5b4638', rotation: { x: -90, y: 0 } }
   ];
 
   // Auto-rotation effect
@@ -42,9 +30,9 @@ const RotatingCube = () => {
   useEffect(() => {
     const rotations = [
       { x: 0, y: 0 },      // Front - GitHub
-      { x: 0, y: 90 },     // Right - LinkedIn
-      { x: 0, y: 180 },    // Back - Discord
-      { x: 0, y: 270 },    // Left - Email
+      { x: 0, y: -90 },    // Right - LinkedIn
+      { x: 0, y: -180 },   // Back - Discord
+      { x: 0, y: -270 },   // Left - Email
       { x: -90, y: 0 },    // Top - Codeforces
       { x: 90, y: 0 },     // Bottom - CodeChef
     ];
@@ -73,6 +61,8 @@ const RotatingCube = () => {
             transformStyle: 'preserve-3d',
             transform: `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`,
             transition: 'transform 0.8s cubic-bezier(0.4, 0.0, 0.2, 1)',
+            WebkitTransformStyle: 'preserve-3d',
+            willChange: 'transform',
           }}
         >
           {/* Front face */}
@@ -91,8 +81,7 @@ const RotatingCube = () => {
               width: '110px',
               height: '110px',
               backgroundColor: 'rgba(255, 255, 255, 0.1)',
-              backdropFilter: 'blur(10px)',
-              border: '2px solid rgba(255, 255, 255, 0.2)',
+              backdropFilter: 'blur(3px)',
               borderRadius: '0px',
               display: 'flex',
               flexDirection: 'column',
@@ -102,7 +91,11 @@ const RotatingCube = () => {
               transform: 'translateZ(55px)',
               transition: 'all 0.3s ease',
               cursor: 'pointer',
-              opacity: getFaceVisibility({ x: 0, y: 0 })
+              WebkitBackfaceVisibility: 'hidden',
+              backfaceVisibility: 'hidden',
+              WebkitFontSmoothing: 'antialiased',
+              MozOsxFontSmoothing: 'grayscale',
+              isolation: 'isolate',
             }}
           >
             <img src={faces[0].svg} alt={faces[0].label} className="w-16 h-16 object-contain" />
@@ -125,8 +118,7 @@ const RotatingCube = () => {
               width: '110px',
               height: '110px',
               backgroundColor: 'rgba(255, 255, 255, 0.1)',
-              backdropFilter: 'blur(10px)',
-              border: '2px solid rgba(255, 255, 255, 0.2)',
+              backdropFilter: 'blur(3px)',
               borderRadius: '0px',
               display: 'flex',
               flexDirection: 'column',
@@ -136,7 +128,11 @@ const RotatingCube = () => {
               transform: 'rotateY(90deg) translateZ(55px)',
               transition: 'all 0.3s ease',
               cursor: 'pointer',
-              opacity: getFaceVisibility({ x: 0, y: 90 })
+              WebkitBackfaceVisibility: 'hidden',
+              backfaceVisibility: 'hidden',
+              WebkitFontSmoothing: 'antialiased',
+              MozOsxFontSmoothing: 'grayscale',
+              isolation: 'isolate',
             }}
           >
             <img src={faces[1].svg} alt={faces[1].label} className="w-16 h-16 object-contain" />
@@ -159,8 +155,7 @@ const RotatingCube = () => {
               width: '110px',
               height: '110px',
               backgroundColor: 'rgba(255, 255, 255, 0.1)',
-              backdropFilter: 'blur(10px)',
-              border: '2px solid rgba(255, 255, 255, 0.2)',
+              backdropFilter: 'blur(3px)',
               borderRadius: '0px',
               display: 'flex',
               flexDirection: 'column',
@@ -170,7 +165,11 @@ const RotatingCube = () => {
               transform: 'rotateY(180deg) translateZ(55px)',
               transition: 'all 0.3s ease',
               cursor: 'pointer',
-              opacity: getFaceVisibility({ x: 0, y: 180 })
+              WebkitBackfaceVisibility: 'hidden',
+              backfaceVisibility: 'hidden',
+              WebkitFontSmoothing: 'antialiased',
+              MozOsxFontSmoothing: 'grayscale',
+              isolation: 'isolate',
             }}
           >
             <img src={faces[2].svg} alt={faces[2].label} className="w-16 h-16 object-contain" />
@@ -200,8 +199,7 @@ const RotatingCube = () => {
               width: '110px',
               height: '110px',
               backgroundColor: 'rgba(255, 255, 255, 0.1)',
-              backdropFilter: 'blur(10px)',
-              border: '2px solid rgba(255, 255, 255, 0.2)',
+              backdropFilter: 'blur(3px)',
               borderRadius: '0px',
               display: 'flex',
               flexDirection: 'column',
@@ -211,7 +209,11 @@ const RotatingCube = () => {
               transform: 'rotateY(-90deg) translateZ(55px)',
               transition: 'all 0.3s ease',
               cursor: 'pointer',
-              opacity: getFaceVisibility({ x: 0, y: 270 })
+              WebkitBackfaceVisibility: 'hidden',
+              backfaceVisibility: 'hidden',
+              WebkitFontSmoothing: 'antialiased',
+              MozOsxFontSmoothing: 'grayscale',
+              isolation: 'isolate',
             }}
           >
             <img src={faces[3].svg} alt={faces[3].label} className="w-16 h-16 object-contain" />
@@ -224,13 +226,17 @@ const RotatingCube = () => {
             target="_blank"
             rel="noopener noreferrer"
             className="cube-face cube-face-top"
+            onClick={(e) => {
+              e.preventDefault();
+              if (currentFace === 4) window.open(faces[4].href, '_blank');
+              else handleFaceClick(4);
+            }}
             style={{
               position: 'absolute',
               width: '110px',
               height: '110px',
               backgroundColor: 'rgba(255, 255, 255, 0.1)',
-              backdropFilter: 'blur(10px)',
-              border: '2px solid rgba(255, 255, 255, 0.2)',
+              backdropFilter: 'blur(3px)',
               borderRadius: '0px',
               display: 'flex',
               flexDirection: 'column',
@@ -240,7 +246,11 @@ const RotatingCube = () => {
               transform: 'rotateX(90deg) translateZ(55px)',
               transition: 'all 0.3s ease',
               cursor: 'pointer',
-              opacity: getFaceVisibility({ x: 90, y: 0 })
+              WebkitBackfaceVisibility: 'hidden',
+              backfaceVisibility: 'hidden',
+              WebkitFontSmoothing: 'antialiased',
+              MozOsxFontSmoothing: 'grayscale',
+              isolation: 'isolate',
             }}
           >
             <img src={faces[4].svg} alt={faces[4].label} className="w-16 h-16 object-contain" />
@@ -253,13 +263,17 @@ const RotatingCube = () => {
             target="_blank"
             rel="noopener noreferrer"
             className="cube-face cube-face-bottom"
+            onClick={(e) => {
+              e.preventDefault();
+              if (currentFace === 5) window.open(faces[5].href, '_blank');
+              else handleFaceClick(5);
+            }}
             style={{
               position: 'absolute',
               width: '110px',
               height: '110px',
               backgroundColor: 'rgba(255, 255, 255, 0.1)',
-              backdropFilter: 'blur(10px)',
-              border: '2px solid rgba(255, 255, 255, 0.2)',
+              backdropFilter: 'blur(3px)',
               borderRadius: '0px',
               display: 'flex',
               flexDirection: 'column',
@@ -269,7 +283,11 @@ const RotatingCube = () => {
               transform: 'rotateX(-90deg) translateZ(55px)',
               transition: 'all 0.3s ease',
               cursor: 'pointer',
-              opacity: getFaceVisibility({ x: -90, y: 0 })
+              WebkitBackfaceVisibility: 'hidden',
+              backfaceVisibility: 'hidden',
+              WebkitFontSmoothing: 'antialiased',
+              MozOsxFontSmoothing: 'grayscale',
+              isolation: 'isolate',
             }}
           >
             <img src={faces[5].svg} alt={faces[5].label} className="w-16 h-16 object-contain" />

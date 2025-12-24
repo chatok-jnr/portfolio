@@ -1,5 +1,5 @@
 import React from 'react';
-import { Award, ExternalLink, MessageSquare } from 'lucide-react';
+import { Award, ExternalLink, MessageSquare, Info } from 'lucide-react';
 import useIntersectionObserver from '../hooks/useIntersectionObserver';
 
 export default function AchievementsSection({ achievements = [], onOpen }) {
@@ -32,32 +32,44 @@ export default function AchievementsSection({ achievements = [], onOpen }) {
           {achievements.map((achievement, idx) => (
             <div
               key={idx}
+              className="cursor-pointer glass glow p-6 text-center transition-all duration-300 group flex flex-col"
               onClick={() => onOpen && onOpen(achievement)}
-              className="cursor-pointer glass glow p-6 text-center transition-all duration-300 group"
             >
               {!isMobile && (
                 <div className="text-5xl mb-4 transition-transform duration-300" style={{animation: 'float 5s ease-in-out infinite'}}>{achievement.icon}</div>
               )}
               <h3 className="text-lg font-bold text-white mb-2">{achievement.title}</h3>
               <p className="text-white text-sm leading-relaxed">{achievement.short}</p>
-              <div className="flex flex-wrap gap-2 mt-4 justify-center">
+              <div className="flex flex-wrap gap-2 mt-4 justify-center mb-auto">
                 {(achievement.highlights || []).map((h, i) => (
                   <span key={i} className="px-3 py-1 bg-black text-white rounded-full text-xs border border-white font-semibold">
                     {h}
                   </span>
                 ))}
               </div>
-              <div className="mt-4">
-                <a
-                  href={achievement.link || '#'}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  className="inline-flex items-center gap-2 text-white hover:text-white transition-all font-bold group-hover:gap-3"
+              <div className="flex flex-wrap gap-2 mt-4">
+                {achievement.link && (
+                  <a
+                    href={achievement.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-lg text-sm font-semibold transition-all duration-300 hover:bg-white/20 hover:border-white/50 flex items-center gap-2"
+                  >
+                    <ExternalLink size={16} />
+                    Open Link
+                  </a>
+                )}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onOpen && onOpen(achievement);
+                  }}
+                  className="px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-lg text-sm font-semibold transition-all duration-300 hover:bg-white/20 hover:border-white/50 flex items-center gap-2"
                 >
-                  Learn More {!isMobile && <span>🏆</span>}
-                  {!isMobile && <ExternalLink size={16} className="group-hover:translate-x-1 transition-transform" />}
-                </a>
+                  <Info size={16} />
+                  Details
+                </button>
               </div>
             </div>
           ))}
