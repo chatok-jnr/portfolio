@@ -1,12 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Saira:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=WDXL+Lubrifont+SC&display=swap');
+
+body {
+  font-family: 'WDXL Lubrifont SC', sans-serif;
+}
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root{--bg:#000000;--card:#0b1220;--accent:#60a5fa;--text:#e6eef8}
+:root{--bg:#000000;--card:#0b1220;--accent:#60a5fa;--text:#ffffff}
 /* Previous gradient theme variables override */
-.theme-previous:root{--bg:#0f172a;--card:#0b1220;--accent:#60a5fa;--text:#e6eef8}
+.theme-previous:root{--bg:#000000;--card:#0b1220;--accent:#60a5fa;--text:#ffffff}
 *{box-sizing:border-box}
 html,body,#root{height:100%}
 
@@ -33,17 +37,16 @@ html,body,#root{height:100%}
 
 body{
   margin:0;
-  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+  font-family:'WDXL Lubrifont SC',Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
   background-color: var(--bg);
   color:var(--text);
   overflow-x: hidden;
+  font-size: 1.125rem;
 }
 
 /* Previous theme background gradient */
 body.theme-previous{
-  background: linear-gradient(-45deg, #0a0e1a, #0f1728, #10b981, #059669, #0f172a);
-  background-size: 400% 400%;
-  animation: gradientShift 15s ease infinite;
+  background-color: #000000;
 }
 
 /* Particle effects */
@@ -72,19 +75,17 @@ body.theme-previous::before{
 .hero{text-align:center;margin-bottom:2rem}
 
 .glowing-text {
-  font-family: 'Inter', sans-serif !important;
-  font-size: clamp(1.5rem,4vw,3rem);
+  font-family: 'WDXL Lubrifont SC', sans-serif !important;
+  font-size: clamp(1.75rem,4vw,3.25rem);
   font-weight: 700;
   margin: 0;
-  color: #10b981;
-  text-shadow: 
-    0 0 5px rgba(16, 185, 129, 0.3),
-    0 0 10px rgba(16, 185, 129, 0.2);
+  color: #ffffff;
+  text-shadow: none;
 }
 
 /* Specific styling for the role text */
 div > .glowing-text {
-  font-family: 'Inter', sans-serif !important;
+  font-family: 'WDXL Lubrifont SC', sans-serif !important;
   letter-spacing: 0.02em;
 }
 
@@ -92,9 +93,34 @@ div > .glowing-text {
   display: inline-block;
   width: 3px;
   height: 1em;
-  background-color: #10b981;
+  background-color: #ffffff;
   margin-left: 5px;
   animation: blink 1s infinite;
+}
+
+/* Glassmorphism effect for hero text - applied to letters */
+.glass-text {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0.6) 50%,
+    rgba(255, 255, 255, 0.9) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% 200%;
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.5))
+          drop-shadow(0 0 40px rgba(255, 255, 255, 0.3))
+          drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+  animation: glass-shimmer 3s ease-in-out infinite;
+  position: relative;
+  letter-spacing: 0.05em;
+}
+
+@keyframes glass-shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
 @keyframes blink {
@@ -116,38 +142,33 @@ div > .glowing-text {
 @layer utilities {
 	/* Glassmorphism surface with enhanced depth */
 	.glass {
-    @apply rounded-2xl border border-emerald-400/40 bg-gradient-to-br from-black/20 to-black/5 backdrop-blur-xl shadow-2xl shadow-emerald-500/25;
+  @apply rounded-2xl border border-white/40 bg-gradient-to-br from-black/20 to-black/5 backdrop-blur-sm shadow-2xl shadow-white/25;
     background-image:
       linear-gradient(135deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.1) 100%),
-      linear-gradient(to bottom right, rgba(16,185,129,0.08), rgba(16,185,129,0.02));
-    outline: 1px solid rgba(16,185,129,0.12);
-    box-shadow: 0 0 0 1px rgba(16,185,129,0.12) inset, 0 8px 24px rgba(16,185,129,0.12);
+      linear-gradient(to bottom right, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+    outline: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.12) inset, 0 8px 24px rgba(255,255,255,0.12);
 	}
 
   /* Previous theme variant for glass */
   .theme-previous .glass{
-    border-color: rgba(16,185,129,0.30);
+    border-color: rgba(255,255,255,0.30);
     background-image:
       linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%),
-      linear-gradient(to bottom right, rgba(16,185,129,0.05), transparent);
-    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.2), 0 0 40px rgba(16, 185, 129, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      linear-gradient(to bottom right, rgba(255,255,255,0.05), transparent);
+    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2), 0 0 40px rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
 
-	/* Enhanced emerald glow with subtle hover */
+	/* Simple hover effect like Google Classroom */
 	.glow {
-		transition: all 300ms ease;
-		box-shadow: 
-			0 4px 20px rgba(16, 185, 129, 0.2),
-			0 0 40px rgba(16, 185, 129, 0.1),
-			inset 0 1px 0 rgba(255, 255, 255, 0.1);
+		transition: all 200ms ease;
+		box-shadow: 0 1px 3px rgba(255, 255, 255, 0.12);
 	}
 
 	.glow:hover {
-		box-shadow: 
-			0 8px 30px rgba(16, 185, 129, 0.3),
-			0 0 50px rgba(16, 185, 129, 0.2);
-		transform: translateY(-4px);
-		border-color: rgba(16, 185, 129, 0.5) !important;
+		box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
+		transform: translateY(-2px);
+		border-color: rgba(255, 255, 255, 0.6) !important;
 	}
 
 	.btn-glass {
@@ -175,112 +196,8 @@ div > .glowing-text {
   filter: brightness(1.2);
 }
 
-/* Section transition animations */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes fadeInRight {
-  from {
-    opacity: 0;
-    transform: translateX(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes fadeOut {
-  from {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-}
 
 /* Section transition classes */
-.section-hidden {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-}
-
-.section-visible {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-}
-
-.section-exit {
-  opacity: 0;
-  transform: translateY(-20px);
-  transition: opacity 0.6s ease-in, transform 0.6s ease-in;
-}
-
-/* Animation variants */
-.animate-fadeInUp {
-  animation: fadeInUp 0.8s ease-out forwards;
-}
-
-.animate-fadeInDown {
-  animation: fadeInDown 0.8s ease-out forwards;
-}
-
-.animate-fadeInLeft {
-  animation: fadeInLeft 0.8s ease-out forwards;
-}
-
-.animate-fadeInRight {
-  animation: fadeInRight 0.8s ease-out forwards;
-}
-
-.animate-scaleIn {
-  animation: scaleIn 0.8s ease-out forwards;
-}
 
 /* 3D Flip Animation */
 .perspective-1000 {
@@ -319,4 +236,44 @@ div > .glowing-text {
     transform: rotateX(90deg);
     opacity: 0;
   }
+}
+
+/* Fix for white effect around cube in Chrome/Brave */
+.cube-3d {
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.cube-face {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Prevent white edges in webkit browsers */
+  outline: 1px solid transparent;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+
+/* Additional fix for cube container */
+.perspective-container {
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+
+/* Prevent button vibration/jitter on mobile */
+button,
+a {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-font-smoothing: subpixel-antialiased;
+}
+
+.will-change-auto {
+  will-change: auto;
+  transform: translateZ(0);
 }

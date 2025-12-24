@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react';
 
 const FlippingName = () => {
-  const [showFirst, setShowFirst] = useState(true);
+  const [rotation, setRotation] = useState({ x: 0, y: 0 });
+  const [autoRotate, setAutoRotate] = useState(true);
+  const [currentFace, setCurrentFace] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+
+  const names = ['Chatok Junior', 'Md. Sakib Hosen'];
 
   useEffect(() => {
     const checkMobile = () => {
@@ -13,94 +17,99 @@ const FlippingName = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  // Auto-rotation effect
   useEffect(() => {
+    if (!autoRotate) return;
+
     const interval = setInterval(() => {
-      setShowFirst(prev => !prev);
+      setCurrentFace((prev) => (prev + 1) % 2); // Rotate between 2 faces
     }, 3000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [autoRotate]);
 
-  // On mobile, use simple fade instead of 3D rotation
+  // Update rotation based on current face
+  useEffect(() => {
+    const rotations = [
+      { x: 0, y: 0 },      // Front - Chatok Junior
+      { x: -180, y: 0 },   // Bottom - Md. Sakib Hosen (flip vertically)
+    ];
+    setRotation(rotations[currentFace]);
+  }, [currentFace]);
+
+  // On mobile, show only "Chatok Junior"
   if (isMobile) {
     return (
       <div 
-        className="text-xl sm:text-2xl font-bold text-emerald-400 transition-colors hover:text-emerald-300 cursor-pointer whitespace-nowrap"
-        style={{
-          minWidth: '280px',
-          position: 'relative',
-        }}
+        className="text-xl sm:text-2xl font-bold text-white transition-colors hover:text-white cursor-pointer whitespace-nowrap"
       >
-        <div
-          style={{
-            opacity: showFirst ? 1 : 0,
-            transition: 'opacity 0.5s ease-in-out',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-          }}
-        >
-          Chatok Junior
-        </div>
-        <div
-          style={{
-            opacity: !showFirst ? 1 : 0,
-            transition: 'opacity 0.5s ease-in-out',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-          }}
-        >
-          Md. Sakib Hosen
-        </div>
-        <div style={{ opacity: 0, pointerEvents: 'none' }}>
-          Md. Sakib Hosen
-        </div>
+        Chatok Junior
       </div>
     );
   }
 
-  // Desktop: keep 3D flip animation
+  // Desktop: 3D cube flip animation
   return (
     <div 
-      className="text-xl sm:text-2xl font-bold text-emerald-400 transition-colors hover:text-emerald-300 cursor-pointer whitespace-nowrap"
+      className="text-xl sm:text-2xl font-bold text-white transition-colors hover:text-white cursor-pointer whitespace-nowrap"
+      onMouseEnter={() => setAutoRotate(false)}
+      onMouseLeave={() => setAutoRotate(true)}
       style={{
         perspective: '1000px',
-        transformStyle: 'preserve-3d',
         minWidth: '280px',
         position: 'relative',
+        height: '2rem',
       }}
     >
-      <div
+      <div 
         style={{
-          transform: showFirst ? 'rotateX(0deg)' : 'rotateX(90deg)',
-          opacity: showFirst ? 1 : 0,
-          transition: 'all 0.5s ease-in-out',
-          position: 'absolute',
-          top: 0,
-          left: 0,
           width: '100%',
+          height: '100%',
+          position: 'relative',
+          transformStyle: 'preserve-3d',
+          transform: `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`,
+          transition: 'transform 0.8s cubic-bezier(0.4, 0.0, 0.2, 1)',
+          WebkitTransformStyle: 'preserve-3d',
+          willChange: 'transform',
         }}
       >
-        Chatok Junior
-      </div>
-      <div
-        style={{
-          transform: !showFirst ? 'rotateX(0deg)' : 'rotateX(-90deg)',
-          opacity: !showFirst ? 1 : 0,
-          transition: 'all 0.5s ease-in-out',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-        }}
-      >
-        Md. Sakib Hosen
-      </div>
-      <div style={{ opacity: 0, pointerEvents: 'none' }}>
-        Md. Sakib Hosen
+        {/* Front face - Chatok Junior */}
+        <div
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            transform: 'translateZ(1px)',
+            WebkitBackfaceVisibility: 'hidden',
+            backfaceVisibility: 'hidden',
+            WebkitFontSmoothing: 'antialiased',
+            MozOsxFontSmoothing: 'grayscale',
+          }}
+        >
+          {names[0]}
+        </div>
+
+        {/* Bottom face - Md. Sakib Hosen */}
+        <div
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            transform: 'rotateX(180deg) translateZ(1px)',
+            WebkitBackfaceVisibility: 'hidden',
+            backfaceVisibility: 'hidden',
+            WebkitFontSmoothing: 'antialiased',
+            MozOsxFontSmoothing: 'grayscale',
+          }}
+        >
+          {names[1]}
+        </div>
       </div>
     </div>
   );
