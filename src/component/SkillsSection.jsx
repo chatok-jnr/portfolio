@@ -5,12 +5,32 @@ import useIntersectionObserver from '../hooks/useIntersectionObserver';
 const SkillsSection = ({ skills = {} }) => {
   const { elementRef, isVisible } = useIntersectionObserver({ threshold: 0.15 });
   const [isMobile, setIsMobile] = React.useState(false);
+  const [ripples, setRipples] = React.useState({});
+
   React.useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  const handleMouseMove = (e, key) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    
+    setRipples(prev => ({
+      ...prev,
+      [key]: { x, y, active: true }
+    }));
+  };
+
+  const handleMouseLeave = (key) => {
+    setRipples(prev => ({
+      ...prev,
+      [key]: { ...prev[key], active: false }
+    }));
+  };
 
   // Skill icons mapping
   const skillIcons = {
@@ -74,11 +94,21 @@ const SkillsSection = ({ skills = {} }) => {
                   <div className="flex flex-col gap-4">
                     <h3 className="text-xl font-bold text-white text-center">{title}</h3>
                     <div className="grid grid-cols-3 gap-4">
-                      {items.map((item) => (
+                      {items.map((item) => {
+                        const itemKey = `${category}-${item}`;
+                        return (
                         <div
                           key={item}
-                          className="group cursor-default transition-all duration-200 hover:scale-110 flex flex-col items-center"
+                          className="group cursor-default transition-all duration-200 hover:scale-110 flex flex-col items-center relative overflow-hidden"
                           title={item}
+                          onMouseMove={(e) => handleMouseMove(e, itemKey)}
+                          onMouseLeave={() => handleMouseLeave(itemKey)}
+                          style={{
+                            transform: ripples[itemKey]?.active 
+                              ? `perspective(1000px) rotateX(${(ripples[itemKey].y - 50) * 0.1}deg) rotateY(${(ripples[itemKey].x - 50) * 0.1}deg)`
+                              : 'none',
+                            transition: 'transform 0.1s ease-out'
+                          }}
                         >
                           {isConcepts ? (
                             <div className="w-16 h-16 flex items-center justify-center bg-white/10 rounded-lg transition-all duration-200 hover:bg-white/20">
@@ -97,7 +127,8 @@ const SkillsSection = ({ skills = {} }) => {
                             </>
                           )}
                         </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
                 ) : (
@@ -105,11 +136,21 @@ const SkillsSection = ({ skills = {} }) => {
                   <div className="flex flex-row items-center gap-4 sm:gap-8">
                     <h3 className="text-xl sm:text-2xl font-bold text-white w-[140px] sm:w-[160px] text-right flex-shrink-0">{title}</h3>
                     <div className="flex flex-wrap gap-4 sm:gap-6 flex-1">
-                      {items.map((item) => (
+                      {items.map((item) => {
+                        const itemKey = `${category}-${item}`;
+                        return (
                         <div
                           key={item}
-                          className="group cursor-default transition-all duration-200 hover:scale-110"
+                          className="group cursor-default transition-all duration-200 hover:scale-110 relative overflow-hidden"
                           title={item}
+                          onMouseMove={(e) => handleMouseMove(e, itemKey)}
+                          onMouseLeave={() => handleMouseLeave(itemKey)}
+                          style={{
+                            transform: ripples[itemKey]?.active 
+                              ? `perspective(1000px) rotateX(${(ripples[itemKey].y - 50) * 0.1}deg) rotateY(${(ripples[itemKey].x - 50) * 0.1}deg)`
+                              : 'none',
+                            transition: 'transform 0.1s ease-out'
+                          }}
                         >
                           {isConcepts ? (
                             <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center bg-white/10 rounded-lg transition-all duration-200 hover:bg-white/20">
@@ -128,7 +169,8 @@ const SkillsSection = ({ skills = {} }) => {
                             </>
                           )}
                         </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
                 )}

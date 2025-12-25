@@ -5,12 +5,32 @@ import useIntersectionObserver from '../hooks/useIntersectionObserver';
 export default function AchievementsSection({ achievements = [], onOpen }) {
   const { elementRef, isVisible } = useIntersectionObserver({ threshold: 0.15 });
   const [isMobile, setIsMobile] = React.useState(false);
+  const [ripples, setRipples] = React.useState({});
+
   React.useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  const handleMouseMove = (e, idx) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    
+    setRipples(prev => ({
+      ...prev,
+      [idx]: { x, y, active: true }
+    }));
+  };
+
+  const handleMouseLeave = (idx) => {
+    setRipples(prev => ({
+      ...prev,
+      [idx]: { ...prev[idx], active: false }
+    }));
+  };
 
   return (
     <section 
@@ -32,22 +52,31 @@ export default function AchievementsSection({ achievements = [], onOpen }) {
           {achievements.map((achievement, idx) => (
             <div
               key={idx}
-              className="cursor-pointer glass glow p-6 text-center transition-all duration-300 group flex flex-col"
+              className="cursor-pointer glass glow p-6 text-center transition-all duration-300 group flex flex-col relative overflow-hidden hover:border-blue-500 hover:shadow-blue-500/50"
               onClick={() => onOpen && onOpen(achievement)}
+              onMouseMove={(e) => handleMouseMove(e, idx)}
+              onMouseLeave={() => handleMouseLeave(idx)}
+              style={{
+                transform: ripples[idx]?.active 
+                  ? `perspective(1000px) rotateX(${(ripples[idx].y - 50) * 0.1}deg) rotateY(${(ripples[idx].x - 50) * 0.1}deg)`
+                  : 'none',
+                transition: 'transform 0.1s ease-out'
+              }}
             >
+              
               {!isMobile && (
-                <div className="text-5xl mb-4 transition-transform duration-300" style={{animation: 'float 5s ease-in-out infinite'}}>{achievement.icon}</div>
+                <div className="text-5xl mb-4 transition-transform duration-300 relative z-10" style={{animation: 'float 5s ease-in-out infinite'}}>{achievement.icon}</div>
               )}
-              <h3 className="text-lg font-bold text-white mb-2">{achievement.title}</h3>
-              <p className="text-white text-sm leading-relaxed">{achievement.short}</p>
-              <div className="flex flex-wrap gap-2 mt-4 justify-center mb-auto">
+              <h3 className="text-lg font-bold text-white mb-2 relative z-10">{achievement.title}</h3>
+              <p className="text-white text-sm leading-relaxed relative z-10">{achievement.short}</p>
+              <div className="flex flex-wrap gap-2 mt-4 justify-center mb-auto relative z-10">
                 {(achievement.highlights || []).map((h, i) => (
                   <span key={i} className="px-3 py-1 bg-black text-white rounded-full text-xs border border-white font-semibold">
                     {h}
                   </span>
                 ))}
               </div>
-              <div className="flex flex-wrap gap-2 mt-4">
+              <div className="flex flex-wrap gap-2 mt-4 relative z-10">
                 {achievement.link && (
                   <a
                     href={achievement.link}
@@ -75,7 +104,17 @@ export default function AchievementsSection({ achievements = [], onOpen }) {
           ))}
         </div>
 
-        <div className="glass glow p-8 mt-12 transition-all">
+        <div 
+          className="glass glow p-8 mt-12 transition-all relative overflow-hidden"
+          onMouseMove={(e) => handleMouseMove(e, 'mentorship')}
+          onMouseLeave={() => handleMouseLeave('mentorship')}
+          style={{
+            transform: ripples['mentorship']?.active 
+              ? `perspective(1000px) rotateX(${(ripples['mentorship'].y - 50) * 0.05}deg) rotateY(${(ripples['mentorship'].x - 50) * 0.05}deg)`
+              : 'none',
+            transition: 'transform 0.1s ease-out'
+          }}
+        >
           <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
             {!isMobile && <MessageSquare size={28} />}
             {!isMobile && <span>👨‍🎓</span>} Mentorship & Community
