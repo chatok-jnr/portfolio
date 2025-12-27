@@ -52,7 +52,7 @@ export default function AchievementsSection({ achievements = [], onOpen }) {
           {achievements.map((achievement, idx) => (
             <div
               key={idx}
-              className="cursor-pointer glass glow p-6 text-center transition-all duration-300 group flex flex-col relative overflow-hidden hover:border-blue-500 hover:shadow-blue-500/50"
+              className="cursor-pointer glass glow p-6 text-center transition-all duration-300 group flex flex-col relative overflow-hidden"
               onClick={() => onOpen && onOpen(achievement)}
               onMouseMove={(e) => handleMouseMove(e, idx)}
               onMouseLeave={() => handleMouseLeave(idx)}

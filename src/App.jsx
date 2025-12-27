@@ -29,9 +29,9 @@ export default function App() {
   const [profileOrbitAngle, setProfileOrbitAngle] = useState(0);
   const [theme, setTheme] = useState(() => {
     try {
-      return localStorage.getItem('theme') ?? 'previous';
+      return localStorage.getItem('theme') ?? 'current';
     } catch {
-      return 'previous';
+      return 'current';
     }
   }); // 'current' | 'previous'
   const [isMobile, setIsMobile] = useState(false);

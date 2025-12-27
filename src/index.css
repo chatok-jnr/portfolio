@@ -171,13 +171,14 @@ div > .glowing-text {
 		border-color: rgba(255, 255, 255, 0.6) !important;
 	}
 
-	/* Blue hover effect for achievement cards */
+	/* Crystal blue hover effect for cards */
 	#achievements .glow:hover,
 	#skills .glow:hover,
 	#projects .glow:hover,
-	#support .glow:hover {
-		border-color: rgb(16, 185, 129) !important;
-		box-shadow: 0 4px 16px rgba(16, 185, 129, 0.5), 0 0 24px rgba(16, 185, 129, 0.3) !important;
+	#support .glow:hover,
+	#contact .glow:hover {
+		border-color: rgb(255, 255, 255) !important;
+		box-shadow: 0 4px 16px rgba(255, 255, 255, 0.6), 0 0 32px rgba(255, 255, 255, 0.4) !important;
 	}
 
 	.btn-glass {
