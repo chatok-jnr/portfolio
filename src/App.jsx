@@ -7,6 +7,7 @@ import cvPdf from './assets/cv.pdf';
 import tazaBazarImg from './assets/project_images/tazaBazar.png';
 import solveSudokuImg from './assets/project_images/solveSudoku.png';
 import icpc25Img from './assets/achievement_images/icpc_25.png';
+import buyMeACoffeeQR from './assets/buy_me_a_cofee.jpg';
 import FlippingName from './component/FlippingName';
 import VideoBackground from './component/VideoBackground';
 import RotatingCube from './component/RotatingCube';
@@ -28,12 +29,32 @@ export default function App() {
   const [profileOrbitAngle, setProfileOrbitAngle] = useState(0);
   const [theme, setTheme] = useState(() => {
     try {
-      return localStorage.getItem('theme') ?? 'previous';
+      return localStorage.getItem('theme') ?? 'current';
     } catch {
-      return 'previous';
+      return 'current';
     }
   }); // 'current' | 'previous'
   const [isMobile, setIsMobile] = useState(false);
+  const [cardRipples, setCardRipples] = useState({});
+
+  // Card hover handlers for 3D tilt effect
+  const handleCardMouseMove = (e, cardId) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    
+    setCardRipples(prev => ({
+      ...prev,
+      [cardId]: { x, y, active: true }
+    }));
+  };
+
+  const handleCardMouseLeave = (cardId) => {
+    setCardRipples(prev => ({
+      ...prev,
+      [cardId]: { ...prev[cardId], active: false }
+    }));
+  };
 
   // Intersection observers for sections
   const { elementRef: homeRef, isVisible: homeVisible } = useIntersectionObserver({ threshold: 0.2 });
@@ -526,7 +547,17 @@ export default function App() {
             Get In Touch
           </h2>
           
-          <div className="glass glow p-6 sm:p-12 transition-all">
+          <div 
+            className="glass glow p-6 sm:p-12 transition-all relative overflow-hidden"
+            onMouseMove={(e) => handleCardMouseMove(e, 'contact')}
+            onMouseLeave={() => handleCardMouseLeave('contact')}
+            style={{
+              transform: cardRipples['contact']?.active 
+                ? `perspective(1000px) rotateX(${ (cardRipples['contact'].y - 50) * 0.05}deg) rotateY(${(cardRipples['contact'].x - 50) * 0.05}deg)`
+                : 'none',
+              transition: 'transform 0.1s ease-out'
+            }}
+          >
             <p className="text-xl text-white mb-8 leading-relaxed">
               I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision. 🚀
             </p>
@@ -575,6 +606,42 @@ export default function App() {
                 </a>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Buy Me a Coffee Section */}
+      <section id="support" className="px-4 sm:px-6 py-12 sm:py-16 relative">
+        <div className="max-w-4xl mx-auto text-center">
+          <div 
+            className="glass glow p-6 sm:p-10 transition-all relative overflow-hidden"
+            onMouseMove={(e) => handleCardMouseMove(e, 'support')}
+            onMouseLeave={() => handleCardMouseLeave('support')}
+            style={{
+              transform: cardRipples['support']?.active 
+                ? `perspective(1000px) rotateX(${(cardRipples['support'].y - 50) * 0.05}deg) rotateY(${(cardRipples['support'].x - 50) * 0.05}deg)`
+                : 'none',
+              transition: 'transform 0.1s ease-out'
+            }}
+          >
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
+              ☕ Support My Work
+            </h2>
+            <p className="text-white mb-6 text-base sm:text-lg">
+              If you like my work and want to support me, feel free to buy me a coffee!
+            </p>
+            <div className="flex justify-center">
+              <div className="bg-white p-4 rounded-xl shadow-2xl hover:scale-105 transition-transform duration-300">
+                <img 
+                  src={buyMeACoffeeQR} 
+                  alt="Buy Me a Coffee QR Code" 
+                  className="w-48 h-48 sm:w-64 sm:h-64 object-contain"
+                />
+              </div>
+            </div>
+            <p className="text-white mt-4 text-sm">
+              Scan the QR code to buy me a coffee ☕
+            </p>
           </div>
         </div>
       </section>

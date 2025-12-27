@@ -171,6 +171,16 @@ div > .glowing-text {
 		border-color: rgba(255, 255, 255, 0.6) !important;
 	}
 
+	/* Crystal blue hover effect for cards */
+	#achievements .glow:hover,
+	#skills .glow:hover,
+	#projects .glow:hover,
+	#support .glow:hover,
+	#contact .glow:hover {
+		border-color: rgb(255, 255, 255) !important;
+		box-shadow: 0 4px 16px rgba(255, 255, 255, 0.6), 0 0 32px rgba(255, 255, 255, 0.4) !important;
+	}
+
 	.btn-glass {
 		@apply glass glow px-6 py-3 font-semibold transition-all;
 	}
@@ -276,4 +286,31 @@ a {
 .will-change-auto {
   will-change: auto;
   transform: translateZ(0);
+}
+
+/* Water ripple effect for achievement cards */
+.ripple-wave {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  animation: ripple-expand 1.2s ease-out;
+  pointer-events: none;
+}
+
+@keyframes ripple-expand {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    width: 300px;
+    height: 300px;
+    opacity: 0;
+  }
 }

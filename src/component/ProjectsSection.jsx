@@ -5,12 +5,32 @@ import useIntersectionObserver from '../hooks/useIntersectionObserver';
 export default function ProjectsSection({ projects = [], onOpen }) {
   const { elementRef, isVisible } = useIntersectionObserver({ threshold: 0.15 });
   const [isMobile, setIsMobile] = React.useState(false);
+  const [ripples, setRipples] = React.useState({});
+
   React.useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  const handleMouseMove = (e, idx) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    
+    setRipples(prev => ({
+      ...prev,
+      [idx]: { x, y, active: true }
+    }));
+  };
+
+  const handleMouseLeave = (idx) => {
+    setRipples(prev => ({
+      ...prev,
+      [idx]: { ...prev[idx], active: false }
+    }));
+  };
 
   return (
     <section 
@@ -31,8 +51,16 @@ export default function ProjectsSection({ projects = [], onOpen }) {
           {projects.map((project, idx) => (
             <div
               key={idx}
-              className="cursor-pointer glass glow p-6 transition-all duration-300 group flex flex-col"
+              className="cursor-pointer glass glow p-6 transition-all duration-300 group flex flex-col relative overflow-hidden"
               onClick={() => onOpen && onOpen(project)}
+              onMouseMove={(e) => handleMouseMove(e, idx)}
+              onMouseLeave={() => handleMouseLeave(idx)}
+              style={{
+                transform: ripples[idx]?.active 
+                  ? `perspective(1000px) rotateX(${(ripples[idx].y - 50) * 0.1}deg) rotateY(${(ripples[idx].x - 50) * 0.1}deg)`
+                  : 'none',
+                transition: 'transform 0.1s ease-out'
+              }}
             >
               {/* Project Image */}
               <div className="w-full h-48 bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center relative overflow-hidden rounded-lg mb-4">
