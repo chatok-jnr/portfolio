@@ -653,7 +653,7 @@ export default function App() {
           <p className="mt-2 text-white font-bold text-lg">
             🏆 Competitive Programmer | Backend Developer 💻
           </p>
-          <p className="mt-3 text-sm text-white">Built with React + Vite • Styled with Tailwind CSS</p>
+          <p className="mt-3 text-sm text-white">Built with Copilot + Claude</p>
         </div>
       </footer>
 
