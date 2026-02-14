@@ -1,5 +1,5 @@
 import React from 'react';
-import { Award, ExternalLink, MessageSquare, Info } from 'lucide-react';
+import { Award, ExternalLink, Info } from 'lucide-react';
 import useIntersectionObserver from '../hooks/useIntersectionObserver';
 
 export default function AchievementsSection({ achievements = [], onOpen }) {
@@ -69,9 +69,9 @@ export default function AchievementsSection({ achievements = [], onOpen }) {
               )}
               <h3 className="text-lg font-bold text-white mb-2 relative z-10">{achievement.title}</h3>
               <p className="text-white text-sm leading-relaxed relative z-10">{achievement.short}</p>
-              <div className="flex flex-wrap gap-2 mt-4 justify-center mb-auto relative z-10">
+              <div className="flex flex-wrap gap-1.5 mt-4 justify-center mb-auto relative z-10">
                 {(achievement.highlights || []).map((h, i) => (
-                  <span key={i} className="px-3 py-1 bg-black text-white rounded-full text-xs border border-white font-semibold">
+                  <span key={i} className="px-2 py-0.5 bg-black text-white rounded-full text-[10px] border border-white font-semibold">
                     {h}
                   </span>
                 ))}
@@ -83,9 +83,9 @@ export default function AchievementsSection({ achievements = [], onOpen }) {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
-                    className="px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-lg text-sm font-semibold transition-all duration-300 hover:bg-white/20 hover:border-white/50 flex items-center gap-2"
+                    className="px-3 py-1.5 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-lg text-xs font-semibold transition-all duration-300 hover:bg-white/20 hover:border-white/50 flex items-center gap-1.5"
                   >
-                    <ExternalLink size={16} />
+                    <ExternalLink size={14} />
                     Open Link
                   </a>
                 )}
@@ -94,35 +94,14 @@ export default function AchievementsSection({ achievements = [], onOpen }) {
                     e.stopPropagation();
                     onOpen && onOpen(achievement);
                   }}
-                  className="px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-lg text-sm font-semibold transition-all duration-300 hover:bg-white/20 hover:border-white/50 flex items-center gap-2"
+                  className="px-3 py-1.5 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-lg text-xs font-semibold transition-all duration-300 hover:bg-white/20 hover:border-white/50 flex items-center gap-1.5"
                 >
-                  <Info size={16} />
+                  <Info size={14} />
                   Details
                 </button>
               </div>
             </div>
           ))}
-        </div>
-
-        <div 
-          className="glass glow p-8 mt-12 transition-all relative overflow-hidden"
-          onMouseMove={(e) => handleMouseMove(e, 'mentorship')}
-          onMouseLeave={() => handleMouseLeave('mentorship')}
-          style={{
-            transform: ripples['mentorship']?.active 
-              ? `perspective(1000px) rotateX(${(ripples['mentorship'].y - 50) * 0.05}deg) rotateY(${(ripples['mentorship'].x - 50) * 0.05}deg)`
-              : 'none',
-            transition: 'transform 0.1s ease-out'
-          }}
-        >
-          <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-            {!isMobile && <MessageSquare size={28} />}
-            {!isMobile && <span>👨‍🎓</span>} Mentorship & Community
-          </h3>
-          <p className="text-white leading-relaxed text-lg">
-            Regularly mentor junior students in Competitive Programming, organizing problem-solving sessions
-            and guiding them through algorithmic concepts to improve their logical reasoning and contest performance.
-          </p>
         </div>
       </div>
     </section>

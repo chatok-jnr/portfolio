@@ -3,8 +3,9 @@ import { Github, Linkedin, Mail, Phone, ExternalLink, Award, Briefcase, Graduati
 import { UilDiscord } from '@iconscout/react-unicons';
 import { Helmet } from 'react-helmet-async';
 import useIntersectionObserver from './hooks/useIntersectionObserver';
-import cvPdf from './assets/cv.pdf';
+import resumePdf from './assets/resume.pdf';
 import tazaBazarImg from './assets/project_images/tazaBazar.png';
+import biteNowImg from './assets/project_images/biteNow.png';
 import solveSudokuImg from './assets/project_images/solveSudoku.png';
 import icpc25Img from './assets/achievement_images/icpc_25.png';
 import buyMeACoffeeQR from './assets/buy_me_a_cofee.jpg';
@@ -15,6 +16,7 @@ import RotatingCube from './component/RotatingCube';
 const ProjectsSection = React.lazy(() => import('./component/ProjectsSection'));
 const AchievementsSection = React.lazy(() => import('./component/AchievementsSection'));
 const SkillsSection = React.lazy(() => import('./component/SkillsSection'));
+const ExperienceSection = React.lazy(() => import('./component/ExperienceSection'));
 
 export default function App() {
   const [typedText, setTypedText] = useState('');
@@ -202,13 +204,36 @@ export default function App() {
 
   const skills = {
     languages: ['C++', 'JavaScript'],
-    frameworks: ['Node.js', 'Express', 'Mongoose'],
-    database: ['MongoDB'],
-    concepts: ['OOP', 'Algorithms', 'Problem Solving', 'DSA'],
+    backend: ['Node.js', 'Express', 'REST APIs'],
+    database: ['MongoDB', 'Mongoose'],
+    concepts: ['OOP', 'Data Structure', 'Algorithm'],
     tools: ['Linux', 'Git/Github', 'MongoDB Compass', 'Postman']
   };
 
   const projects = [
+    {
+      title: 'BiteNow',
+      tech: 'Node.js, Express, MongoDB, Google oAuth, JWT',
+      short: ` The backend is a Node.js + Express API for BiteNow, providing authentication, 
+      user/restaurant/rider/admin management, orders, announcements, and audit logging, all 
+      backed by MongoDB (via Mongoose). It implements REST routes by feature, uses JWT + bcrypt 
+      for authentication, and is set up for local development with nodemon and production start via 
+      node server.js.`,
+
+      details: [
+        '**RESTful API Server: Express.js-based backend powering the BiteNow food delivery platform.',
+        '**Multi-Role Authentication: JWT-based authentication system supporting customers, restaurant owners, riders, and administrators with role-based access control.',
+        '**Food Delivery Platform Features: Manages restaurants, menus, orders, carts, real-time location updates, and announcements for all user roles.',
+        '**Admin Management System: Admin panel with user management, content moderation, announcements, and audit logging.',
+        '**MongoDB Database: Mongoose ODM for data modeling with schemas for users, restaurants, orders, carts, audit logs, and more.',
+        '**Production-Ready: Configured with CORS, security middleware, error handling, and deployment support for cloud hosting.'
+      ],
+
+      image: biteNowImg,
+      projectLink: 'https://bite-now.netlify.app/',
+      githubLink: 'https://github.com/chatok-jnr/BiteNow',
+      highlights: ['JWT Authentication', 'RESTful API', 'Google oAuth', 'Multi-Role System', 'Admin Panel', 'MongoDB', 'Production-Ready', 'RBAC']
+    },
     {
       title: 'Taza Bazar',
       tech: 'Node.js, Express, MongoDB',
@@ -491,12 +516,12 @@ export default function App() {
 
                 <div className="mt-8 lg:mt-12 flex flex-wrap justify-center lg:justify-start gap-4">
                   <a
-                    href={cvPdf}
-                    download="Chatok_Junior_CV.pdf"
+                    href={resumePdf}
+                    download="Md_Sakib_Hosen_Resume.pdf"
                     className="px-8 py-4 bg-black border-2 border-white text-white rounded-xl font-bold transition-all hover:bg-white hover:text-black flex items-center gap-2 will-change-auto"
                   >
                     <Download size={20} />
-                    Download CV
+                    Download Resume
                   </a>
                   <button
                     onClick={() => scrollToSection('contact')}
@@ -525,6 +550,11 @@ export default function App() {
 
       <Suspense fallback={<section id="skills" className="px-4 sm:px-6 py-16 text-center text-white">Loading skills…</section>}>
         <SkillsSection skills={skills} />
+        <ExperienceSection 
+          cardRipples={cardRipples}
+          handleCardMouseMove={handleCardMouseMove}
+          handleCardMouseLeave={handleCardMouseLeave}
+        />
       </Suspense>
 
       <Suspense fallback={<section id="projects" className="px-4 sm:px-6 py-16 text-center text-white">Loading projects…</section>}>
@@ -611,7 +641,7 @@ export default function App() {
       </section>
 
       {/* Buy Me a Coffee Section */}
-      <section id="support" className="px-4 sm:px-6 py-12 sm:py-16 relative">
+      {/* <section id="support" className="px-4 sm:px-6 py-12 sm:py-16 relative">
         <div className="max-w-4xl mx-auto text-center">
           <div 
             className="glass glow p-6 sm:p-10 transition-all relative overflow-hidden"
@@ -644,7 +674,7 @@ export default function App() {
             </p>
           </div>
         </div>
-      </section>
+      </section> */}
 
       <footer className="bg-black/90 backdrop-blur-md border-t border-white/30 py-8 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-t from-white/5 to-transparent"></div>
@@ -653,7 +683,6 @@ export default function App() {
           <p className="mt-2 text-white font-bold text-lg">
             🏆 Competitive Programmer | Backend Developer 💻
           </p>
-          <p className="mt-3 text-sm text-white">Built with Copilot + Claude</p>
         </div>
       </footer>
 

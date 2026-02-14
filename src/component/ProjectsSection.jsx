@@ -83,11 +83,11 @@ export default function ProjectsSection({ projects = [], onOpen }) {
                 <h3 className="text-xl font-bold text-white mb-3">{project.title}</h3>
                 
                 {/* Tags */}
-                <div className="flex flex-wrap gap-2 mb-auto">
+                <div className="flex flex-wrap gap-1.5 mb-auto">
                   {project.highlights.map((h, i) => (
                     <span 
                       key={i} 
-                      className="px-3 py-1 bg-black text-white rounded-full text-xs border border-white font-semibold"
+                      className="px-2 py-0.5 bg-black text-white rounded-full text-[10px] border border-white font-semibold"
                     >
                       {h}
                     </span>
@@ -102,9 +102,9 @@ export default function ProjectsSection({ projects = [], onOpen }) {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
-                      className="px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-lg text-sm font-semibold transition-all duration-300 hover:bg-white/20 hover:border-white/50 flex items-center gap-2"
+                      className="px-3 py-1.5 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-lg text-xs font-semibold transition-all duration-300 hover:bg-white/20 hover:border-white/50 flex items-center gap-1.5"
                     >
-                      <ExternalLink size={16} />
+                      <ExternalLink size={14} />
                       View Project
                     </a>
                   )}
@@ -114,9 +114,9 @@ export default function ProjectsSection({ projects = [], onOpen }) {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
-                      className="px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-lg text-sm font-semibold transition-all duration-300 hover:bg-white/20 hover:border-white/50 flex items-center gap-2"
+                      className="px-3 py-1.5 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-lg text-xs font-semibold transition-all duration-300 hover:bg-white/20 hover:border-white/50 flex items-center gap-1.5"
                     >
-                      <Code size={16} />
+                      <Code size={14} />
                       View Code
                     </a>
                   )}
@@ -125,9 +125,9 @@ export default function ProjectsSection({ projects = [], onOpen }) {
                       e.stopPropagation();
                       onOpen && onOpen(project);
                     }}
-                    className="px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-lg text-sm font-semibold transition-all duration-300 hover:bg-white/20 hover:border-white/50 flex items-center gap-2"
+                    className="px-3 py-1.5 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-lg text-xs font-semibold transition-all duration-300 hover:bg-white/20 hover:border-white/50 flex items-center gap-1.5"
                   >
-                    <Info size={16} />
+                    <Info size={14} />
                     Details
                   </button>
                 </div>

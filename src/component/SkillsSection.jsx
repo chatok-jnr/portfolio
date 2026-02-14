@@ -99,7 +99,7 @@ const SkillsSection = ({ skills = {} }) => {
                         return (
                         <div
                           key={item}
-                          className="group cursor-default transition-all duration-200 hover:scale-110 flex flex-col items-center relative overflow-hidden"
+                          className="group cursor-default transition-all duration-300 hover:scale-125 flex flex-col items-center relative overflow-hidden"
                           title={item}
                           onMouseMove={(e) => handleMouseMove(e, itemKey)}
                           onMouseLeave={() => handleMouseLeave(itemKey)}
@@ -116,7 +116,7 @@ const SkillsSection = ({ skills = {} }) => {
                             </div>
                           ) : (
                             <>
-                              <div className="w-16 h-16 flex items-center justify-center bg-white/10 rounded-lg p-3 transition-all duration-200 hover:bg-white/20">
+                              <div className="w-16 h-16 flex items-center justify-center bg-white/10 rounded-lg p-3 transition-all duration-300 hover:scale-125 hover:bg-white/20">
                                 <img 
                                   src={skillIcons[item] || 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/devicon/devicon-original.svg'} 
                                   alt={item}
@@ -141,7 +141,7 @@ const SkillsSection = ({ skills = {} }) => {
                         return (
                         <div
                           key={item}
-                          className="group cursor-default transition-all duration-200 hover:scale-110 relative overflow-hidden"
+                          className="group cursor-default transition-all duration-300 hover:scale-125 relative overflow-hidden"
                           title={item}
                           onMouseMove={(e) => handleMouseMove(e, itemKey)}
                           onMouseLeave={() => handleMouseLeave(itemKey)}
@@ -158,7 +158,7 @@ const SkillsSection = ({ skills = {} }) => {
                             </div>
                           ) : (
                             <>
-                              <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center bg-white/10 rounded-lg p-3 transition-all duration-200 hover:bg-white/20">
+                              <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center bg-white/10 rounded-lg p-3 transition-all duration-300 hover:scale-125 hover:bg-white/20">
                                 <img 
                                   src={skillIcons[item] || 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/devicon/devicon-original.svg'} 
                                   alt={item}
