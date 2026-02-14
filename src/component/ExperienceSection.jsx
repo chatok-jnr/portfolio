@@ -1,18 +1,9 @@
 import React, { useState } from 'react';
-import { Briefcase, Info, MessageSquare } from 'lucide-react';
+import { Briefcase, Info } from 'lucide-react';
 import brainStationLogo from '../assets/experience_images/intern_at_bs23.png';
-import uitsLogo from '../assets/experience_images/programming_mentor_at_uits.png';
 
 const ExperienceSection = ({ cardRipples, handleCardMouseMove, handleCardMouseLeave }) => {
   const [showDetails, setShowDetails] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-
-  React.useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
 
   return (
     <section id="experience" className="min-h-[40vh] flex items-center justify-center px-4 sm:px-6 py-16 sm:py-20 relative">
@@ -114,32 +105,6 @@ const ExperienceSection = ({ cardRipples, handleCardMouseMove, handleCardMouseLe
             </div>
           </div>
         )}
-
-        {/* Mentorship & Community Section */}
-        <div 
-          className="glass glow p-6 sm:p-8 mt-8 transition-all relative overflow-hidden"
-          onMouseMove={e => handleCardMouseMove && handleCardMouseMove(e, 'mentorship')}
-          onMouseLeave={() => handleCardMouseLeave && handleCardMouseLeave('mentorship')}
-          style={{
-            transform: cardRipples && cardRipples['mentorship']?.active 
-              ? `perspective(1000px) rotateX(${(cardRipples['mentorship'].y - 50) * 0.05}deg) rotateY(${(cardRipples['mentorship'].x - 50) * 0.05}deg)`
-              : 'none',
-            transition: 'transform 0.1s ease-out',
-            backgroundImage: `url(${uitsLogo})`,
-            backgroundPosition: 'center',
-            backgroundSize: 'contain',
-            backgroundRepeat: 'no-repeat'
-          }}
-        >
-          <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-            {!isMobile && <MessageSquare size={28} />}
-            {!isMobile && <span>👨‍🎓</span>} Mentorship & Community
-          </h3>
-          <p className="text-white leading-relaxed text-lg">
-            Regularly mentor junior students in Competitive Programming, organizing problem-solving sessions
-            and guiding them through algorithmic concepts to improve their logical reasoning and contest performance.
-          </p>
-        </div>
       </div>
     </section>
   );

@@ -91,7 +91,7 @@ export default function App() {
   };
 
   const firstName = "Hello, I am ";
-  const lastName = "CHA70K JUNIOR";
+  const lastName = "CHAT0K JUNIOR";
   const roles = ["Competitive Programmer", "Back-End Developer"];
 
   useEffect(() => {
@@ -203,7 +203,7 @@ export default function App() {
   }, []);
 
   const skills = {
-    languages: ['C++', 'JavaScript'],
+    languages: ['C++', 'Java', 'JavaScript', 'SQL'],
     backend: ['Node.js', 'Express', 'REST APIs'],
     database: ['MongoDB', 'Mongoose'],
     concepts: ['OOP', 'Data Structure', 'Algorithm'],
@@ -503,12 +503,13 @@ export default function App() {
                 <div className="space-y-6 text-center lg:text-left">
                 <div className="space-y-4">
                   <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
-                    <div className="text-white glowing-text text-xl sm:text-2xl md:text-3xl">Hello,</div>
-                    <div className="flex justify-center lg:justify-start mt-4">
-                      <span className="glass-text">I AM CHA7OK JUNIOR</span>
+                    <div className="text-white text-xl sm:text-2xl md:text-3xl">Hello, I am</div>
+                    <div className="mt-4 flex flex-col justify-center lg:justify-start">
+                      {/* <span className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white">I am</span> */}
+                      <span className="text-white">Md Sakib Hosen</span>
                     </div>
                   </div>
-                  <div className="glowing-text text-xl sm:text-2xl md:text-3xl text-white">
+                  <div className="text-xl sm:text-2xl md:text-3xl text-white">
                     {typedRole}
                     <span className={`typing-cursor ${cursorVisible ? 'opacity-100' : 'opacity-0'}`}></span>
                   </div>
@@ -564,6 +565,39 @@ export default function App() {
       <Suspense fallback={<section id="achievements" className="px-4 sm:px-6 py-16 text-center text-white">Loading achievements…</section>}>
         <AchievementsSection achievements={achievements} onOpen={openAchievementDetails} />
       </Suspense>
+
+      {/* Mentorship & Community Section */}
+      <section id="mentorship" className="min-h-[40vh] flex items-center justify-center px-4 sm:px-6 py-16 sm:py-20 relative">
+        <div className="max-w-4xl w-full">
+          <div 
+            className="glass glow p-6 sm:p-8 transition-all relative overflow-hidden"
+            onMouseMove={e => handleCardMouseMove(e, 'mentorship')}
+            onMouseLeave={() => handleCardMouseLeave('mentorship')}
+            style={{
+              transform: cardRipples['mentorship']?.active 
+                ? `perspective(1000px) rotateX(${(cardRipples['mentorship'].y - 50) * 0.05}deg) rotateY(${(cardRipples['mentorship'].x - 50) * 0.05}deg)`
+                : 'none',
+              transition: 'transform 0.1s ease-out'
+            }}
+          >
+            <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
+              {!isMobile && (
+                <>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                  </svg>
+                  <span>👨‍🎓</span>
+                </>
+              )}
+              Mentorship & Community
+            </h3>
+            <p className="text-white leading-relaxed text-lg">
+              Regularly mentor junior students in Competitive Programming, organizing problem-solving sessions
+              and guiding them through algorithmic concepts to improve their logical reasoning and contest performance.
+            </p>
+          </div>
+        </div>
+      </section>
 
       <section 
         ref={contactRef}
