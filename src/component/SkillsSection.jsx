@@ -113,12 +113,12 @@ const SkillsSection = ({ skills = {} }) => {
                           }}
                         >
                           {isConcepts ? (
-                            <div className="w-16 h-16 flex items-center justify-center bg-white/10 rounded-lg transition-all duration-200 hover:bg-white/20">
+                            <div className="w-16 h-16 flex items-center justify-center bg-white/10 transition-all duration-200 hover:bg-white/20">
                               <p className="text-xs text-white font-semibold text-center leading-tight px-1">{item}</p>
                             </div>
                           ) : (
                             <>
-                              <div className="w-16 h-16 flex items-center justify-center bg-white/10 rounded-lg p-3 transition-all duration-300 hover:scale-125 hover:bg-white/20">
+                              <div className="w-16 h-16 flex items-center justify-center bg-white/10 p-3 transition-all duration-300 hover:scale-125 hover:bg-white/20">
                                 <img 
                                   src={skillIcons[item] || 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/devicon/devicon-original.svg'} 
                                   alt={item}
@@ -155,12 +155,12 @@ const SkillsSection = ({ skills = {} }) => {
                           }}
                         >
                           {isConcepts ? (
-                            <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center bg-white/10 rounded-lg transition-all duration-200 hover:bg-white/20">
+                            <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center bg-white/10 transition-all duration-200 hover:bg-white/20">
                               <p className="text-xs sm:text-sm text-white font-semibold text-center leading-tight">{item}</p>
                             </div>
                           ) : (
                             <>
-                              <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center bg-white/10 rounded-lg p-3 transition-all duration-300 hover:scale-125 hover:bg-white/20">
+                              <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center bg-white/10 p-3 transition-all duration-300 hover:scale-125 hover:bg-white/20">
                                 <img 
                                   src={skillIcons[item] || 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/devicon/devicon-original.svg'} 
                                   alt={item}

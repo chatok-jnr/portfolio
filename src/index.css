@@ -145,17 +145,15 @@ div > .glowing-text {
 @layer utilities {
 	/* Glassmorphism surface with enhanced depth */
 	.glass {
-  @apply rounded-2xl border border-white/40 bg-gradient-to-br from-black/20 to-black/5 backdrop-blur-sm shadow-2xl shadow-white/25;
+  @apply bg-gradient-to-br from-black/20 to-black/5 backdrop-blur-sm shadow-2xl shadow-white/25;
     background-image:
       linear-gradient(135deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.1) 100%),
       linear-gradient(to bottom right, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
-    outline: 1px solid rgba(255,255,255,0.12);
-    box-shadow: 0 0 0 1px rgba(255,255,255,0.12) inset, 0 8px 24px rgba(255,255,255,0.12);
+    box-shadow: 0 8px 24px rgba(255,255,255,0.12);
 	}
 
   /* Previous theme variant for glass */
   .theme-previous .glass{
-    border-color: rgba(255,255,255,0.30);
     background-image:
       linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%),
       linear-gradient(to bottom right, rgba(255,255,255,0.05), transparent);
@@ -169,9 +167,41 @@ div > .glowing-text {
 	}
 
 	.glow:hover {
+		background: black !important;
+		background-image: none !important;
 		box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
 		transform: translateY(-2px);
-		border-color: rgba(255, 255, 255, 0.6) !important;
+	}
+
+	/* Experience card hover - keep logo visible */
+	.experience-card {
+		position: relative;
+		transition: all 200ms ease;
+		box-shadow: 0 1px 3px rgba(255, 255, 255, 0.12);
+	}
+	
+	.experience-card::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: rgba(0, 0, 0, 0.7);
+		transition: background 300ms ease;
+		z-index: 0;
+		pointer-events: none;
+	}
+	
+	.experience-card:hover {
+		box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
+		transform: translateY(-2px);
+	}
+	
+	.experience-card:hover::before {
+		background: rgba(0, 0, 0, 0.3);
+	}
+	
+	.experience-card > * {
+		position: relative;
+		z-index: 1;
 	}
 
 	/* Crystal blue hover effect for cards */
@@ -180,7 +210,6 @@ div > .glowing-text {
 	#projects .glow:hover,
 	#support .glow:hover,
 	#contact .glow:hover {
-		border-color: rgb(0, 225, 255) !important;
 		box-shadow: 0 4px 16px rgba(255, 255, 255, 0.2), 0 0 32px rgba(0, 225, 255, 0.4) !important;
 	}
 

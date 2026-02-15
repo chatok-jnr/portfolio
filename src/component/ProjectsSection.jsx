@@ -63,7 +63,7 @@ export default function ProjectsSection({ projects = [], onOpen }) {
               }}
             >
               {/* Project Image */}
-              <div className="w-full h-48 bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center relative overflow-hidden rounded-lg mb-4">
+              <div className="w-full h-48 bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center relative overflow-hidden mb-4">
                 {project.image ? (
                   <img 
                     src={project.image} 

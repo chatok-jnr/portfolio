@@ -13,7 +13,7 @@ const ExperienceSection = ({ cardRipples, handleCardMouseMove, handleCardMouseLe
           Experience
         </h2>
         <div
-          className="glass glow p-6 sm:p-12 transition-all relative overflow-hidden group flex flex-col cursor-pointer"
+          className="glass p-6 sm:p-12 transition-all relative overflow-hidden group flex flex-col cursor-pointer experience-card"
           onMouseMove={e => handleCardMouseMove && handleCardMouseMove(e, 'experience')}
           onMouseLeave={() => handleCardMouseLeave && handleCardMouseLeave('experience')}
           style={{
@@ -32,7 +32,7 @@ const ExperienceSection = ({ cardRipples, handleCardMouseMove, handleCardMouseLe
               <h3 className="text-2xl sm:text-3xl font-bold text-white drop-shadow">Brain Station 23</h3>
             </div>
             <div className="flex-1 text-right">
-              <span className="inline-block bg-blue-600/80 text-white text-xs font-semibold px-3 py-1 rounded-full shadow">Dec 2026</span>
+              <span className="inline-block bg-blue-600/80 text-white text-xs font-semibold px-3 py-1 rounded-full shadow">Dec 2025</span>
             </div>
           </div>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4 text-left">
@@ -72,7 +72,7 @@ const ExperienceSection = ({ cardRipples, handleCardMouseMove, handleCardMouseLe
               </button>
               <h3 className="text-3xl sm:text-4xl font-bold text-white mb-4">Internship at Brain Station 23</h3>
               <div className="mb-4 text-left flex flex-col sm:flex-row sm:items-center sm:gap-4">
-                <span className="inline-block bg-blue-600/80 text-white text-xs font-semibold px-3 py-1 rounded-full shadow mr-2">Dec 2026</span>
+                <span className="inline-block bg-blue-600/80 text-white text-xs font-semibold px-3 py-1 rounded-full shadow mr-2">Dec 2025</span>
                 <span className="text-lg sm:text-xl text-white font-semibold ml-2">Backend Developer</span>
               </div>
               <p className="text-white mb-4 text-left">I completed a 2-week internship as a backend developer and contributed to the <span className="font-semibold">BiteNow</span> project.</p>

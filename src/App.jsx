@@ -674,46 +674,10 @@ export default function App() {
         </div>
       </section>
 
-      {/* Buy Me a Coffee Section */}
-      {/* <section id="support" className="px-4 sm:px-6 py-12 sm:py-16 relative">
-        <div className="max-w-4xl mx-auto text-center">
-          <div 
-            className="glass glow p-6 sm:p-10 transition-all relative overflow-hidden"
-            onMouseMove={(e) => handleCardMouseMove(e, 'support')}
-            onMouseLeave={() => handleCardMouseLeave('support')}
-            style={{
-              transform: cardRipples['support']?.active 
-                ? `perspective(1000px) rotateX(${(cardRipples['support'].y - 50) * 0.05}deg) rotateY(${(cardRipples['support'].x - 50) * 0.05}deg)`
-                : 'none',
-              transition: 'transform 0.1s ease-out'
-            }}
-          >
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
-              ☕ Support My Work
-            </h2>
-            <p className="text-white mb-6 text-base sm:text-lg">
-              If you like my work and want to support me, feel free to buy me a coffee!
-            </p>
-            <div className="flex justify-center">
-              <div className="bg-white p-4 rounded-xl shadow-2xl hover:scale-105 transition-transform duration-300">
-                <img 
-                  src={buyMeACoffeeQR} 
-                  alt="Buy Me a Coffee QR Code" 
-                  className="w-48 h-48 sm:w-64 sm:h-64 object-contain"
-                />
-              </div>
-            </div>
-            <p className="text-white mt-4 text-sm">
-              Scan the QR code to buy me a coffee ☕
-            </p>
-          </div>
-        </div>
-      </section> */}
-
       <footer className="bg-black/90 backdrop-blur-md border-t border-white/30 py-8 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-t from-white/5 to-transparent"></div>
         <div className="max-w-7xl mx-auto px-6 text-center text-white relative z-10">
-          <p className="font-semibold text-white">© 2025 Md. Sakib Hosen <span className="text-white">AKA</span> Chatok Junior</p>
+          <p className="font-semibold text-white">© 2025 - 2026 Md. Sakib Hosen <span className="text-white">AKA</span> Chatok Junior</p>
           <p className="mt-2 text-white font-bold text-lg">
             🏆 Competitive Programmer | Backend Developer 💻
           </p>
@@ -745,7 +709,7 @@ export default function App() {
             <div className="px-8 pb-8 -mt-4">{selectedProject && (
               <div className="animate-fade-in">
                 {selectedProject.image && (
-                  <div className="w-full bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center relative overflow-hidden rounded-lg mb-4">
+                  <div className="w-full bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center relative overflow-hidden mb-4">
                     <img 
                       src={selectedProject.image} 
                       alt={selectedProject.title}
@@ -811,7 +775,7 @@ export default function App() {
             {selectedAchievement && (
               <div className="animate-fade-in">
                 {selectedAchievement.image ? (
-                  <div className="w-full bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center relative overflow-hidden rounded-lg mb-4">
+                  <div className="w-full bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center relative overflow-hidden mb-4">
                     <img 
                       src={selectedAchievement.image} 
                       alt={selectedAchievement.title}
