@@ -205,7 +205,7 @@ export default function App() {
   const skills = {
     languages: ['C++', 'Java', 'JavaScript', 'SQL'],
     backend: ['Node.js', 'Express', 'REST APIs'],
-    database: ['MongoDB', 'Mongoose'],
+    database: ['MongoDB', 'Mongoose', 'MySQL'],
     concepts: ['OOP', 'Data Structure', 'Algorithm'],
     tools: ['Linux', 'Git/Github', 'MongoDB Compass', 'Postman']
   };
