@@ -36,10 +36,13 @@ const SkillsSection = ({ skills = {} }) => {
   const skillIcons = {
     'C++': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg',
     'JavaScript': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg',
+    'Java': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',
+    'SQL': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azuresqldatabase/azuresqldatabase-original.svg',
     'Node.js': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',
     'Express': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg',
     'Mongoose': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongoose/mongoose-original.svg',
     'MongoDB': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
+    'MySQL': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg',
     'OOP': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/objectivec/objectivec-plain.svg',
     'Algorithms': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
     'Problem Solving': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/codepen/codepen-plain.svg',
@@ -99,7 +102,7 @@ const SkillsSection = ({ skills = {} }) => {
                         return (
                         <div
                           key={item}
-                          className="group cursor-default transition-all duration-200 hover:scale-110 flex flex-col items-center relative overflow-hidden"
+                          className="group cursor-default transition-all duration-300 hover:scale-125 flex flex-col items-center relative overflow-hidden"
                           title={item}
                           onMouseMove={(e) => handleMouseMove(e, itemKey)}
                           onMouseLeave={() => handleMouseLeave(itemKey)}
@@ -111,12 +114,12 @@ const SkillsSection = ({ skills = {} }) => {
                           }}
                         >
                           {isConcepts ? (
-                            <div className="w-16 h-16 flex items-center justify-center bg-white/10 rounded-lg transition-all duration-200 hover:bg-white/20">
+                            <div className="w-16 h-16 flex items-center justify-center bg-white/10 transition-all duration-200 hover:bg-white/20">
                               <p className="text-xs text-white font-semibold text-center leading-tight px-1">{item}</p>
                             </div>
                           ) : (
                             <>
-                              <div className="w-16 h-16 flex items-center justify-center bg-white/10 rounded-lg p-3 transition-all duration-200 hover:bg-white/20">
+                              <div className="w-16 h-16 flex items-center justify-center bg-white/10 p-3 transition-all duration-300 hover:scale-125 hover:bg-white/20">
                                 <img 
                                   src={skillIcons[item] || 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/devicon/devicon-original.svg'} 
                                   alt={item}
@@ -141,7 +144,7 @@ const SkillsSection = ({ skills = {} }) => {
                         return (
                         <div
                           key={item}
-                          className="group cursor-default transition-all duration-200 hover:scale-110 relative overflow-hidden"
+                          className="group cursor-default transition-all duration-300 hover:scale-125 relative overflow-hidden"
                           title={item}
                           onMouseMove={(e) => handleMouseMove(e, itemKey)}
                           onMouseLeave={() => handleMouseLeave(itemKey)}
@@ -153,12 +156,12 @@ const SkillsSection = ({ skills = {} }) => {
                           }}
                         >
                           {isConcepts ? (
-                            <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center bg-white/10 rounded-lg transition-all duration-200 hover:bg-white/20">
+                            <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center bg-white/10 transition-all duration-200 hover:bg-white/20">
                               <p className="text-xs sm:text-sm text-white font-semibold text-center leading-tight">{item}</p>
                             </div>
                           ) : (
                             <>
-                              <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center bg-white/10 rounded-lg p-3 transition-all duration-200 hover:bg-white/20">
+                              <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center bg-white/10 p-3 transition-all duration-300 hover:scale-125 hover:bg-white/20">
                                 <img 
                                   src={skillIcons[item] || 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/devicon/devicon-original.svg'} 
                                   alt={item}
