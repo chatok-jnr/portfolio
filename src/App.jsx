@@ -17,6 +17,7 @@ const ProjectsSection = React.lazy(() => import('./component/ProjectsSection'));
 const AchievementsSection = React.lazy(() => import('./component/AchievementsSection'));
 const SkillsSection = React.lazy(() => import('./component/SkillsSection'));
 const ExperienceSection = React.lazy(() => import('./component/ExperienceSection'));
+const EducationSection = React.lazy(() => import('./component/EducationSection'));
 
 export default function App() {
   const [typedText, setTypedText] = useState('');
@@ -92,7 +93,7 @@ export default function App() {
 
   const firstName = "Hello, I am ";
   const lastName = "CHAT0K JUNIOR";
-  const roles = ["Competitive Programmer", "Back-End Developer"];
+  const roles = ["Competitive Programmer", "Back-End Engineer"];
 
   useEffect(() => {
     let nameIndex = 0;
@@ -429,7 +430,7 @@ export default function App() {
             </div>
             {/* Desktop menu */}
             <div className="hidden md:flex gap-8 items-center">
-              {['home', 'skills', 'projects', 'achievements', 'contact'].map(item => (
+              {['home', 'skills', 'education', 'projects', 'achievements', 'contact'].map(item => (
                 <button
                   key={item}
                   onClick={() => scrollToSection(item)}
@@ -456,7 +457,7 @@ export default function App() {
           {isMobileMenuOpen && (
             <div className="md:hidden pt-4">
               <div className="flex flex-col space-y-4 pb-3">
-                {['home', 'skills', 'projects', 'achievements', 'contact'].map(item => (
+                {['home', 'skills', 'education', 'projects', 'achievements', 'contact'].map(item => (
                   <button
                     key={item}
                     onClick={() => {
@@ -586,7 +587,6 @@ export default function App() {
                   <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                   </svg>
-                  <span>👨‍🎓</span>
                 </>
               )}
               Mentorship & Community
@@ -598,6 +598,14 @@ export default function App() {
           </div>
         </div>
       </section>
+
+      <Suspense fallback={<section id="education" className="px-4 sm:px-6 py-16 text-center text-white">Loading education…</section>}>
+        <EducationSection
+          cardRipples={cardRipples}
+          handleCardMouseMove={handleCardMouseMove}
+          handleCardMouseLeave={handleCardMouseLeave}
+        />
+      </Suspense>
 
       <section 
         ref={contactRef}
@@ -623,7 +631,7 @@ export default function App() {
             }}
           >
             <p className="text-xl text-white mb-8 leading-relaxed">
-              I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision. 🚀
+              I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.
             </p>
             
             <div className="space-y-6">
@@ -674,13 +682,10 @@ export default function App() {
         </div>
       </section>
 
-      <footer className="bg-black/90 backdrop-blur-md border-t border-white/30 py-8 relative overflow-hidden">
+      <footer className="bg-black/90 backdrop-blur-md border-t border-white/30 py-5 sm:py-8 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-t from-white/5 to-transparent"></div>
-        <div className="max-w-7xl mx-auto px-6 text-center text-white relative z-10">
-          <p className="font-semibold text-white">© 2025 - 2026 Md. Sakib Hosen <span className="text-white">AKA</span> Chatok Junior</p>
-          <p className="mt-2 text-white font-bold text-lg">
-            🏆 Competitive Programmer | Backend Developer 💻
-          </p>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center text-white relative z-10">
+          <p className="font-semibold text-white text-sm sm:text-base leading-relaxed">© 2025 - 2026 Md. Sakib Hosen <span className="text-white">AKA</span> Chatok Junior</p>
         </div>
       </footer>
 
