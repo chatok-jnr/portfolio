@@ -203,11 +203,11 @@ export default function App() {
   }, []);
 
   const skills = {
-    languages: ['C++', 'Java', 'JavaScript', 'SQL'],
-    backend: ['Node.js', 'Express', 'REST APIs'],
-    database: ['MongoDB', 'Mongoose', 'MySQL'],
-    concepts: ['OOP', 'Data Structure', 'Algorithm'],
-    tools: ['Linux', 'Git/Github', 'MongoDB Compass', 'Postman']
+    languages: ['Java', 'C++', 'JavaScript', 'SQL'],
+    backend: ['Spring Boot', 'Node.js', 'Express', 'REST APIs'],
+    database: ['PostgreSQL', 'MongoDB', 'MySQL', 'Mongoose', 'Hibernate JPA'],
+    concepts: ['OOP', 'Data Structure', 'Algorithm', 'Agile'],
+    tools: ['Linux', 'Git/Github', 'MongoDB Compass', 'Postman', 'DBeaver', 'Jira']
   };
 
   const projects = [

@@ -40,9 +40,12 @@ const SkillsSection = ({ skills = {} }) => {
     'SQL': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azuresqldatabase/azuresqldatabase-original.svg',
     'Node.js': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',
     'Express': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg',
+    'Spring Boot': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg',
     'Mongoose': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongoose/mongoose-original.svg',
     'MongoDB': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
     'MySQL': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg',
+    'Hibernate JPA': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/hibernate/hibernate-original.svg',
+    'PostgreSQL': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
     'OOP': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/objectivec/objectivec-plain.svg',
     'Algorithms': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
     'Problem Solving': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/codepen/codepen-plain.svg',
@@ -50,7 +53,9 @@ const SkillsSection = ({ skills = {} }) => {
     'Linux': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg',
     'Git/Github': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg',
     'MongoDB Compass': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
-    'Postman': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postman/postman-original.svg'
+    'Postman': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postman/postman-original.svg',
+    'DBeaver': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dbeaver/dbeaver-original.svg',
+    'Jira': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jira/jira-original.svg'
   };
 
   const categoryTitles = {
@@ -67,6 +72,17 @@ const SkillsSection = ({ skills = {} }) => {
   };
 
   const entries = Object.entries(skills);
+
+  const renderLabel = (item) =>
+    item === 'MongoDB Compass' ? (
+      <>
+        <span>MongoDB</span>
+        <br />
+        <span>Compass</span>
+      </>
+    ) : (
+      item
+    );
 
   return (
     <section 
@@ -126,7 +142,7 @@ const SkillsSection = ({ skills = {} }) => {
                                   className="w-full h-full object-contain"
                                 />
                               </div>
-                              <p className="text-xs text-white text-center mt-2 opacity-80">{item}</p>
+                              <p className="text-xs text-white text-center mt-2 opacity-80">{renderLabel(item)}</p>
                             </>
                           )}
                         </div>
@@ -168,7 +184,7 @@ const SkillsSection = ({ skills = {} }) => {
                                   className="w-full h-full object-contain"
                                 />
                               </div>
-                              <p className="text-xs text-white text-center mt-2 opacity-80">{item}</p>
+                              <p className="text-xs text-white text-center mt-2 opacity-80">{renderLabel(item)}</p>
                             </>
                           )}
                         </div>
