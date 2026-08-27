@@ -706,7 +706,7 @@ export default function App() {
                 {Array.isArray(selectedProject.details) ? (
                   <ul className="text-white mb-6 leading-relaxed text-lg space-y-3 list-none">
                     {selectedProject.details.map((detail, i) => {
-                      const parts = detail.split('**');
+                      const parts = String(detail).split('**');
                       return (
                         <li key={i} className="flex items-start">
                           <span className="mr-2 text-white">/</span>
@@ -723,7 +723,7 @@ export default function App() {
                   <p className="text-white mb-6 leading-relaxed text-lg">{selectedProject.details}</p>
                 )}
                 <div className="flex flex-wrap gap-2 mb-6">
-                  {selectedProject.highlights.map((h, i) => (
+                  {(Array.isArray(selectedProject.highlights) ? selectedProject.highlights : []).map((h, i) => (
                     <span key={i} className="px-4 py-2 bg-black text-white rounded-full text-sm border border-white font-bold">
                       {h}
                     </span>

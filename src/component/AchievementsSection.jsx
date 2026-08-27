@@ -2,6 +2,11 @@ import React from 'react';
 import { Award, ExternalLink, Info } from 'lucide-react';
 import useIntersectionObserver from '../hooks/useIntersectionObserver';
 
+const hasAchievementDetails = (achievement) => (
+  Boolean(achievement.image) ||
+  (typeof achievement.details === 'string' && achievement.details.trim().length > 0)
+);
+
 export default function AchievementsSection({ achievements = [], onOpen }) {
   const { elementRef, isVisible } = useIntersectionObserver({ threshold: 0.15 });
   const [isMobile, setIsMobile] = React.useState(false);
@@ -53,7 +58,7 @@ export default function AchievementsSection({ achievements = [], onOpen }) {
             <div
               key={idx}
               className="cursor-pointer glass glow p-6 text-center transition-all duration-300 group flex flex-col relative overflow-hidden"
-              onClick={() => onOpen && onOpen(achievement)}
+              onClick={() => hasAchievementDetails(achievement) && onOpen && onOpen(achievement)}
               onMouseMove={(e) => handleMouseMove(e, idx)}
               onMouseLeave={() => handleMouseLeave(idx)}
               style={{
@@ -90,16 +95,18 @@ export default function AchievementsSection({ achievements = [], onOpen }) {
                     Open Link
                   </a>
                 )}
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onOpen && onOpen(achievement);
-                  }}
-                  className="px-3 py-1.5 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-lg text-xs font-semibold transition-all duration-300 hover:bg-white/20 hover:border-white/50 flex items-center gap-1.5"
-                >
-                  <Info size={14} />
-                  Details
-                </button>
+                {hasAchievementDetails(achievement) && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onOpen && onOpen(achievement);
+                    }}
+                    className="px-3 py-1.5 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-lg text-xs font-semibold transition-all duration-300 hover:bg-white/20 hover:border-white/50 flex items-center gap-1.5"
+                  >
+                    <Info size={14} />
+                    Details
+                  </button>
+                )}
               </div>
             </div>
           ))}
