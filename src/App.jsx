@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Suspense, useRef } from 'react';
-import { Github, Linkedin, Mail, Phone, ExternalLink, Award, Briefcase, GraduationCap, X, Facebook, Instagram, Download, Sun, Moon, Code, Globe, CircleDot, Star, Trophy, Medal, Target, MessageCircle } from 'lucide-react';
+import { Github, Linkedin, Mail, Phone, ExternalLink, Award, Briefcase, GraduationCap, X, Facebook, Instagram, Download, Code, Globe, CircleDot, Star, Trophy, Medal, Target, MessageCircle } from 'lucide-react';
 import { UilDiscord } from '@iconscout/react-unicons';
 import { Helmet } from 'react-helmet-async';
 import useIntersectionObserver from './hooks/useIntersectionObserver';
@@ -30,13 +30,6 @@ export default function App() {
   const [orbitAngle, setOrbitAngle] = useState(0);
   const [isOrbitPaused, setIsOrbitPaused] = useState(false);
   const [profileOrbitAngle, setProfileOrbitAngle] = useState(0);
-  const [theme, setTheme] = useState(() => {
-    try {
-      return localStorage.getItem('theme') ?? 'current';
-    } catch {
-      return 'current';
-    }
-  }); // 'current' | 'previous'
   const [isMobile, setIsMobile] = useState(false);
   const [cardRipples, setCardRipples] = useState({});
 
@@ -148,21 +141,6 @@ export default function App() {
       if (cursorInterval) clearInterval(cursorInterval);
     };
   }, []);
-
-  // Theme persistence and class application
-
-  useEffect(() => {
-    const body = document.body;
-    body.classList.remove('theme-previous');
-    if (theme === 'previous') {
-      body.classList.add('theme-previous');
-    }
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme(prev => (prev === 'current' ? 'previous' : 'current'));
-  };
 
   // Orbit animation using requestAnimationFrame
   useEffect(() => {
@@ -447,7 +425,6 @@ export default function App() {
         <div className="px-4 sm:px-6 py-2">
           <div className="flex justify-between items-center gap-2 sm:gap-3">
             <FlippingName />
-            {/* Theme toggle */}
             <div className="flex items-center gap-3">
               {/* Mobile menu button */}
               <button
@@ -476,18 +453,6 @@ export default function App() {
                   {item}
                 </button>
               ))}
-              <button
-                onClick={toggleTheme}
-                className="p-2 rounded-md text-white hover:text-white transition-colors"
-                title={theme === 'current' ? 'Switch to previous theme' : 'Switch to current theme'}
-                aria-label="Toggle theme"
-              >
-                {theme === 'current' ? (
-                  <Sun size={20} />
-                ) : (
-                  <Moon size={20} />
-                )}
-              </button>
             </div>
           </div>
           {/* Mobile menu panel */}
@@ -506,18 +471,6 @@ export default function App() {
                     {item}
                   </button>
                 ))}
-                <button
-                  onClick={() => { toggleTheme(); setIsMobileMenuOpen(false); }}
-                  className="p-2 rounded-md text-white hover:text-white transition-colors self-start"
-                  title={theme === 'current' ? 'Switch to previous theme' : 'Switch to current theme'}
-                  aria-label="Toggle theme"
-                >
-                  {theme === 'current' ? (
-                    <Sun size={20} />
-                  ) : (
-                    <Moon size={20} />
-                  )}
-                </button>
               </div>
             </div>
           )}
