@@ -64,9 +64,10 @@ export default function AchievementsSection({ achievements = [], onOpen }) {
               }}
             >
               
-              {!isMobile && (
-                <div className="text-5xl mb-4 transition-transform duration-300 relative z-10" style={{animation: 'float 5s ease-in-out infinite'}}>{achievement.icon}</div>
-              )}
+              {!isMobile && achievement.icon && (() => {
+                const Icon = achievement.icon;
+                return <Icon className="w-12 h-12 mx-auto mb-4 transition-transform duration-300 relative z-10" style={{animation: 'float 5s ease-in-out infinite'}} />;
+              })()}
               <h3 className="text-lg font-bold text-white mb-2 relative z-10">{achievement.title}</h3>
               <p className="text-white text-sm leading-relaxed relative z-10">{achievement.short}</p>
               <div className="flex flex-wrap gap-1.5 mt-4 justify-center mb-auto relative z-10">

@@ -1,11 +1,12 @@
 import React, { useState, useEffect, Suspense, useRef } from 'react';
-import { Github, Linkedin, Mail, Phone, ExternalLink, Award, Briefcase, GraduationCap, X, Facebook, Instagram, Download, Sun, Moon, Code } from 'lucide-react';
+import { Github, Linkedin, Mail, Phone, ExternalLink, Award, Briefcase, GraduationCap, X, Facebook, Instagram, Download, Sun, Moon, Code, Globe, CircleDot, Star, Trophy, Medal, Target, MessageCircle } from 'lucide-react';
 import { UilDiscord } from '@iconscout/react-unicons';
 import { Helmet } from 'react-helmet-async';
 import useIntersectionObserver from './hooks/useIntersectionObserver';
 import resumePdf from './assets/resume.pdf';
 import tazaBazarImg from './assets/project_images/tazaBazar.png';
 import biteNowImg from './assets/project_images/biteNow.png';
+import legalAidImg from './assets/project_images/legalAid.png';
 import solveSudokuImg from './assets/project_images/solveSudoku.png';
 import icpc25Img from './assets/achievement_images/icpc_25.png';
 import buyMeACoffeeQR from './assets/buy_me_a_cofee.jpg';
@@ -169,7 +170,7 @@ export default function App() {
     
     let rafId;
     let lastTime = performance.now();
-    const speed = 0.0002; // radians per ms (~0.0005 rad/ms ≈ 1 rev ~ 12,566ms)
+    const speed = 0.0002; // radians per ms (~0.0005 rad/ms ~= 1 rev ~ 12,566ms)
 
     const tick = (now) => {
       const dt = now - lastTime;
@@ -189,8 +190,8 @@ export default function App() {
   useEffect(() => {
     try {
       const style = 'color:#34d399;font-weight:700;font-size:14px';
-      console.log('%cWelcome curious dev 👋', style);
-      console.log('%cBackend running on Express & MongoDB 💚', 'color:#10b981;font-weight:600');
+      console.log('%cWelcome, curious developer', style);
+      console.log('%cBackend running on Express & MongoDB', 'color:#10b981;font-weight:600');
       console.log('%cType help() for a surprise!', 'color:#a7f3d0');
     } catch {}
 
@@ -203,14 +204,35 @@ export default function App() {
   }, []);
 
   const skills = {
-    languages: ['C++', 'Java', 'JavaScript', 'SQL'],
-    backend: ['Node.js', 'Express', 'REST APIs'],
-    database: ['MongoDB', 'Mongoose', 'MySQL'],
-    concepts: ['OOP', 'Data Structure', 'Algorithm'],
-    tools: ['Linux', 'Git/Github', 'MongoDB Compass', 'Postman']
+    languages: ['Java', 'C++', 'SQL', 'JavaScript', 'TypeScript'],
+    backend: ['Spring Boot', 'Spring Security', 'Spring Data JPA', 'NestJS', 'Express.js', 'Node.js', 'REST APIs'],
+    database: ['PostgreSQL', 'MySQL', 'MongoDB', 'Hibernate (JPA)', 'Mongoose', 'Prisma'],
+    tools: ['Git', 'Docker', 'Jira', 'Postman', 'DBeaver', 'Linux'],
+    methodology: ['Data Structures & Algorithms', 'OOP', 'Layered Architecture', 'Agile']
   };
 
   const projects = [
+    {
+      title: 'LegalAid',
+      tech: 'Java 21, Spring Boot 3.x, Spring Security, PostgreSQL, JWT, Cloudinary',
+      short: `A modular monolith backend for a legal services marketplace connecting clients, lawyers, and administrators. It includes secure authentication, contract workflows, payments, disputes, file management, and asynchronous notifications.`,
+
+      details: [
+        '**Modular Monolith Backend**: Architected across 16 packages covering authentication, lawyers, services, contracts, payments, disputes, and related marketplace functionality.',
+        '**Two-Sided Marketplace**: Supports CLIENT, LAWYER, and ADMIN roles with role-aware workflows and access control.',
+        '**PostgreSQL Data Model**: Designed a 35-table schema with soft deletes, composite partial indexes, referential integrity constraints, and database triggers for automatic rating calculation.',
+        '**Authentication and Authorization**: Implemented stateless JWT authentication with Google OAuth 2.0, 15-minute access tokens, 7-day refresh-token rotation via HttpOnly cookies, and @PreAuthorize guards.',
+        '**Contract State Machine**: Added role-based cancellation rules, service data snapshotting, and 5% platform fee calculation.',
+        '**Secure File Management**: Integrated Cloudinary with backend MIME validation, a 50MB upload limit, per-user folder isolation, and orphan cleanup.',
+        '**Async Notifications**: Decoupled an @Async notification system covering 19 event types from core business logic.',
+        '**Performance Optimization**: Resolved an N+1 query bottleneck with @EntityGraph, reducing page queries from 72 to 1.',
+        '**Deployment**: Containerized with Docker, published to Docker Hub, and deployed on Render.'
+      ],
+      image: legalAidImg,
+      projectLink: 'https://devlab-legalaid.vercel.app/',
+      githubLink: 'https://github.com/chatok-jnr/LegalAid-Backend',
+      highlights: ['Java 21', 'Spring Boot', 'JWT + OAuth 2.0', 'PostgreSQL', 'Role-Based Access', 'State Machine', 'Cloudinary', 'Docker']
+    },
     {
       title: 'BiteNow',
       tech: 'Node.js, Express, MongoDB, Google oAuth, JWT',
@@ -233,6 +255,22 @@ export default function App() {
       projectLink: 'https://bite-now.netlify.app/',
       githubLink: 'https://github.com/chatok-jnr/BiteNow',
       highlights: ['JWT Authentication', 'RESTful API', 'Google oAuth', 'Multi-Role System', 'Admin Panel', 'MongoDB', 'Production-Ready', 'RBAC']
+    },
+    {
+      title: 'E-commerce API',
+      tech: 'Node.js, Express, Prisma, PostgreSQL, JWT, Stripe',
+      short: `A backend marketplace API with relational data modeling, secure authentication, shopping cart and checkout workflows, Stripe payments, inventory management, and reliability protections.`,
+
+      details: [
+        '**Relational Marketplace Database**: Designed a PostgreSQL database with Prisma for users, products, carts, orders, payments, and role-based access control.',
+        '**Authentication and Authorization**: Implemented JWT authentication with refresh-token rotation, secure HttpOnly cookies, and role-based authorization.',
+        '**Shopping and Checkout Workflows**: Built shopping cart, checkout, and Stripe payment flows with webhook-driven order synchronization.',
+        '**Order and Inventory Management**: Added order cancellation and automatic inventory restoration workflows.',
+        '**API Reliability and Security**: Added API rate limiting to protect the service and improve reliability under load.'
+      ],
+
+      githubLink: 'https://github.com/chatok-jnr/E-commerce-API',
+      highlights: ['Node.js', 'Express', 'Prisma ORM', 'PostgreSQL', 'JWT Authentication', 'Stripe Payments', 'RBAC', 'Rate Limiting']
     },
     {
       title: 'Taza Bazar',
@@ -277,35 +315,35 @@ export default function App() {
 
   const achievements = [
     { 
-      icon: '🌐', 
+      icon: Globe,
       title: 'ICPC Dhaka Regional 2025', 
       short: 'Team UITS_ACES participant', 
-      details: `A huge shoutout to my incredible teammates for their dedication, passion, and perseverance. 💪 It was a privilege to be part of this journey together!`, 
+      details: `I competed with teammates whose dedication, passion, and perseverance made this a rewarding experience.`, 
       image: icpc25Img,
       //link: 'https://ln.run/XHCRL',
       highlights: ['ICPC Regional Participant', 'Team Competition']
     },
 
     { 
-      icon: '🌐', 
+      icon: Globe,
       title: 'ICPC Dhaka Regional 2024', 
       short: 'Team UITS_ACES participant', 
-      details: `A huge shoutout to my incredible teammates for their dedication, passion, and perseverance. 💪 It was a privilege to be part of this journey together!`, 
+      details: `I competed with teammates whose dedication, passion, and perseverance made this a rewarding experience.`, 
       link: 'https://ln.run/XHCRL',
       highlights: ['ICPC Regional Participant', 'Team Competition']
     },
 
     { 
-      icon: '🌐', 
-      title: 'Competed in 5 Different Inter University Programming Contest', 
+      icon: Globe,
+      title: 'Competed in 6 Different Inter University Programming Contest', 
       short: 'Team UITS_ACES participant', 
-      details: `A huge shoutout to my incredible teammates for their dedication, passion, and perseverance. 💪 It was a privilege to be part of this journey together!`, 
+      details: `I competed with teammates whose dedication, passion, and perseverance made this a rewarding experience.`, 
       //link: '#',
-      highlights: ['IUT', 'KUET', 'UIU', 'AUST', 'UU']
+      highlights: ['IUT', 'KUET', 'UIU', 'AUST', 'UU', 'IUT']
     },
 
     { 
-      icon: '🟢', 
+      icon: CircleDot, 
       title: 'Codeforces Pupil', 
       short: 'Max Rating: 1344 | 600+ problems solved', 
       details: ``,
@@ -314,7 +352,7 @@ export default function App() {
     },
 
     { 
-      icon: '⭐', 
+      icon: Star, 
       title: 'CodeChef 3-Star', 
       short: 'Max Rating: 1724', 
       details: ``,
@@ -323,7 +361,7 @@ export default function App() {
     },
 
     { 
-      icon: '🏆', 
+      icon: Trophy, 
       title: 'Champion – UITS Hackify Fest 2025', 
       short: 'Team UITS_ACES - 1st place among top university programmers', 
       details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.',
@@ -331,8 +369,8 @@ export default function App() {
       highlights: ['Team Win', 'Top University Teams']
     },
 
-     { 
-      icon: '🏆', 
+    { 
+     icon: Trophy, 
       title: 'Champion – UITS Intra University Programming Contest 2025', 
       short: 'Team UITS_ACES - 1st place among top university programmers', 
       details: 'What an incredible journey! Team UITS_ACES emerged as the champion in the UITS Intra University Programming Contest 2025 held on February 18, 2025.',
@@ -341,7 +379,7 @@ export default function App() {
     },
 
     { 
-      icon: '🥇', 
+      icon: Medal, 
       title: 'Champion – UITS Winter Fest 2024', 
       short: '1st place in solo contest', 
       details: 'I became the first at the UITS winter fest programming contest. Which was held on 18 February 2024.',
@@ -350,7 +388,7 @@ export default function App() {
     },
 
     { 
-      icon: '🎯', 
+      icon: Target, 
       title: 'Solved 1000+ Problems', 
       short: 'Solved across multiple online judges', 
       details: '',
@@ -528,7 +566,7 @@ export default function App() {
                     onClick={() => scrollToSection('contact')}
                     className="px-8 py-4 border-2 border-white text-white rounded-xl font-bold transition-all hover:bg-white hover:text-black will-change-auto"
                   >
-                    💬 Get In Touch
+                    Get In Touch
                   </button>
                 </div>
               </div>
@@ -581,14 +619,7 @@ export default function App() {
             }}
           >
             <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-              {!isMobile && (
-                <>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                  </svg>
-                  <span>👨‍🎓</span>
-                </>
-              )}
+              {!isMobile && <MessageCircle size={28} />}
               Mentorship & Community
             </h3>
             <p className="text-white leading-relaxed text-lg">
@@ -623,7 +654,7 @@ export default function App() {
             }}
           >
             <p className="text-xl text-white mb-8 leading-relaxed">
-              I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision. 🚀
+              I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.
             </p>
             
             <div className="space-y-6">
@@ -679,7 +710,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-6 text-center text-white relative z-10">
           <p className="font-semibold text-white">© 2025 - 2026 Md. Sakib Hosen <span className="text-white">AKA</span> Chatok Junior</p>
           <p className="mt-2 text-white font-bold text-lg">
-            🏆 Competitive Programmer | Backend Developer 💻
+             Competitive Programmer | Backend Developer 
           </p>
         </div>
       </footer>
@@ -725,7 +756,7 @@ export default function App() {
                       const parts = detail.split('**');
                       return (
                         <li key={i} className="flex items-start">
-                          <span className="mr-2 text-white">•</span>
+                          <span className="mr-2 text-white">/</span>
                           <span>
                             {parts.map((part, j) => 
                               j % 2 === 1 ? <strong key={j} className="text-white">{part}</strong> : part
@@ -801,7 +832,7 @@ export default function App() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-3 px-6 py-3 bg-black border-2 border-white text-white rounded-xl font-bold transition-all hover:bg-white hover:text-black"
                   >
-                    🏆 Open Link
+                    Open Link
                     <ExternalLink size={20} />
                   </a>
                 )}

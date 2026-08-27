@@ -1,5 +1,5 @@
 import React from 'react';
-import { Code2 } from 'lucide-react';
+import { Code2, Braces, Database, Layers3, ListChecks, Network, ShieldCheck, Workflow } from 'lucide-react';
 import useIntersectionObserver from '../hooks/useIntersectionObserver';
 
 const SkillsSection = ({ skills = {} }) => {
@@ -32,36 +32,45 @@ const SkillsSection = ({ skills = {} }) => {
     }));
   };
 
-  // Skill icons mapping
   const skillIcons = {
-    'C++': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg',
-    'JavaScript': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg',
     'Java': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',
+    'C++': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg',
     'SQL': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azuresqldatabase/azuresqldatabase-original.svg',
+    'JavaScript': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg',
+    'TypeScript': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
+    'Spring Boot': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg',
+    'Spring Security': ShieldCheck,
+    'Spring Data JPA': Database,
+    'NestJS': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nestjs/nestjs-original.svg',
+    'Express.js': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg',
     'Node.js': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',
-    'Express': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg',
-    'Mongoose': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongoose/mongoose-original.svg',
+    'REST APIs': Network,
+    'PostgreSQL': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
     'MongoDB': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
     'MySQL': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg',
-    'OOP': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/objectivec/objectivec-plain.svg',
-    'Algorithms': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
-    'Problem Solving': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/codepen/codepen-plain.svg',
-    'DSA': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-line.svg',
+    'Hibernate (JPA)': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/hibernate/hibernate-original.svg',
+    'Mongoose': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongoose/mongoose-original.svg',
+    'Prisma': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/prisma/prisma-original.svg',
+    'Git': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg',
+    'Docker': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg',
+    'Jira': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jira/jira-original.svg',
+    'Postman': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postman/postman-original.svg',
+    'DBeaver': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dbeaver/dbeaver-original.svg',
     'Linux': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg',
-    'Git/Github': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg',
-    'MongoDB Compass': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
-    'Postman': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postman/postman-original.svg'
+    'Data Structures & Algorithms': ListChecks,
+    'OOP': Braces,
+    'Layered Architecture': Layers3,
+    'Agile': Workflow
   };
 
   const categoryTitles = {
     languages: 'Languages',
     language: 'Languages',
-    frameworks: 'Frameworks',
-    framework: 'Frameworks',
+    backend: 'Backend',
     database: 'Database',
     databases: 'Database',
     db: 'Database',
-    concepts: 'Concepts',
+    methodology: 'Methodology',
     tools: 'Tools',
     tool: 'Tools'
   };
@@ -88,8 +97,7 @@ const SkillsSection = ({ skills = {} }) => {
           {entries.map(([category, items], index) => {
             const key = String(category).toLowerCase();
             const title = categoryTitles[key] || category.charAt(0).toUpperCase() + category.slice(1);
-            const isConcepts = key === 'concepts' || key === 'concept';
-            
+
             return (
               <div key={category} className={`w-full max-w-5xl mx-auto ${isMobile ? 'px-4' : 'pl-16 sm:pl-32'}`}>
                 {isMobile ? (
@@ -113,22 +121,14 @@ const SkillsSection = ({ skills = {} }) => {
                             transition: 'transform 0.1s ease-out'
                           }}
                         >
-                          {isConcepts ? (
-                            <div className="w-16 h-16 flex items-center justify-center bg-white/10 transition-all duration-200 hover:bg-white/20">
-                              <p className="text-xs text-white font-semibold text-center leading-tight px-1">{item}</p>
-                            </div>
-                          ) : (
-                            <>
-                              <div className="w-16 h-16 flex items-center justify-center bg-white/10 p-3 transition-all duration-300 hover:scale-125 hover:bg-white/20">
-                                <img 
-                                  src={skillIcons[item] || 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/devicon/devicon-original.svg'} 
-                                  alt={item}
-                                  className="w-full h-full object-contain"
-                                />
-                              </div>
-                              <p className="text-xs text-white text-center mt-2 opacity-80">{item}</p>
-                            </>
-                          )}
+                          <div className="w-16 h-16 flex items-center justify-center bg-white/10 p-3 transition-all duration-300 hover:scale-125 hover:bg-white/20">
+                            {typeof skillIcons[item] === 'string' ? (
+                              <img src={skillIcons[item]} alt="" className="w-full h-full object-contain" />
+                            ) : (
+                              React.createElement(skillIcons[item], { className: 'w-full h-full text-cyan-300', strokeWidth: 1.5, 'aria-hidden': true })
+                            )}
+                          </div>
+                          <p className="text-xs text-white text-center mt-2 opacity-80 max-w-[7rem] mx-auto leading-tight break-words">{item}</p>
                         </div>
                         );
                       })}
@@ -136,7 +136,7 @@ const SkillsSection = ({ skills = {} }) => {
                   </div>
                 ) : (
                   // Desktop Layout: Side-by-side
-                  <div className="flex flex-row items-center gap-4 sm:gap-8">
+                  <div className="flex flex-row items-start gap-4 sm:gap-8">
                     <h3 className="text-xl sm:text-2xl font-bold text-white w-[140px] sm:w-[160px] text-right flex-shrink-0">{title}</h3>
                     <div className="flex flex-wrap gap-4 sm:gap-6 flex-1">
                       {items.map((item) => {
@@ -155,22 +155,14 @@ const SkillsSection = ({ skills = {} }) => {
                             transition: 'transform 0.1s ease-out'
                           }}
                         >
-                          {isConcepts ? (
-                            <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center bg-white/10 transition-all duration-200 hover:bg-white/20">
-                              <p className="text-xs sm:text-sm text-white font-semibold text-center leading-tight">{item}</p>
-                            </div>
-                          ) : (
-                            <>
-                              <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center bg-white/10 p-3 transition-all duration-300 hover:scale-125 hover:bg-white/20">
-                                <img 
-                                  src={skillIcons[item] || 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/devicon/devicon-original.svg'} 
-                                  alt={item}
-                                  className="w-full h-full object-contain"
-                                />
-                              </div>
-                              <p className="text-xs text-white text-center mt-2 opacity-80">{item}</p>
-                            </>
-                          )}
+                          <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center bg-white/10 p-3 transition-all duration-300 hover:scale-125 hover:bg-white/20">
+                            {typeof skillIcons[item] === 'string' ? (
+                              <img src={skillIcons[item]} alt="" className="w-full h-full object-contain" />
+                            ) : (
+                              React.createElement(skillIcons[item], { className: 'w-full h-full text-cyan-300', strokeWidth: 1.5, 'aria-hidden': true })
+                            )}
+                          </div>
+                          <p className="text-xs text-white text-center mt-2 opacity-80 max-w-[7rem] mx-auto leading-tight break-words">{item}</p>
                         </div>
                         );
                       })}
