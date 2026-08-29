@@ -4,7 +4,7 @@ import videoFile from '../assets/codepage.mp4';
 const VideoBackground = () => {
   return (
     <div
-      className="fixed inset-0 w-full h-full overflow-hidden pointer-events-none z-0"
+      className="video-background fixed inset-0 w-full h-full overflow-hidden pointer-events-none z-0"
     >
       {/* Video element */}
       <video

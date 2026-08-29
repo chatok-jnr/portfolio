@@ -87,7 +87,7 @@ const SkillsSection = ({ skills = {} }) => {
           : `transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`
       }`}
     >
-      <div className="max-w-6xl w-full">
+      <div className="max-w-6xl w-full mx-auto">
         <h2 className="text-3xl sm:text-5xl font-bold text-white mb-8 sm:mb-12 text-center">
           <Code2 className="inline mr-2 sm:mr-3 w-8 h-8 sm:w-12 sm:h-12" />
           Skills & Technologies

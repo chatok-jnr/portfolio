@@ -11,8 +11,57 @@ body {
 @tailwind utilities;
 
 :root{--bg:#000000;--card:#0b1220;--accent:#60a5fa;--text:#ffffff}
+
+/* White Theme */
+:root[data-theme="light"] {
+  --bg: #ffffff;
+  --card: #ffffff;
+  --accent: #3b82f6;
+  --text: #000000;
+  --card-border: #000000;
+  --text-secondary: #444444;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+}
 *{box-sizing:border-box}
 html,body,#root{height:100%}
+
+:root[data-theme="light"] html {
+  background-color: #ffffff !important;
+}
+
+:root[data-theme="light"] body {
+  background-color: #ffffff !important;
+  background-image: none !important;
+}
+
+:root[data-theme="light"] #root {
+  background-color: #ffffff !important;
+  background-image: none !important;
+}
+
+/* Ensure main app div is visible */
+:root[data-theme="light"] > * {
+  background-color: #ffffff !important;
+}
+
+/* Hide video background in light theme */
+:root[data-theme="light"] .video-background {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+:root[data-theme="light"] .video-background video {
+  display: none !important;
+}
+
+:root[data-theme="light"] .video-background > div {
+  display: none !important;
+}
+
+/* Keep the mobile navigation icon visible despite the generic light-mode div reset. */
+:root[data-theme="light"] .mobile-menu-line {
+  background-color: #000000 !important;
+}
 
 @keyframes gradientShift {
   0% { background-position: 0% 50%; }
@@ -45,6 +94,11 @@ body {
   font-size: 1.125rem;
 }
 
+:root[data-theme="light"] body {
+  background-color: #ffffff;
+  background-image: none;
+}
+
 /* Particle effects */
 body::before {
   content: '';
@@ -62,15 +116,25 @@ body::before {
   display: block;
 }
 
+:root[data-theme="light"] body::before {
+  display: none !important;
+  background-image: none !important;
+}
+
 .app{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:3rem;position:relative;z-index:2;}
 .hero{text-align:center;margin-bottom:2rem}
+
+:root[data-theme="light"] .app {
+  background-color: #ffffff !important;
+  color: #000000;
+}
 
 .glowing-text {
   font-family: 'WDXL Lubrifont SC', sans-serif !important;
   font-size: clamp(1.75rem,4vw,3.25rem);
   font-weight: 700;
   margin: 0;
-  color: #ffffff;
+  color: var(--text);
   text-shadow: none;
 }
 
@@ -84,7 +148,7 @@ div > .glowing-text {
   display: inline-block;
   width: 3px;
   height: 1em;
-  background-color: #ffffff;
+  background-color: var(--text);
   margin-left: 5px;
   animation: blink 1s infinite;
 }
@@ -109,6 +173,18 @@ div > .glowing-text {
   letter-spacing: 0.05em;
 }
 
+:root[data-theme="light"] .glass-text {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.6) 50%,
+    rgba(0, 0, 0, 0.9) 100%
+  );
+  filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.2))
+          drop-shadow(0 0 40px rgba(0, 0, 0, 0.1))
+          drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.1));
+}
+
 @keyframes glass-shimmer {
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -129,15 +205,194 @@ div > .glowing-text {
 .content section{margin-bottom:1rem}
 .footer{margin-top:2rem;opacity:0.7}
 
-/* Custom utility classes */
-@layer utilities {
-	/* Glassmorphism surface with enhanced depth */
-	.glass {
-  @apply bg-gradient-to-br from-black/20 to-black/5 backdrop-blur-sm shadow-2xl shadow-white/25;
-    background-image:
-      linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%),
-      linear-gradient(to bottom right, rgba(255,255,255,0.05), transparent);
-    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2), 0 0 40px rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+/* Light theme text styling */
+:root[data-theme="light"] .subtitle {
+  color: #666666;
+}
+
+:root[data-theme="light"] .content {
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+:root[data-theme="light"] h1,
+:root[data-theme="light"] h2,
+:root[data-theme="light"] h3,
+:root[data-theme="light"] h4,
+:root[data-theme="light"] h5,
+:root[data-theme="light"] h6 {
+  color: #000000;
+}
+
+:root[data-theme="light"] p,
+:root[data-theme="light"] span,
+:root[data-theme="light"] a {
+  color: #000000;
+}
+
+	/* Light theme button styling */
+	:root[data-theme="light"] button,
+	:root[data-theme="light"] a {
+		color: #000000 !important;
+	}
+
+	:root[data-theme="light"] .glass button,
+	:root[data-theme="light"] .glass a,
+	:root[data-theme="light"] button[type="button"],
+	:root[data-theme="light"] a[href] {
+		background-color: #ffffff !important;
+		background-image: none !important;
+		border: 2px solid #000000 !important;
+		color: #000000 !important;
+		transition: all 200ms ease;
+	}
+
+	:root[data-theme="light"] .glass button:hover,
+	:root[data-theme="light"] .glass a:hover,
+	:root[data-theme="light"] button[type="button"]:hover,
+	:root[data-theme="light"] a[href]:hover {
+		background-color: #f0f0f0 !important;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+	}
+
+	/* Light theme modal styling */
+	:root[data-theme="light"] [role="dialog"] {
+		background-color: #ffffff !important;
+		color: #000000 !important;
+	}
+
+	:root[data-theme="light"] [role="dialog"] h3,
+	:root[data-theme="light"] [role="dialog"] h2,
+	:root[data-theme="light"] [role="dialog"] p {
+		color: #000000 !important;
+	}
+
+	:root[data-theme="light"] [role="dialog"] .sticky {
+		background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), transparent) !important;
+	}
+
+	:root[data-theme="light"] [role="dialog"] button {
+		background-color: #f5f5f5 !important;
+		color: #000000 !important;
+		border: 2px solid #000000 !important;
+	}
+
+	:root[data-theme="light"] [role="dialog"] button:hover {
+		background-color: #e0e0e0 !important;
+	}
+
+	/* Comprehensive light theme text color */
+	:root[data-theme="light"] {
+		color: #000000;
+	}
+
+	:root[data-theme="light"] * {
+		color-scheme: light;
+	}
+
+	:root[data-theme="light"] body,
+	:root[data-theme="light"] html,
+	:root[data-theme="light"] #root {
+		color: #000000;
+	}
+
+	/* Ensure all text is visible in light mode */
+	:root[data-theme="light"] section,
+	:root[data-theme="light"] div,
+	:root[data-theme="light"] p,
+	:root[data-theme="light"] span,
+	:root[data-theme="light"] h1,
+	:root[data-theme="light"] h2,
+	:root[data-theme="light"] h3,
+	:root[data-theme="light"] h4,
+	:root[data-theme="light"] h5,
+	:root[data-theme="light"] h6,
+	:root[data-theme="light"] li,
+	:root[data-theme="light"] ul,
+	:root[data-theme="light"] ol,
+	:root[data-theme="light"] dt,
+	:root[data-theme="light"] dd {
+		color: #000000 !important;
+		background-color: transparent !important;
+	}
+
+	/* Exception: Keep footer dark in light mode */
+	:root[data-theme="light"] footer {
+		background-color: rgba(0, 0, 0, 0.9) !important;
+		color: #ffffff !important;
+	}
+
+	:root[data-theme="light"] footer div {
+		background-color: inherit !important;
+		color: #ffffff !important;
+	}
+
+	:root[data-theme="light"] footer p,
+	:root[data-theme="light"] footer span {
+		color: #ffffff !important;
+		background-color: transparent !important;
+	}
+
+	/* Ensure sections are visible */
+	:root[data-theme="light"] section {
+		background-color: #ffffff !important;
+		visibility: visible !important;
+		display: block !important;
+	}
+
+	/* Ensure glass elements are visible with proper text color */
+	:root[data-theme="light"] .glass {
+		background-color: #ffffff !important;
+		color: #000000 !important;
+	}
+
+	:root[data-theme="light"] .glass * {
+		color: #000000 !important;
+	}
+
+	/* Ensure SVG icons are visible */
+	:root[data-theme="light"] svg {
+		color: #000000 !important;
+		stroke: #000000 !important;
+		fill: #000000 !important;
+	}
+
+	:root[data-theme="light"] .glass svg {
+		color: #000000 !important;
+		stroke: #000000 !important;
+		fill: #000000 !important;
+	}
+
+	/* Override Tailwind text-white class in light theme */
+	:root[data-theme="light"] .text-white {
+		color: #000000 !important;
+	}
+
+	/* Exception: Keep footer text white in light mode */
+	:root[data-theme="light"] footer .text-white {
+		color: #ffffff !important;
+	}
+
+	:root[data-theme="light"] [style*="color: white"],
+	:root[data-theme="light"] [style*="color:#ffffff"],
+	:root[data-theme="light"] [style*="color: #ffffff"] {
+		color: #000000 !important;
+	}
+
+	/* Override common gray text colors in light theme */
+	:root[data-theme="light"] .text-gray-500,
+	:root[data-theme="light"] .text-gray-400,
+	:root[data-theme="light"] .text-gray-300 {
+		color: #000000 !important;
+	}
+
+	/* Override more text colors from Tailwind */
+	:root[data-theme="light"] .text-blue-400,
+	:root[data-theme="light"] .text-blue-300,
+	:root[data-theme="light"] .text-cyan-400,
+	:root[data-theme="light"] .text-emerald-400 {
+		color: #3b82f6 !important;
 	}
 
 	/* Simple hover effect like Google Classroom */
@@ -151,6 +406,21 @@ div > .glowing-text {
 		background-image: none !important;
 		box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
 		transform: translateY(-2px);
+	}
+
+	:root[data-theme="light"] .glow {
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+	}
+
+	:root[data-theme="light"] .glow:hover {
+		background: #f5f5f5 !important;
+		background-image: none !important;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+		transform: translateY(-2px);
+	}
+
+	:root[data-theme="light"] .glow * {
+		color: #000000 !important;
 	}
 
 	/* Experience card hover - keep logo visible */
@@ -178,6 +448,22 @@ div > .glowing-text {
 	.experience-card:hover::before {
 		background: rgba(0, 0, 0, 0.3);
 	}
+
+	:root[data-theme="light"] .experience-card {
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+	}
+
+	:root[data-theme="light"] .experience-card::before {
+		background: rgba(0, 0, 0, 0.05);
+	}
+
+	:root[data-theme="light"] .experience-card:hover {
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+	}
+
+	:root[data-theme="light"] .experience-card:hover::before {
+		background: rgba(0, 0, 0, 0.08);
+	}
 	
 	.experience-card > * {
 		position: relative;
@@ -200,6 +486,10 @@ div > .glowing-text {
     bottom: 1.75rem;
     width: 2px;
     background: linear-gradient(to bottom, rgba(96, 165, 250, 0.9), rgba(255, 255, 255, 0.15));
+  }
+
+  :root[data-theme="light"] .experience-timeline::before {
+    background: linear-gradient(to bottom, rgba(59, 130, 246, 0.9), rgba(0, 0, 0, 0.15));
   }
 
   .experience-entry {
@@ -229,6 +519,13 @@ div > .glowing-text {
     z-index: 2;
   }
 
+  :root[data-theme="light"] .experience-node {
+    border: 2px solid rgba(59, 130, 246, 0.95);
+    background: #ffffff;
+    box-shadow: 0 0 0 5px rgba(59, 130, 246, 0.08), 0 0 18px rgba(59, 130, 246, 0.25);
+    color: #1e40af;
+  }
+
   .experience-logo {
     display: grid;
     place-items: center;
@@ -238,6 +535,11 @@ div > .glowing-text {
     border-radius: 0.5rem;
     background: rgba(255, 255, 255, 0.94);
     overflow: hidden;
+  }
+
+  :root[data-theme="light"] .experience-logo {
+    border: 2px solid #000000;
+    background: #ffffff;
   }
 
   .experience-logo img {
@@ -265,16 +567,48 @@ div > .glowing-text {
 	#skills .glow:hover,
 	#projects .glow:hover,
 	#support .glow:hover,
-	#contact .glow:hover {
+	#contact .glow:hover,
+	#mentorship .glow:hover,
+	#experience .experience-card:hover {
 		box-shadow: 0 4px 16px rgba(255, 255, 255, 0.2), 0 0 32px rgba(0, 225, 255, 0.4) !important;
+	}
+
+	:root[data-theme="light"] #achievements .glow:hover,
+	:root[data-theme="light"] #skills .glow:hover,
+	:root[data-theme="light"] #projects .glow:hover,
+	:root[data-theme="light"] #support .glow:hover,
+	:root[data-theme="light"] #contact .glow:hover,
+	:root[data-theme="light"] #mentorship .glow:hover,
+	:root[data-theme="light"] #experience .experience-card:hover {
+		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15), 0 0 32px rgba(59, 130, 246, 0.3) !important;
 	}
 
 	.btn-glass {
 		@apply glass glow px-6 py-3 font-semibold transition-all;
 	}
-}
 
-/* Slow rotation animation */
+	/* Light theme cube styling */
+	:root[data-theme="light"] a.cube-face[href] {
+		background-color: #ffffff !important;
+		background-image: none !important;
+		border: 0.1px solid rgb(0, 0, 0) !important;
+		box-shadow: none !important;
+	}
+
+	:root[data-theme="light"] .cube-face img {
+		opacity: 1 !important;
+	}
+
+	/* The source GitHub mark is white; invert it for reliable contrast in light mode. */
+	:root[data-theme="light"] .cube-face-front img {
+		filter: invert(1) !important;
+	}
+
+	:root[data-theme="light"] .cube-face-front > div {
+		background-color: rgba(255, 255, 255, 0.35) !important;
+	}
+
+	/* Slow rotation animation */
 @keyframes spin-slow {
   from {
     transform: rotate(0deg);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Suspense, useRef } from 'react';
-import { Github, Linkedin, Mail, Phone, ExternalLink, Award, Briefcase, GraduationCap, X, Facebook, Instagram, Download, Code, Globe, CircleDot, Star, Trophy, Medal, Target, MessageCircle } from 'lucide-react';
+import { Github, Linkedin, Mail, Phone, ExternalLink, Award, Briefcase, GraduationCap, X, Facebook, Instagram, Download, Code, Globe, CircleDot, Star, Trophy, Medal, Target, MessageCircle, Moon, Sun } from 'lucide-react';
 import { UilDiscord } from '@iconscout/react-unicons';
 import { Helmet } from 'react-helmet-async';
 import useIntersectionObserver from './hooks/useIntersectionObserver';
@@ -32,6 +32,7 @@ export default function App() {
   const [profileOrbitAngle, setProfileOrbitAngle] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const [cardRipples, setCardRipples] = useState({});
+  const [theme, setTheme] = useState('dark');
 
   // Card hover handlers for 3D tilt effect
   const handleCardMouseMove = (e, cardId) => {
@@ -65,6 +66,21 @@ export default function App() {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // Initialize theme from localStorage
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('portfolio-theme') || 'dark';
+    setTheme(savedTheme);
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  }, []);
+
+  // Toggle theme function
+  const toggleTheme = () => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('portfolio-theme', newTheme);
+  };
 
   // Orbital links configuration
   const socialLinks = [
@@ -405,8 +421,9 @@ export default function App() {
   }, [selectedProject, selectedAchievement]);
 
   return (
-    <div className="min-h-screen text-white relative overflow-hidden" style={{
-      background: '#000000'
+    <div className="min-h-screen relative overflow-hidden" style={{
+      background: 'var(--bg)',
+      color: 'var(--text)'
     }}>
 
       {/* Video Background */}
@@ -421,38 +438,57 @@ export default function App() {
         <meta property="og:image" content="/og-image.png" />
       </Helmet>
 
-      <nav className="fixed top-4 left-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-md z-50 border border-white/20 shadow-lg shadow-white/5 rounded-[2.5rem]">
+      <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 max-w-[calc(100%-2rem)] rounded-[2.5rem]" style={{
+        background: theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : '#ffffff',
+        backdropFilter: theme === 'dark' ? 'blur(12px)' : 'none',
+        border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid rgba(0, 0, 0, 0.15)',
+        boxShadow: theme === 'dark' ? '0 20px 20px rgba(255, 255, 255, 0.05)' : '0 2px 8px rgba(0, 0, 0, 0.1)'
+      }}>
         <div className="px-4 sm:px-6 py-2">
           <div className="flex justify-between items-center gap-2 sm:gap-3">
-            <FlippingName />
+            {/* Keep the compact mobile name, but hide the wide name while desktop links need the room. */}
+            <div className="block md:hidden lg:block shrink-0">
+              <FlippingName />
+            </div>
             <div className="flex items-center gap-3">
+              {/* Desktop menu */}
+              <div className="hidden md:flex gap-8 items-center">
+                {['home', 'skills', 'projects', 'achievements', 'contact'].map(item => (
+                  <button
+                    key={item}
+                    onClick={() => scrollToSection(item)}
+                    className="capitalize transition-colors"
+                    style={{ color: 'var(--text)' }}
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
               {/* Mobile menu button */}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="md:hidden p-2 rounded-md text-white hover:text-white focus:outline-none"
+                className="md:hidden p-2 rounded-md focus:outline-none"
+                style={{ color: 'var(--text)' }}
               >
                 {isMobileMenuOpen ? (
                   <X size={24} />
                 ) : (
                   <div className="space-y-2">
-                    <div className="w-6 h-0.5 bg-current"></div>
-                    <div className="w-6 h-0.5 bg-current"></div>
-                    <div className="w-6 h-0.5 bg-current"></div>
+                    <div className="mobile-menu-line w-6 h-0.5 bg-current"></div>
+                    <div className="mobile-menu-line w-6 h-0.5 bg-current"></div>
+                    <div className="mobile-menu-line w-6 h-0.5 bg-current"></div>
                   </div>
                 )}
               </button>
-            </div>
-            {/* Desktop menu */}
-            <div className="hidden md:flex gap-8 items-center">
-              {['home', 'skills', 'projects', 'achievements', 'contact'].map(item => (
-                <button
-                  key={item}
-                  onClick={() => scrollToSection(item)}
-                  className="capitalize text-white hover:text-white transition-colors"
-                >
-                  {item}
-                </button>
-              ))}
+              {/* Theme toggle button */}
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-md focus:outline-none transition-all"
+                style={{ color: 'var(--text)' }}
+                title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+              >
+                {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+              </button>
             </div>
           </div>
           {/* Mobile menu panel */}
@@ -466,7 +502,8 @@ export default function App() {
                       scrollToSection(item);
                       setIsMobileMenuOpen(false);
                     }}
-                    className="capitalize text-white hover:text-white transition-colors"
+                    className="capitalize transition-colors"
+                    style={{ color: 'var(--text)' }}
                   >
                     {item}
                   </button>
@@ -484,10 +521,10 @@ export default function App() {
           homeVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
       >
-        <div className="w-full max-w-7xl">
+        <div className="w-full">
           {/* Hero Layout - Image Right, Text Left */}
           <div className="relative min-h-[700px] md:min-h-[800px] flex items-center justify-center py-12">
-            <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-32 lg:gap-48 items-center relative">
+            <div className="w-full max-w-6xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center relative">
               
               {/* Left Side - Text Content */}
               <div className="flex items-center justify-center lg:justify-start order-2 lg:order-1">
@@ -506,11 +543,11 @@ export default function App() {
                   </div>
                 </div>
 
-                <div className="mt-8 lg:mt-12 flex flex-wrap justify-center lg:justify-start gap-4">
+                <div className="mt-8 lg:mt-12 flex flex-col sm:flex-row justify-center lg:justify-start gap-4">
                   <a
                     href={resumePdf}
                     download="Md_Sakib_Hosen_Resume.pdf"
-                    className="px-8 py-4 bg-black border-2 border-white text-white rounded-xl font-bold transition-all hover:bg-white hover:text-black flex items-center gap-2 will-change-auto"
+                    className="px-8 py-4 bg-black border-2 border-white text-white rounded-xl font-bold transition-all hover:bg-white hover:text-black flex items-center justify-center gap-2 will-change-auto"
                   >
                     <Download size={20} />
                     Download Resume
@@ -526,9 +563,9 @@ export default function App() {
               </div>
 
               {/* Right Side - Rotating Cube */}
-              <div className="relative flex flex-col items-center justify-center order-1 lg:order-2" style={{ zIndex: 1, marginTop: isMobile ? '0px' : '-170px' }}>
+              <div className="relative flex flex-col items-center justify-center order-1 lg:order-2" style={{ zIndex: 1 }}>
                 {/* Rotating Cube - Same size as the previous image */}
-                <div className="w-72 h-72 md:w-80 md:h-80 flex items-center justify-center">
+                <div className="w-72 h-[26rem] md:w-80 md:h-[31rem] flex items-center justify-center">
                   <div className="scale-[2.4] md:scale-[2.9]">
                     <RotatingCube />
                   </div>
@@ -559,7 +596,7 @@ export default function App() {
 
       {/* Mentorship & Community Section */}
       <section id="mentorship" className="min-h-[40vh] flex items-center justify-center px-4 sm:px-6 py-16 sm:py-20 relative">
-        <div className="max-w-4xl w-full">
+        <div className="max-w-4xl w-full mx-auto">
           <div 
             className="glass glow p-6 sm:p-8 transition-all relative overflow-hidden"
             onMouseMove={e => handleCardMouseMove(e, 'mentorship')}
@@ -586,11 +623,11 @@ export default function App() {
       <section 
         ref={contactRef}
         id="contact" 
-        className={`min-h-screen flex items-center justify-center px-4 sm:px-6 py-16 sm:py-20 relative transition-all duration-700 ease-out ${
+        className={`min-h-[40vh] flex items-center justify-center px-4 sm:px-6 py-16 sm:py-20 relative transition-all duration-700 ease-out ${
           contactVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
       >
-        <div className="max-w-4xl w-full text-center">
+        <div className="max-w-4xl w-full mx-auto text-center">
           <h2 className="text-3xl sm:text-5xl font-bold text-white mb-8 sm:mb-12">
             Get In Touch
           </h2>
@@ -758,7 +795,7 @@ export default function App() {
 
             {selectedAchievement && (
               <div className="animate-fade-in">
-                {selectedAchievement.image ? (
+                {selectedAchievement.image && (
                   <div className="w-full bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center relative overflow-hidden mb-4">
                     <img 
                       src={selectedAchievement.image} 
@@ -766,8 +803,6 @@ export default function App() {
                       className="w-full h-auto object-contain"
                     />
                   </div>
-                ) : (
-                  <div className="text-7xl mb-6 animate-bounce">{selectedAchievement.icon}</div>
                 )}
                 <h3 className="text-3xl font-bold text-white mb-3">{selectedAchievement.title}</h3>
                 <p className="text-white mb-6 leading-relaxed text-lg">{selectedAchievement.details}</p>

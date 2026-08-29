@@ -42,7 +42,7 @@ export default function ProjectsSection({ projects = [], onOpen }) {
           : ''
       }`}
     >
-      <div className="max-w-7xl w-full">
+      <div className="max-w-7xl w-full mx-auto">
         <h2 className="text-3xl sm:text-5xl font-bold text-white mb-8 sm:mb-12 text-center">
           {!isMobile && <Briefcase className="inline mr-2 sm:mr-3 w-8 h-8 sm:w-12 sm:h-12" />}
           Projects
@@ -95,14 +95,14 @@ export default function ProjectsSection({ projects = [], onOpen }) {
                 </div>
 
                 {/* Buttons */}
-                <div className="flex flex-wrap gap-2 mt-4">
+                <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2 mt-4">
                   {project.projectLink && (
                     <a
                       href={project.projectLink}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
-                      className="px-3 py-1.5 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-lg text-xs font-semibold transition-all duration-300 hover:bg-white/20 hover:border-white/50 flex items-center gap-1.5"
+                      className="w-full sm:w-auto px-3 py-1.5 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-lg text-xs font-semibold transition-all duration-300 hover:bg-white/20 hover:border-white/50 flex items-center justify-center gap-1.5"
                     >
                       <ExternalLink size={14} />
                       View Project
@@ -114,7 +114,7 @@ export default function ProjectsSection({ projects = [], onOpen }) {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
-                      className="px-3 py-1.5 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-lg text-xs font-semibold transition-all duration-300 hover:bg-white/20 hover:border-white/50 flex items-center gap-1.5"
+                      className="w-full sm:w-auto px-3 py-1.5 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-lg text-xs font-semibold transition-all duration-300 hover:bg-white/20 hover:border-white/50 flex items-center justify-center gap-1.5"
                     >
                       <Code size={14} />
                       View Code
@@ -125,7 +125,7 @@ export default function ProjectsSection({ projects = [], onOpen }) {
                       e.stopPropagation();
                       onOpen && onOpen(project);
                     }}
-                    className="px-3 py-1.5 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-lg text-xs font-semibold transition-all duration-300 hover:bg-white/20 hover:border-white/50 flex items-center gap-1.5"
+                    className="w-full sm:w-auto px-3 py-1.5 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-lg text-xs font-semibold transition-all duration-300 hover:bg-white/20 hover:border-white/50 flex items-center justify-center gap-1.5"
                   >
                     <Info size={14} />
                     Details

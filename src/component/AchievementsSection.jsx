@@ -47,7 +47,7 @@ export default function AchievementsSection({ achievements = [], onOpen }) {
           : ''
       }`}
     >
-      <div className="max-w-6xl w-full">
+      <div className="max-w-6xl w-full mx-auto">
         <h2 className="text-3xl sm:text-5xl font-bold text-white mb-8 sm:mb-12 text-center">
           {!isMobile && <Award className="inline mr-2 sm:mr-3 w-8 h-8 sm:w-12 sm:h-12" />}
           Achievements & Awards
@@ -82,14 +82,14 @@ export default function AchievementsSection({ achievements = [], onOpen }) {
                   </span>
                 ))}
               </div>
-              <div className="flex flex-wrap gap-2 mt-4 relative z-10">
+              <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2 mt-4 relative z-10">
                 {achievement.link && (
                   <a
                     href={achievement.link}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
-                    className="px-3 py-1.5 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-lg text-xs font-semibold transition-all duration-300 hover:bg-white/20 hover:border-white/50 flex items-center gap-1.5"
+                    className="w-full sm:w-auto px-3 py-1.5 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-lg text-xs font-semibold transition-all duration-300 hover:bg-white/20 hover:border-white/50 flex items-center justify-center gap-1.5"
                   >
                     <ExternalLink size={14} />
                     Open Link
@@ -101,7 +101,7 @@ export default function AchievementsSection({ achievements = [], onOpen }) {
                       e.stopPropagation();
                       onOpen && onOpen(achievement);
                     }}
-                    className="px-3 py-1.5 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-lg text-xs font-semibold transition-all duration-300 hover:bg-white/20 hover:border-white/50 flex items-center gap-1.5"
+                    className="w-full sm:w-auto px-3 py-1.5 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-lg text-xs font-semibold transition-all duration-300 hover:bg-white/20 hover:border-white/50 flex items-center justify-center gap-1.5"
                   >
                     <Info size={14} />
                     Details
