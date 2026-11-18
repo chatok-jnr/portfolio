@@ -7,6 +7,7 @@ import resumePdf from './assets/resume.pdf';
 import tazaBazarImg from './assets/project_images/tazaBazar.png';
 import biteNowImg from './assets/project_images/biteNow.png';
 import legalAidImg from './assets/project_images/legalAid.png';
+import spring_boot_api from './assets/project_images/spring_boot_api.png';
 import solveSudokuImg from './assets/project_images/solveSudoku.png';
 import icpc25Img from './assets/achievement_images/icpc_25.png';
 import buyMeACoffeeQR from './assets/buy_me_a_cofee.jpg';
@@ -207,6 +208,24 @@ export default function App() {
   };
 
   const projects = [
+    {
+      title: 'Secure Team Api',
+      tech: 'Java 25, Spring Boot 4.x, Spring Security, Spring Data Jpa, PostgreSQL, JWT, Docker, Github Actions',
+      short: `A secure team management API demonstrating JWT authentication, RBAC, refresh token rotation, and audit logging with Spring Boot & PostgreSQL.`,
+
+      details: [
+        'Developed a RESTful backend with Spring Boot and PostgreSQL, implementing user registration, login, and authenticated profile retrieval',
+        'mplemented JWT-based authentication with short-lived access tokens delivered through HttpOnly cookies',
+        'Built a custom Spring Security authentication provider with BCrypt password verification and account lockout after repeated failed login attempts',
+        'Implemented role-based authorization using Spring Security, including endpoint-level rules and method-level security with @PreAuthorize',
+        'Designed persistent refresh-token storage using SHA-256 token hashing, expiration tracking, and revocation support',
+        'Wrote unit and controller slice tests using JUnit 5, Mockito, and MockMvc',
+        'Configured GitHub Actions CI/CD pipeline to automate testing, Docker image publishing to GHCR, and deployment to Railway'
+      ],
+      image: spring_boot_api,
+      githubLink: 'github.com/chatok-jnr/secure-team-api',
+      highlights: ['Java 25', 'Spring Boot', 'Spring Security', 'CI/CD Pipeline', 'Github Actions', 'JWT', 'PostgreSQL', 'Role-Based Access', 'Docker']
+    },
     {
       title: 'LegalAid',
       tech: 'Java 21, Spring Boot 3.x, Spring Security, PostgreSQL, JWT, Cloudinary',
