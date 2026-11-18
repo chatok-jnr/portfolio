@@ -201,8 +201,9 @@ export default function App() {
     languages: ['Java', 'C++', 'SQL', 'JavaScript', 'TypeScript'],
     backend: ['Spring Boot', 'Spring Security', 'Spring Data JPA', 'NestJS', 'Express.js', 'Node.js', 'REST APIs'],
     database: ['PostgreSQL', 'MySQL', 'MongoDB', 'Hibernate (JPA)', 'Mongoose', 'Prisma'],
-    tools: ['Git', 'Docker', 'Jira', 'Postman', 'DBeaver', 'Linux'],
-    methodology: ['Data Structures & Algorithms', 'OOP', 'Layered Architecture', 'Agile']
+    test: ['Unit Testing', 'Integration Testing', 'Junit5', 'Mockito'],
+    tools: ['Git', 'Docker', 'CI/CD pipeline', 'Github Action', 'Postman', 'Linux', 'Jira', 'DBeaver'],
+    methodology: ['Data Structures & Algorithms', 'OOP', 'Agile']
   };
 
   const projects = [

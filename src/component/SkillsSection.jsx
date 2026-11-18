@@ -1,5 +1,5 @@
 import React from 'react';
-import { Code2, Braces, Database, Layers3, ListChecks, Network, ShieldCheck, Workflow } from 'lucide-react';
+import { Code2, Braces, Database, Layers3, ListChecks, Network, ShieldCheck, Workflow, ClipboardCheck, Puzzle, FlaskConical, Rocket } from 'lucide-react';
 import useIntersectionObserver from '../hooks/useIntersectionObserver';
 
 const SkillsSection = ({ skills = {} }) => {
@@ -57,6 +57,12 @@ const SkillsSection = ({ skills = {} }) => {
     'Postman': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postman/postman-original.svg',
     'DBeaver': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dbeaver/dbeaver-original.svg',
     'Linux': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg',
+    'Unit Testing': ClipboardCheck,
+    'Integration Testing': Puzzle,
+    'Junit5': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/junit/junit-original.svg',
+    'Mockito': FlaskConical,
+    'CI/CD pipeline': Rocket,
+    'Github Action': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/githubactions/githubactions-original.svg',
     'Data Structures & Algorithms': ListChecks,
     'OOP': Braces,
     'Layered Architecture': Layers3,
@@ -71,8 +77,11 @@ const SkillsSection = ({ skills = {} }) => {
     databases: 'Database',
     db: 'Database',
     methodology: 'Methodology',
-    tools: 'Tools',
-    tool: 'Tools'
+    test: 'Test',
+    testing: 'Test',
+    tools: 'DevOps & Tools',
+    tool: 'DevOps & Tools',
+    devops: 'DevOps & Tools'
   };
 
   const entries = Object.entries(skills);
