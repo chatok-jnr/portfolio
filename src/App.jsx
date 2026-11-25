@@ -200,7 +200,7 @@ export default function App() {
 
   const skills = {
     languages: ['Java', 'C++', 'SQL', 'JavaScript', 'TypeScript'],
-    backend: ['Spring Boot', 'Spring Security', 'Spring Data JPA', 'NestJS', 'Express.js', 'Node.js', 'REST APIs'],
+    backend: ['Spring Boot', 'Spring Security', 'Spring Data JPA', 'NestJS', 'Express.js', 'Node.js', 'Redis', 'REST APIs'],
     database: ['PostgreSQL', 'MySQL', 'MongoDB', 'Hibernate (JPA)', 'Mongoose', 'Prisma'],
     test: ['Unit Testing', 'Integration Testing', 'Junit5', 'Mockito'],
     tools: ['Git', 'Docker', 'CI/CD pipeline', 'Github Action', 'Postman', 'Linux', 'Jira', 'DBeaver'],
