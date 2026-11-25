@@ -18,7 +18,7 @@ const SkillsSection = ({ skills = {} }) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
-    
+
     setRipples(prev => ({
       ...prev,
       [key]: { x, y, active: true }
@@ -45,6 +45,7 @@ const SkillsSection = ({ skills = {} }) => {
     'Express.js': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg',
     'Node.js': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',
     'REST APIs': Network,
+    'Redis': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg',
     'PostgreSQL': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
     'MongoDB': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
     'MySQL': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg',
@@ -87,9 +88,9 @@ const SkillsSection = ({ skills = {} }) => {
   const entries = Object.entries(skills);
 
   return (
-    <section 
+    <section
       ref={elementRef}
-      id="skills" 
+      id="skills"
       className={`min-h-screen flex items-center justify-center px-4 sm:px-6 py-16 sm:py-20 relative ${
         isMobile
           ? ''
@@ -124,7 +125,7 @@ const SkillsSection = ({ skills = {} }) => {
                           onMouseMove={(e) => handleMouseMove(e, itemKey)}
                           onMouseLeave={() => handleMouseLeave(itemKey)}
                           style={{
-                            transform: ripples[itemKey]?.active 
+                            transform: ripples[itemKey]?.active
                               ? `perspective(1000px) rotateX(${(ripples[itemKey].y - 50) * 0.1}deg) rotateY(${(ripples[itemKey].x - 50) * 0.1}deg)`
                               : 'none',
                             transition: 'transform 0.1s ease-out'
@@ -134,7 +135,7 @@ const SkillsSection = ({ skills = {} }) => {
                             {typeof skillIcons[item] === 'string' ? (
                               <img src={skillIcons[item]} alt="" className="w-full h-full object-contain" />
                             ) : (
-                              React.createElement(skillIcons[item], { className: 'w-full h-full text-cyan-300', strokeWidth: 1.5, 'aria-hidden': true })
+                              React.createElement(skillIcons[item] || Code2, { className: 'w-full h-full text-cyan-300', strokeWidth: 1.5, 'aria-hidden': true })
                             )}
                           </div>
                           <p className="text-xs text-white text-center mt-2 opacity-80 max-w-[7rem] mx-auto leading-tight break-words">{item}</p>
@@ -158,7 +159,7 @@ const SkillsSection = ({ skills = {} }) => {
                           onMouseMove={(e) => handleMouseMove(e, itemKey)}
                           onMouseLeave={() => handleMouseLeave(itemKey)}
                           style={{
-                            transform: ripples[itemKey]?.active 
+                            transform: ripples[itemKey]?.active
                               ? `perspective(1000px) rotateX(${(ripples[itemKey].y - 50) * 0.1}deg) rotateY(${(ripples[itemKey].x - 50) * 0.1}deg)`
                               : 'none',
                             transition: 'transform 0.1s ease-out'
@@ -168,7 +169,7 @@ const SkillsSection = ({ skills = {} }) => {
                             {typeof skillIcons[item] === 'string' ? (
                               <img src={skillIcons[item]} alt="" className="w-full h-full object-contain" />
                             ) : (
-                              React.createElement(skillIcons[item], { className: 'w-full h-full text-cyan-300', strokeWidth: 1.5, 'aria-hidden': true })
+                              React.createElement(skillIcons[item] || Code2, { className: 'w-full h-full text-cyan-300', strokeWidth: 1.5, 'aria-hidden': true })
                             )}
                           </div>
                           <p className="text-xs text-white text-center mt-2 opacity-80 max-w-[7rem] mx-auto leading-tight break-words">{item}</p>
