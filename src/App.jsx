@@ -14,6 +14,7 @@ import buyMeACoffeeQR from './assets/buy_me_a_cofee.jpg';
 import FlippingName from './component/FlippingName';
 import VideoBackground from './component/VideoBackground';
 import RotatingCube from './component/RotatingCube';
+import ReferencesSection from './component/ReferencesSection';
 
 const ProjectsSection = React.lazy(() => import('./component/ProjectsSection'));
 const AchievementsSection = React.lazy(() => import('./component/AchievementsSection'));
@@ -473,7 +474,7 @@ export default function App() {
             <div className="flex items-center gap-3">
               {/* Desktop menu */}
               <div className="hidden md:flex gap-8 items-center">
-                {['home', 'skills', 'projects', 'achievements', 'contact'].map(item => (
+                {['home', 'skills', 'projects', 'achievements', 'references', 'contact'].map(item => (
                   <button
                     key={item}
                     onClick={() => scrollToSection(item)}
@@ -515,7 +516,7 @@ export default function App() {
           {isMobileMenuOpen && (
             <div className="md:hidden pt-4">
               <div className="flex flex-col space-y-4 pb-3">
-                {['home', 'skills', 'projects', 'achievements', 'contact'].map(item => (
+                {['home', 'skills', 'projects', 'achievements', 'references', 'contact'].map(item => (
                   <button
                     key={item}
                     onClick={() => {
@@ -639,6 +640,8 @@ export default function App() {
           </div>
         </div>
       </section>
+
+      <ReferencesSection />
 
       <section 
         ref={contactRef}

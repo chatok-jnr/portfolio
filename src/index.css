@@ -569,6 +569,7 @@ div > .glowing-text {
 	#support .glow:hover,
 	#contact .glow:hover,
 	#mentorship .glow:hover,
+	#references .glow:hover,
 	#experience .experience-card:hover {
 		box-shadow: 0 4px 16px rgba(255, 255, 255, 0.2), 0 0 32px rgba(0, 225, 255, 0.4) !important;
 	}
@@ -579,6 +580,7 @@ div > .glowing-text {
 	:root[data-theme="light"] #support .glow:hover,
 	:root[data-theme="light"] #contact .glow:hover,
 	:root[data-theme="light"] #mentorship .glow:hover,
+	:root[data-theme="light"] #references .glow:hover,
 	:root[data-theme="light"] #experience .experience-card:hover {
 		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15), 0 0 32px rgba(59, 130, 246, 0.3) !important;
 	}
