@@ -91,13 +91,6 @@ export default function ReferencesSection() {
                   <Mail className="shrink-0" size={20} />
                   {reference.email}
                 </a>
-                <a
-                  href={`tel:${reference.phone}`}
-                  className="flex items-center gap-3 px-3 py-2 text-white hover:text-white transition-all font-semibold"
-                >
-                  <Phone className="shrink-0" size={20} />
-                  {reference.phoneLabel}
-                </a>
               </div>
             </article>
           ))}
